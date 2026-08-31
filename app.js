@@ -1097,7 +1097,7 @@ function renderToday() {
   const m = state.modeles;
   el.innerHTML = `
     <div class="card">
-      <h2>Aujourd'hui</h2>
+      <h2>Aujourd’hui</h2>
       ${m.length ? m.map(x => `
         <button class="modele" data-demarrer="${x.id}">
           <span class="modele-nom">${esc(x.nom)}</span>

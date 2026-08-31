@@ -368,7 +368,7 @@ input:focus,select:focus{outline:2px solid var(--steel);outline-offset:0}
   <button class="tab active" data-tab="today">Aujourd’hui</button>
   <button class="tab tab-rec" data-tab="rec"><i></i>Rec</button>
   <button class="tab" data-tab="history">Historique</button>
-  <button class="tab" data-tab="insights">Analyses</button>
+  <button class="tab" data-tab="insights">Progrès</button>
   <button class="tab" data-tab="profile">Profil</button>
 </nav>
 </div>
@@ -1964,7 +1964,7 @@ function renderToday() {
   const m = state.modeles;
   el.innerHTML = `
     <div class="card">
-      <h2>Aujourd'hui</h2>
+      <h2>Aujourd’hui</h2>
       ${m.length ? m.map(x => `
         <button class="modele" data-demarrer="${x.id}">
           <span class="modele-nom">${esc(x.nom)}</span>
