@@ -86,6 +86,21 @@ L'app estime aussi la **journée complète** : Mifflin-St Jeor × facteur d'acti
 de la séance, puis +12 % (hypertrophie), 0 % (stabilité) ou −18 % (sèche), avec la répartition
 protéines / glucides / lipides du jour.
 
+## Essayer l'app
+
+Trois façons, par ordre de simplicité :
+
+1. **`gymrec.html`** — l'app entière en un seul fichier (78 Ko, aucune dépendance). Télécharge-le
+   et ouvre-le : navigateur, Fichiers d'un téléphone, clé USB, pièce jointe. Tout marche, hors ligne
+   compris.
+2. **Le dossier tel quel** — ouvre `index.html`, ou sers-le (`npx http-server`) pour profiter en plus
+   du service worker et de l'installation en PWA.
+3. **Publier le dossier** sur n'importe quel hébergement statique (GitHub Pages, Netlify…).
+
+`gymrec.html` est **généré** : après une modification, relance `node build.mjs` (Node seul, aucune
+dépendance à installer). `node build.mjs --artifact` produit la variante sans `<html>`/`<body>`
+pour un hôte qui fournit déjà la coquille.
+
 ## Utilisation
 
 1. Onglet **Profil** : poids, taille, âge, sexe, activité, objectif, récup par défaut.
@@ -131,6 +146,7 @@ donnée, choisies pour être distinguables entre elles, pas pour porter la marqu
 - `icon.svg`, `icon-512.png`, `apple-touch-icon.png` — le logo : un **G** épais en dégradé
   acier, le **point REC** rouge dans sa contre-forme. Repris en marque dans l'en-tête, avec
   le logotype `GYM` blanc / `REC` rouge.
+- `build.mjs`, `gymrec.html` — la fabrique du fichier unique et son résultat (généré)
 - `charte.html` — la charte vivante : lockup, monogramme aux différentes tailles, jetons,
   règles d'emploi et couleurs de donnée.
 

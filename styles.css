@@ -17,6 +17,7 @@
   --accent-ink:#0d0d0f;    /* texte posé sur un aplat (17:1) */
   --danger:#ff2d2d;        /* destructif : le rouge, en contour */
   --radius:14px;
+  color-scheme:dark;        /* menus, cases et ascenseurs natifs suivent le thème */
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}

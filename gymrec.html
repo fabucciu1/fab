@@ -1,3 +1,774 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d0d0f">
+<title>GymRec — Chrono &amp; Séances</title>
+<style>
+/* =========================================================
+   GymRec — charte : CHARCOAL #0D0D0F · WHITE #FFFFFF
+                     REC RED #FF2D2D · STEEL #E6E6E6
+   Surface neutre, le rouge n'appartient qu'à l'enregistrement.
+   ========================================================= */
+:root{
+  --bg:#0d0d0f;            /* CHARCOAL */
+  --card:#141417;
+  --card2:#1b1b20;
+  --line:#26262c;
+  --txt:#ffffff;           /* WHITE */
+  --steel:#e6e6e6;         /* STEEL */
+  --muted:#8b8b95;
+  --rec:#ff2d2d;           /* REC RED — le point du logo */
+  --accent:var(--steel);   /* aplats d'action */
+  --accent2:#c8c8d0;
+  --accent-ink:#0d0d0f;    /* texte posé sur un aplat (17:1) */
+  --danger:#ff2d2d;        /* destructif : le rouge, en contour */
+  --radius:14px;
+  color-scheme:dark;        /* menus, cases et ascenseurs natifs suivent le thème */
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg);
+  color:var(--txt);
+  font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;
+  padding-bottom:40px;
+  -webkit-text-size-adjust:100%;
+}
+main{max-width:640px;margin:0 auto;padding:12px 12px 60px}
+
+/* ---------- en-tête et onglets ---------- */
+.head-sticky{position:sticky;top:0;z-index:20;background:var(--bg)}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px calc(12px + env(safe-area-inset-top,0)) 16px;
+  background:var(--bg);border-bottom:1px solid var(--line);
+}
+.brand{display:flex;align-items:center;gap:10px}
+.mark{width:30px;height:30px;flex:none;display:block}
+.lockup{display:flex;flex-direction:column;gap:2px}
+.wordmark{font-weight:800;font-size:19px;letter-spacing:2.5px;line-height:1}
+.wordmark i{font-style:normal;color:var(--rec)}
+.tagline{font-size:7px;letter-spacing:3.2px;color:var(--muted);text-transform:uppercase;line-height:1}
+.clock{font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px;letter-spacing:.5px}
+
+.tabs{
+  display:flex;gap:4px;padding:8px 12px;background:var(--bg);
+  border-bottom:1px solid var(--line);max-width:640px;margin:0 auto;
+}
+.tab{
+  flex:1;padding:10px 2px;border:1px solid transparent;border-radius:9px;background:var(--card);
+  color:var(--muted);font-weight:700;font-size:10.5px;letter-spacing:.9px;text-transform:uppercase;
+  cursor:pointer;white-space:nowrap;
+}
+.tab.active{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.panel{display:none}
+.panel.active{display:block}
+
+/* ---------- éléments génériques ---------- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:15px;margin:12px 0}
+/* signature de la planche : label capitales + filet rouge */
+h2{
+  margin:0 0 14px;font-size:10.5px;font-weight:700;text-transform:uppercase;
+  letter-spacing:2.4px;color:var(--muted);position:relative;padding-bottom:9px;
+}
+h2::after{content:"";position:absolute;left:0;bottom:0;width:20px;height:2px;background:var(--rec)}
+h3{margin:0;font-size:16px}
+.row{display:flex;align-items:center}
+.gap{gap:8px}
+.grow{flex:1}
+.hidden{display:none !important}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+label{display:block;margin:10px 0;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:1px}
+label.check{display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:13px}
+label.check input{width:auto;margin:0}
+input[type=checkbox]{accent-color:var(--steel)}   /* la case native suivait le bleu du système */
+input,select{
+  width:100%;margin-top:5px;padding:11px 12px;border-radius:9px;
+  border:1px solid var(--line);background:var(--card2);color:var(--txt);font-size:16px;
+  text-transform:none;letter-spacing:0;
+}
+input:focus,select:focus{outline:2px solid var(--steel);outline-offset:0}
+
+.btn{
+  border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13px;font-weight:700;
+  background:var(--card2);color:var(--txt);cursor:pointer;white-space:nowrap;
+  text-transform:uppercase;letter-spacing:1.2px;
+}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.danger{background:transparent;color:var(--danger);border-color:var(--danger)}
+.btn.ghost{background:var(--card2);color:var(--txt)}
+.btn.big{flex:1;padding:16px;font-size:14px;letter-spacing:1.8px}
+.chip{
+  border:1px solid var(--line);background:var(--card2);color:var(--muted);
+  border-radius:999px;padding:9px 12px;font-size:12px;font-weight:700;cursor:pointer;flex:1;
+  letter-spacing:.6px;
+}
+.chip.active{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+
+/* ---------- séance ---------- */
+.session-card .session-times{display:flex;justify-content:space-between;margin-bottom:14px}
+.session-times div{display:flex;flex-direction:column;align-items:center;flex:1;gap:4px}
+.session-times .lbl{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--muted)}
+.session-times strong{font-size:20px;font-variant-numeric:tabular-nums;letter-spacing:.5px}
+/* témoin d'enregistrement, repris du point du logo */
+.rec-live{display:inline-flex;align-items:center;gap:6px;font-size:15px;letter-spacing:2.5px;color:var(--rec)}
+.rec-live i{width:9px;height:9px;border-radius:50%;background:var(--rec);animation:pulseRec 1.6s ease-in-out infinite}
+@keyframes pulseRec{0%,100%{opacity:1}50%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){.rec-live i{animation:none}}
+
+/* ---------- chronomètre ---------- */
+.timer-card{text-align:center}
+.timer-wrap{position:relative;width:min(260px,72vw);margin:0 auto 16px}
+.ring{width:100%;transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:var(--card2);stroke-width:12}
+.ring-fg{
+  fill:none;stroke:url(#gr-ring);stroke-width:12;stroke-linecap:round;
+  stroke-dasharray:552.9;stroke-dashoffset:0;transition:stroke-dashoffset .2s linear,stroke .3s;
+}
+.timer-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.timer-display{font-size:clamp(38px,13vw,54px);font-weight:800;font-variant-numeric:tabular-nums;line-height:1;letter-spacing:1px}
+.timer-label{font-size:9px;text-transform:uppercase;letter-spacing:2.6px;color:var(--muted);margin-top:8px}
+.timer-card.done .ring-fg{stroke:var(--rec)}
+.timer-card.done .timer-display{color:var(--rec)}
+.presets{margin-bottom:10px}
+.timer-card .row{margin-top:8px}
+
+/* ---------- compteurs ---------- */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(62px,1fr));gap:6px;margin:12px 0}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 4px;text-align:center}
+.stat span{display:block;font-size:19px;font-weight:800;font-variant-numeric:tabular-nums}
+.stat em{font-style:normal;font-size:8.5px;color:var(--muted);line-height:1.3;display:block;
+  text-transform:uppercase;letter-spacing:1.1px;margin-top:3px}
+
+/* ---------- exercices ---------- */
+.exo-form{margin-bottom:12px}
+.exo-form input#exoRest{width:86px;flex:none}
+.exo-form .btn{flex:none;width:52px;font-size:17px;letter-spacing:0}
+.exo{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:13px;margin-bottom:10px}
+.exo-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.exo-head .meta{font-size:11px;color:var(--muted);margin-top:3px;letter-spacing:.3px}
+.exo-head .del{background:none;border:0;color:var(--muted);font-size:20px;cursor:pointer;padding:0 4px}
+.sets{list-style:none;margin:10px 0 0;padding:0}
+.sets li{
+  display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--line);
+  font-variant-numeric:tabular-nums;font-size:15px;
+}
+.sets li .n{width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--accent-ink);
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex:none}
+.sets li .info{flex:1}
+.sets li .vol{color:var(--muted);font-size:11.5px}
+.sets li .rm{background:none;border:0;color:var(--muted);cursor:pointer;font-size:16px}
+.add-set{display:grid;grid-template-columns:1fr 1fr 82px;gap:8px;margin-top:12px}
+.add-set input{margin:0;text-align:center;min-width:0}
+.add-set [data-addset]{grid-column:1 / 3}
+.pdc{padding:11px 10px;font-size:15px;letter-spacing:0}
+
+/* ---------- listes de valeurs et macros ---------- */
+.kv{display:flex;flex-direction:column;gap:7px;font-size:14px}
+.kv .line{display:flex;justify-content:space-between;gap:12px}
+.kv .line span:first-child{color:var(--muted)}
+.kv .line span:last-child{font-weight:700;font-variant-numeric:tabular-nums;text-align:right;color:var(--txt)}
+.kv .line.total{border-top:1px solid var(--line);padding-top:9px;margin-top:3px;font-size:15px}
+.kv .line.total span:first-child{color:var(--txt)}
+.kv .line.total span:last-child{color:var(--rec)}
+.macros{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.macro{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:13px 6px;text-align:center}
+.macro b{display:block;font-size:24px;font-variant-numeric:tabular-nums;color:var(--txt)}
+.macro em{font-style:normal;font-size:8.5px;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;
+  display:block;margin-top:4px}
+.objectif-row{margin-bottom:4px}
+.foods{margin-top:12px;font-size:14px}
+.foods summary{color:var(--muted);cursor:pointer;font-size:11px;text-transform:uppercase;letter-spacing:1.4px}
+.foods .kv{margin-top:12px}
+
+/* ---------- historique ---------- */
+.hist{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px;margin-bottom:10px}
+.hist-head{display:flex;justify-content:space-between;align-items:center}
+.hist-head b{font-size:15px}
+.hist-head .rm{background:none;border:0;color:var(--muted);font-size:18px;cursor:pointer}
+.hist-sub{font-size:12.5px;color:var(--muted);margin-top:5px}
+.hist-exos{font-size:12.5px;color:var(--muted);margin-top:6px}
+.toast{
+  position:fixed;left:50%;bottom:24px;transform:translateX(-50%);
+  background:var(--accent);color:var(--accent-ink);font-weight:700;padding:12px 18px;border-radius:10px;
+  z-index:50;box-shadow:0 8px 24px #000a;font-size:14px;
+}
+
+/* ---------- RPE et records ---------- */
+.rpe-select{width:100%;margin:0;padding:11px 4px;text-align:center;font-size:15px;font-weight:600}
+.sets li .rpe{
+  display:inline-block;margin-left:5px;padding:2px 7px;border-radius:999px;
+  background:#2a2a31;color:var(--steel);font-size:10px;font-weight:700;letter-spacing:.8px;vertical-align:1px;
+}
+.sets li .pr{margin-left:4px;font-size:13px}
+.pr-tag{color:var(--rec);font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase}
+.exo-head .meta:empty{display:none}
+
+.hist.rec .hist-head{align-items:baseline}
+.rec-big{font-size:20px;font-weight:800;color:var(--rec);font-variant-numeric:tabular-nums}
+.rec-kv{margin-top:10px;border-top:1px solid var(--line);padding-top:10px}
+.rec-kv .line{align-items:baseline}
+.rec-kv .line span:last-child{max-width:62%}
+.rec-kv em{
+  display:block;font-style:normal;font-weight:400;font-size:11px;color:var(--muted);margin-top:2px;
+}
+#recordTri{margin-top:2px}
+
+/* ---------- graphiques ---------- */
+.filtres{margin-top:2px}
+.filtres select{margin-top:0}
+#progPeriode{width:132px;flex:none}
+.viz-sub{margin:-6px 0 14px;font-size:12.5px;color:var(--muted);line-height:1.4}
+.viz{position:relative;width:100%}
+.viz-svg{display:block;width:100%;height:auto;touch-action:pan-y}
+.viz:focus{outline:none}
+.viz:focus-visible{outline:2px solid var(--steel);outline-offset:4px;border-radius:8px}
+.viz-tick{fill:#8b8b95;font-size:11px;font-variant-numeric:tabular-nums}
+.viz-label{fill:#ffffff;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums}
+.viz-vide{color:var(--muted);font-size:13px;margin:8px 0}
+.viz-tip{
+  position:absolute;pointer-events:none;z-index:5;
+  background:#0d0d0ff2;border:1px solid var(--line);border-radius:9px;
+  padding:8px 10px;font-size:12px;max-width:210px;box-shadow:0 6px 18px #000b;
+}
+.viz-tip-date{color:var(--muted);font-size:10px;margin-bottom:5px;text-transform:uppercase;letter-spacing:1px}
+.viz-tip-l{display:flex;align-items:baseline;gap:6px;line-height:1.5}
+.viz-tip-l b{font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.viz-tip-n{color:var(--muted)}
+.viz-key{width:10px;height:2px;border-radius:2px;flex:none;align-self:center}
+.viz-bar{transition:filter .12s}
+.viz-bar.on{filter:brightness(1.3)}
+.viz-table summary{color:var(--muted);cursor:pointer;font-size:11px;text-transform:uppercase;letter-spacing:1.4px}
+.tbl{width:100%;border-collapse:collapse;margin-top:12px;font-size:12.5px}
+.tbl th,.tbl td{text-align:right;padding:7px 3px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl th:first-child,.tbl td:first-child{text-align:left}
+.tbl th{color:var(--muted);font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:1.2px}
+.tbl td{font-variant-numeric:tabular-nums}
+#progTable{overflow-x:auto}
+
+/* ---------- chiffre-phare ---------- */
+.hero-card{text-align:center}
+.hero-lbl{font-size:9px;text-transform:uppercase;letter-spacing:2.4px;color:var(--muted)}
+.hero{font-size:54px;font-weight:800;line-height:1.1;margin:4px 0;letter-spacing:-1px}
+.hero-sub{font-size:12.5px;color:var(--muted)}
+.voir-prog{width:100%;margin-top:12px;font-size:11px;padding:10px}
+.hist.rec{cursor:pointer}
+
+</style>
+
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9Ikd5bVJlYyI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImdyLWFjaWVyIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjExMCIgeTE9IjkwIiB4Mj0iNDIwIiB5Mj0iNDMwIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZmZmZmIi8+PHN0b3Agb2Zmc2V0PSIwLjUiIHN0b3AtY29sb3I9IiNlNmU2ZTYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNhMmE3YWYiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8Y2xpcFBhdGggaWQ9ImdyLWRpc3F1ZSI+PGNpcmNsZSBjeD0iMjU2IiBjeT0iMjU2IiByPSIxODAiLz48L2NsaXBQYXRoPgogIDwvZGVmcz4KICA8cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjExMiIgZmlsbD0iIzBkMGQwZiIvPgogIDxwYXRoIGQ9Ik0zOTYuNiAyMzYuMiBBMTQyIDE0MiAwIDEgMSAyOTUuMSAxMTkuNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI2dyLWFjaWVyKSIgc3Ryb2tlLXdpZHRoPSI3NiIvPgogIDxwYXRoIGQ9Ik0zMDAgMjU2IEg0NTAiIHN0cm9rZT0idXJsKCNnci1hY2llcikiIHN0cm9rZS13aWR0aD0iNzYiIGNsaXAtcGF0aD0idXJsKCNnci1kaXNxdWUpIi8+CiAgPGNpcmNsZSBjeD0iMjUwIiBjeT0iMjU2IiByPSIzNCIgZmlsbD0iI2ZmMmQyZCIvPgo8L3N2Zz4K" type="image/svg+xml">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9Ikd5bVJlYyI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImdyLWFjaWVyIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjExMCIgeTE9IjkwIiB4Mj0iNDIwIiB5Mj0iNDMwIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZmZmZmIi8+PHN0b3Agb2Zmc2V0PSIwLjUiIHN0b3AtY29sb3I9IiNlNmU2ZTYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNhMmE3YWYiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8Y2xpcFBhdGggaWQ9ImdyLWRpc3F1ZSI+PGNpcmNsZSBjeD0iMjU2IiBjeT0iMjU2IiByPSIxODAiLz48L2NsaXBQYXRoPgogIDwvZGVmcz4KICA8cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjExMiIgZmlsbD0iIzBkMGQwZiIvPgogIDxwYXRoIGQ9Ik0zOTYuNiAyMzYuMiBBMTQyIDE0MiAwIDEgMSAyOTUuMSAxMTkuNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI2dyLWFjaWVyKSIgc3Ryb2tlLXdpZHRoPSI3NiIvPgogIDxwYXRoIGQ9Ik0zMDAgMjU2IEg0NTAiIHN0cm9rZT0idXJsKCNnci1hY2llcikiIHN0cm9rZS13aWR0aD0iNzYiIGNsaXAtcGF0aD0idXJsKCNnci1kaXNxdWUpIi8+CiAgPGNpcmNsZSBjeD0iMjUwIiBjeT0iMjU2IiByPSIzNCIgZmlsbD0iI2ZmMmQyZCIvPgo8L3N2Zz4K">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GymRec">
+</head>
+<body>
+
+<div class="head-sticky">
+<header class="topbar">
+  <div class="brand">
+    <svg class="mark" viewBox="0 0 512 512" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="gr-acier" gradientUnits="userSpaceOnUse" x1="110" y1="90" x2="420" y2="430">
+          <stop offset="0" stop-color="#ffffff"/><stop offset="0.5" stop-color="#e6e6e6"/><stop offset="1" stop-color="#a2a7af"/>
+        </linearGradient>
+        <clipPath id="gr-disque"><circle cx="256" cy="256" r="180"/></clipPath>
+      </defs>
+      <path d="M396.6 236.2 A142 142 0 1 1 295.1 119.5" fill="none" stroke="url(#gr-acier)" stroke-width="76"/>
+      <path d="M300 256 H450" stroke="url(#gr-acier)" stroke-width="76" clip-path="url(#gr-disque)"/>
+      <circle cx="250" cy="256" r="34" fill="#ff2d2d"/>
+    </svg>
+    <span class="lockup">
+      <span class="wordmark">GYM<i>REC</i></span>
+      <span class="tagline">Workout recorder</span>
+    </span>
+  </div>
+  <div id="sessionClock" class="clock">—</div>
+</header>
+
+<nav class="tabs">
+  <button class="tab active" data-tab="seance">Séance</button>
+  <button class="tab" data-tab="progres">Progrès</button>
+  <button class="tab" data-tab="records">Records</button>
+  <button class="tab" data-tab="histo">Historique</button>
+  <button class="tab" data-tab="profil">Profil</button>
+</nav>
+</div>
+
+<main>
+
+<!-- ============ SÉANCE ============ -->
+<section id="tab-seance" class="panel active">
+
+  <!-- Bandeau séance -->
+  <div class="card session-card">
+    <div class="session-times">
+      <div><span class="lbl">Début</span><strong id="startTime">—</strong></div>
+      <div><span class="lbl">Fin</span><strong id="endTime">—</strong></div>
+      <div><span class="lbl">Durée</span><strong id="duration">00:00</strong></div>
+    </div>
+    <div class="row gap">
+      <button id="btnStart" class="btn primary big">Démarrer la séance</button>
+      <button id="btnEnd" class="btn primary big hidden">Terminer</button>
+    </div>
+  </div>
+
+  <!-- Chronomètre de récup -->
+  <div class="card timer-card">
+    <div class="timer-wrap">
+      <svg viewBox="0 0 200 200" class="ring">
+        <defs>
+          <linearGradient id="gr-ring" gradientUnits="userSpaceOnUse" x1="20" y1="10" x2="180" y2="190">
+            <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#a2a7af"/>
+          </linearGradient>
+        </defs>
+        <circle class="ring-bg" cx="100" cy="100" r="88"></circle>
+        <circle id="ringFg" class="ring-fg" cx="100" cy="100" r="88"></circle>
+      </svg>
+      <div class="timer-center">
+        <div id="timerDisplay" class="timer-display">01:30</div>
+        <div id="timerLabel" class="timer-label">Récupération</div>
+      </div>
+    </div>
+
+    <div class="row gap presets" id="presets">
+      <button class="chip" data-sec="45">45s</button>
+      <button class="chip" data-sec="60">1:00</button>
+      <button class="chip" data-sec="90">1:30</button>
+      <button class="chip" data-sec="120">2:00</button>
+      <button class="chip" data-sec="180">3:00</button>
+    </div>
+
+    <div class="row gap">
+      <button id="btnMinus" class="btn ghost">−15s</button>
+      <button id="btnToggle" class="btn primary grow">Démarrer</button>
+      <button id="btnPlus" class="btn ghost">+15s</button>
+    </div>
+    <div class="row gap">
+      <button id="btnReset" class="btn ghost grow">Réinitialiser</button>
+      <button id="btnSound" class="btn ghost grow">🔔 Son : on</button>
+    </div>
+  </div>
+
+  <!-- Compteurs live -->
+  <div class="stats" id="liveStats">
+    <div class="stat"><span id="stSets">0</span><em>séries</em></div>
+    <div class="stat"><span id="stReps">0</span><em>reps</em></div>
+    <div class="stat"><span id="stTonnage">0</span><em>kg soulevés</em></div>
+    <div class="stat"><span id="stRpe">—</span><em>RPE moyen</em></div>
+    <div class="stat"><span id="stKcal">0</span><em>kcal</em></div>
+  </div>
+
+  <!-- Exercices -->
+  <div class="card">
+    <h2>Exercices du jour</h2>
+    <form id="exoForm" class="exo-form">
+      <input id="exoName" list="exoList" placeholder="Ex : Développé couché" autocomplete="off" required>
+      <datalist id="exoList"></datalist>
+      <div class="row gap">
+        <select id="exoGroup" class="grow"></select>
+        <input id="exoRest" type="number" min="10" step="5" value="90" inputmode="numeric" title="Récup (s)">
+        <button class="btn primary" type="submit">+</button>
+      </div>
+    </form>
+    <div id="exoContainer" class="exo-container"></div>
+    <p id="exoEmpty" class="muted">Aucun exercice. Ajoute le premier ci-dessus.</p>
+  </div>
+
+  <!-- Dépense énergétique -->
+  <div class="card">
+    <h2>Dépense énergétique</h2>
+    <div id="kcalDetail" class="kv"></div>
+  </div>
+
+  <!-- Macros post-training -->
+  <div class="card">
+    <h2>Collation post-training</h2>
+    <div class="row gap objectif-row" id="objectifRow">
+      <button class="chip obj" data-obj="hypertrophie">Hypertrophie</button>
+      <button class="chip obj" data-obj="stabilite">Stabilité</button>
+      <button class="chip obj" data-obj="seche">Sèche</button>
+    </div>
+    <div class="macros" id="macros"></div>
+    <div id="macroNote" class="muted small"></div>
+    <details class="foods">
+      <summary>Exemples d'aliments pour atteindre ces macros</summary>
+      <div id="foodIdeas" class="kv"></div>
+    </details>
+  </div>
+
+  <div class="card">
+    <h2>Journée complète (estimation)</h2>
+    <div id="dailyTargets" class="kv"></div>
+  </div>
+
+</section>
+
+<!-- ============ PROGRÈS ============ -->
+<section id="tab-progres" class="panel">
+  <div class="card">
+    <h2>Progression</h2>
+    <div class="row gap filtres">
+      <select id="progExo" class="grow" aria-label="Exercice"></select>
+      <select id="progPeriode" aria-label="Période">
+        <option value="tout">Tout</option>
+        <option value="12">12 dernières</option>
+        <option value="90">3 mois</option>
+      </select>
+    </div>
+  </div>
+
+  <p id="progVide" class="muted">Enregistre des séries pour voir tes courbes de progression.</p>
+
+  <div id="progContenu">
+    <div class="card hero-card">
+      <div class="hero-lbl">1RM estimé actuel</div>
+      <div class="hero" id="progHero">—</div>
+      <div class="hero-sub" id="progHeroSub"></div>
+    </div>
+
+    <div class="card">
+      <h2>1RM estimé</h2>
+      <p class="viz-sub">Charge maximale théorique, série par série (la meilleure de chaque séance).</p>
+      <div id="chartE1rm"></div>
+    </div>
+
+    <div class="card">
+      <h2>Volume par séance</h2>
+      <p class="viz-sub">Kilos déplacés sur l'exercice : charge × reps, cumulés sur la séance.</p>
+      <div id="chartVol"></div>
+    </div>
+
+    <div class="card">
+      <h2>RPE moyen</h2>
+      <p class="viz-sub">Difficulté ressentie moyenne des séries de l'exercice (10 = échec).</p>
+      <div id="chartRpe"></div>
+    </div>
+
+    <details class="card viz-table">
+      <summary>Voir les données</summary>
+      <div id="progTable"></div>
+    </details>
+  </div>
+</section>
+
+<!-- ============ RECORDS ============ -->
+<section id="tab-records" class="panel">
+  <div class="card">
+    <h2>Mes records</h2>
+    <div class="row gap" id="recordTri">
+      <button class="chip tri active" data-tri="e1rm">1RM est.</button>
+      <button class="chip tri" data-tri="masse">Charge max</button>
+      <button class="chip tri" data-tri="recent">Récents</button>
+    </div>
+  </div>
+  <div id="recordsList"></div>
+  <p id="recordsEmpty" class="muted">Aucun record : enregistre des séries pour commencer à en poser.</p>
+</section>
+
+<!-- ============ HISTORIQUE ============ -->
+<section id="tab-histo" class="panel">
+  <div class="stats">
+    <div class="stat"><span id="hSessions">0</span><em>séances</em></div>
+    <div class="stat"><span id="hSets">0</span><em>séries</em></div>
+    <div class="stat"><span id="hTonnage">0</span><em>t soulevées</em></div>
+    <div class="stat"><span id="hKcal">0</span><em>kcal</em></div>
+  </div>
+  <div id="historyList"></div>
+  <p id="histoEmpty" class="muted">Pas encore de séance enregistrée.</p>
+  <div class="card">
+    <div class="row gap">
+      <button id="btnExport" class="btn ghost grow">Exporter (JSON)</button>
+      <button id="btnWipe" class="btn danger grow">Tout effacer</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROFIL ============ -->
+<section id="tab-profil" class="panel">
+  <div class="card">
+    <h2>Mes données</h2>
+    <label>Poids (kg)<input id="pPoids" type="number" min="30" max="250" step="0.5" inputmode="decimal"></label>
+    <label>Taille (cm)<input id="pTaille" type="number" min="120" max="230" step="1" inputmode="numeric"></label>
+    <label>Âge<input id="pAge" type="number" min="14" max="90" step="1" inputmode="numeric"></label>
+    <label>Sexe
+      <select id="pSexe"><option value="h">Homme</option><option value="f">Femme</option></select>
+    </label>
+    <label>Activité hors muscu
+      <select id="pActivite">
+        <option value="1.2">Sédentaire (bureau)</option>
+        <option value="1.375">Légère</option>
+        <option value="1.55">Modérée</option>
+        <option value="1.725">Élevée</option>
+      </select>
+    </label>
+    <label>Objectif
+      <select id="pObjectif">
+        <option value="hypertrophie">Hypertrophie (prise de muscle)</option>
+        <option value="stabilite">Stabilité (maintien)</option>
+        <option value="seche">Sèche (perte de gras)</option>
+      </select>
+    </label>
+    <label>Récup par défaut (s)<input id="pRest" type="number" min="10" max="600" step="5" inputmode="numeric"></label>
+    <label class="check"><input id="pAutoTimer" type="checkbox"> Lancer le chrono automatiquement après chaque série</label>
+    <div id="profilInfo" class="kv"></div>
+  </div>
+  <div class="card">
+    <h2>Comment sont calculés les chiffres ?</h2>
+    <div id="methodo" class="muted small"></div>
+  </div>
+</section>
+
+</main>
+
+<script>
+/* =========================================================
+   Viz — petite boîte à outils de graphiques SVG (sans dépendance)
+   Une série par graphique : pas de légende, le titre nomme la mesure.
+   Palette validée pour la surface sombre #171c24 (bande de clarté,
+   plancher de chroma, séparation daltonisme, contraste).
+   ========================================================= */
+const Viz = (() => {
+  const NS = 'http://www.w3.org/2000/svg';
+
+  const COL = {
+    surface: '#141417',
+    grid:    '#26262c',
+    ink:     '#ffffff',
+    muted:   '#8b8b95',
+    e1rm:    '#3987e5',  // slot 1 — bleu
+    volume:  '#d95926',  // slot 2 — orange
+    rpe:     '#199e70',  // slot 3 — aqua
+  };
+
+  const el = (n, a = {}) => {
+    const e = document.createElementNS(NS, n);
+    for (const k in a) e.setAttribute(k, a[k]);
+    return e;
+  };
+  const fmtJour = t => new Date(t).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' });
+  const fmtLong = t => new Date(t).toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
+
+  // Graduations « rondes » (0, 50, 100…) plutôt que les valeurs brutes
+  function ticks(min, max, n = 4) {
+    if (!(max > min)) { min = Math.max(0, min - 1); max = max + 1; }
+    const brut = (max - min) / n;
+    const mag = 10 ** Math.floor(Math.log10(brut));
+    const norm = brut / mag;
+    const pas = (norm <= 1 ? 1 : norm <= 2 ? 2 : norm <= 5 ? 5 : 10) * mag;
+    const lo = Math.floor(min / pas) * pas, hi = Math.ceil(max / pas) * pas;
+    const t = [];
+    for (let v = lo; v <= hi + pas / 1000; v += pas) t.push(Math.round(v * 1e6) / 1e6);
+    return { t, lo, hi };
+  }
+
+  /**
+   * host   : élément conteneur (position:relative)
+   * o.type : 'line' | 'bar'
+   * o.data : [{ t: horodatage, v: valeur, info: [[label, valeur affichée], …] }]
+   * o.color, o.fmt (valeur → texte), o.domaine ([min,max] forcé), o.titre
+   */
+  function chart(host, o) {
+    const data = (o.data || []).filter(d => d.v != null && isFinite(d.v));
+    host.innerHTML = '';
+    host.classList.add('viz');
+    if (!data.length) {
+      const p = document.createElement('p');
+      p.className = 'viz-vide';
+      p.textContent = o.vide || 'Pas encore de données pour cet exercice.';
+      host.appendChild(p);
+      return;
+    }
+
+    const fmt = v => String((o.fmt || Math.round)(v));   // toujours une chaîne : sert aussi à mesurer les graduations
+    const W = Math.max(260, host.clientWidth || 320);
+    const H = 188, pad = { l: 42, r: 14, t: 12, b: 26 };
+    const vals = data.map(d => d.v);
+    let vmin, vmax;
+    if (o.domaine) { [vmin, vmax] = o.domaine; }
+    else if (o.type === 'bar') { vmin = 0; vmax = Math.max(...vals); }
+    else {
+      const lo = Math.min(...vals), hi = Math.max(...vals), marge = (hi - lo || hi || 1) * 0.15;
+      vmin = Math.max(0, lo - marge); vmax = hi + marge;
+    }
+    const g = ticks(vmin, vmax, 4);
+    if (!o.domaine) { vmin = o.type === 'bar' ? 0 : g.lo; vmax = g.hi; }
+    const large = Math.max(...g.t.map(v => fmt(v).length));
+    pad.l = Math.max(30, Math.min(64, large * 6.6 + 12));
+    const iw = W - pad.l - pad.r, ih = H - pad.t - pad.b;
+    const y = v => pad.t + ih - (v - vmin) / (vmax - vmin || 1) * ih;
+
+    const t0 = data[0].t, t1 = data[data.length - 1].t;
+    const bande = iw / data.length;                       // graphiques en barres : positions par bande
+    const x = (d, i) => o.type === 'bar'
+      ? pad.l + bande * (i + 0.5)
+      : (t1 === t0 ? pad.l + iw / 2 : pad.l + (d.t - t0) / (t1 - t0) * iw);
+
+    const svg = el('svg', { width: W, height: H, viewBox: `0 0 ${W} ${H}`, class: 'viz-svg' });
+
+    // --- grille + axe des ordonnées (filets pleins, discrets)
+    for (const v of g.t) {
+      if (v < vmin - 1e-9 || v > vmax + 1e-9) continue;
+      svg.appendChild(el('line', { x1: pad.l, x2: W - pad.r, y1: y(v), y2: y(v), stroke: COL.grid, 'stroke-width': 1 }));
+      const tx = el('text', { x: pad.l - 8, y: y(v) + 4, 'text-anchor': 'end', class: 'viz-tick' });
+      tx.textContent = fmt(v);
+      svg.appendChild(tx);
+    }
+
+    // --- marques
+    const cs = [];   // positions, pour le survol
+    if (o.type === 'bar') {
+      const bw = Math.min(24, Math.max(6, bande - 8));    // ≤ 24 px, et au moins 2 px d'écart entre voisines
+      data.forEach((d, i) => {
+        const cx = x(d, i), h = Math.max(1, pad.t + ih - y(d.v)), r = Math.min(4, bw / 2, h);
+        const yy = y(d.v);
+        const barre = el('path', {
+          d: `M${cx - bw / 2} ${pad.t + ih} L${cx - bw / 2} ${yy + r} Q${cx - bw / 2} ${yy} ${cx - bw / 2 + r} ${yy}
+              L${cx + bw / 2 - r} ${yy} Q${cx + bw / 2} ${yy} ${cx + bw / 2} ${yy + r} L${cx + bw / 2} ${pad.t + ih} Z`,
+          fill: o.color, class: 'viz-bar',
+        });
+        svg.appendChild(barre);
+        cs.push({ cx, cy: yy, d, mark: barre });
+      });
+    } else {
+      const pts = data.map((d, i) => `${x(d, i)},${y(d.v)}`).join(' ');
+      if (data.length > 1) {
+        svg.appendChild(el('polyline', {
+          points: pts, fill: 'none', stroke: o.color, 'stroke-width': 2,
+          'stroke-linejoin': 'round', 'stroke-linecap': 'round',
+        }));
+      }
+      data.forEach((d, i) => {
+        const cx = x(d, i), cy = y(d.v);
+        svg.appendChild(el('circle', {
+          cx, cy, r: 4, fill: o.color, stroke: COL.surface, 'stroke-width': 2,
+        }));
+        cs.push({ cx, cy, d });
+      });
+    }
+
+    // --- étiquettes directes : dernier point, et le meilleur s'il est ailleurs
+    const iDernier = data.length - 1;
+    const iMax = vals.indexOf(Math.max(...vals));
+    const marque = new Set([iDernier, iMax]);
+    for (const i of marque) {
+      if (o.type === 'bar' && bande < 34) continue;
+      const c = cs[i];
+      const t = el('text', {
+        x: c.cx, y: Math.max(pad.t + 9, c.cy - 10), 'text-anchor': i === iDernier && data.length > 1 ? 'end' : 'middle',
+        class: 'viz-label',
+      });
+      if (i === iDernier && data.length > 1) t.setAttribute('x', Math.min(W - pad.r, c.cx + 4));
+      t.textContent = fmt(c.d.v);
+      svg.appendChild(t);
+    }
+
+    // --- axe des abscisses : première, dernière et une ou deux dates intermédiaires
+    const idx = new Set([0, data.length - 1]);
+    if (data.length > 3) { idx.add(Math.round((data.length - 1) / 3)); idx.add(Math.round(2 * (data.length - 1) / 3)); }
+    for (const i of idx) {
+      const c = cs[i];
+      const t = el('text', {
+        x: clampX(c.cx, W, pad), y: H - 8, class: 'viz-tick',
+        'text-anchor': i === 0 ? 'start' : (i === data.length - 1 ? 'end' : 'middle'),
+      });
+      t.textContent = fmtJour(c.d.t);
+      svg.appendChild(t);
+    }
+
+    // --- couche de survol : viseur + infobulle
+    const viseur = el('line', { y1: pad.t, y2: pad.t + ih, stroke: COL.muted, 'stroke-width': 1, class: 'viz-cross', opacity: 0 });
+    svg.appendChild(viseur);
+    const halo = el('circle', { r: 7, fill: 'none', stroke: o.color, 'stroke-width': 2, opacity: 0 });
+    svg.appendChild(halo);
+    host.appendChild(svg);
+
+    const tip = document.createElement('div');
+    tip.className = 'viz-tip';
+    tip.hidden = true;
+    host.appendChild(tip);
+
+    host.tabIndex = 0;
+    host.setAttribute('role', 'img');
+    host.setAttribute('aria-label',
+      `${o.titre || 'Graphique'} : ${data.length} points, de ${fmt(data[0].v)} le ${fmtLong(data[0].t)} à ${fmt(data[iDernier].v)} le ${fmtLong(data[iDernier].t)}.`);
+
+    let actif = -1;
+    function montrer(i) {
+      if (i < 0 || i >= cs.length) return;
+      actif = i;
+      const c = cs[i];
+      if (o.type === 'bar') {
+        cs.forEach(k => k.mark.classList.toggle('on', k === c));
+      } else {
+        viseur.setAttribute('x1', c.cx); viseur.setAttribute('x2', c.cx); viseur.setAttribute('opacity', 1);
+        halo.setAttribute('cx', c.cx); halo.setAttribute('cy', c.cy); halo.setAttribute('opacity', 1);
+      }
+      tip.innerHTML = '';
+      const dt = document.createElement('div');
+      dt.className = 'viz-tip-date';
+      dt.textContent = fmtLong(c.d.t);
+      tip.appendChild(dt);
+      for (const [lab, val] of (c.d.info || [['Valeur', fmt(c.d.v)]])) {
+        const l = document.createElement('div');
+        l.className = 'viz-tip-l';
+        const k = document.createElement('span'); k.className = 'viz-key'; k.style.background = o.color;
+        const v = document.createElement('b'); v.textContent = String(val);      // données utilisateur : jamais d'innerHTML
+        const n = document.createElement('span'); n.className = 'viz-tip-n'; n.textContent = String(lab);
+        l.append(k, v, n);
+        tip.appendChild(l);
+      }
+      tip.hidden = false;
+      const tw = tip.offsetWidth || 150, th = tip.offsetHeight || 70;
+      tip.style.left = Math.max(0, Math.min(W - tw, c.cx - tw / 2)) + 'px';
+      tip.style.top = (c.cy - th - 14 < 0 ? Math.min(H - th, c.cy + 14) : c.cy - th - 14) + 'px';
+    }
+    function cacher() {
+      actif = -1; tip.hidden = true;
+      viseur.setAttribute('opacity', 0); halo.setAttribute('opacity', 0);
+      cs.forEach(k => k.mark && k.mark.classList.remove('on'));
+    }
+    const plusProche = px => {
+      let best = 0, dm = Infinity;
+      cs.forEach((c, i) => { const d = Math.abs(c.cx - px); if (d < dm) { dm = d; best = i; } });
+      return best;
+    };
+    const surPointeur = ev => {
+      const r = svg.getBoundingClientRect();
+      montrer(plusProche(ev.clientX - r.left));
+    };
+    svg.addEventListener('pointermove', surPointeur);
+    svg.addEventListener('pointerdown', surPointeur);
+    svg.addEventListener('pointerleave', cacher);
+    host.addEventListener('blur', cacher);
+    host.addEventListener('keydown', ev => {
+      if (ev.key === 'ArrowRight') { montrer(actif < 0 ? 0 : Math.min(cs.length - 1, actif + 1)); ev.preventDefault(); }
+      else if (ev.key === 'ArrowLeft') { montrer(actif < 0 ? cs.length - 1 : Math.max(0, actif - 1)); ev.preventDefault(); }
+      else if (ev.key === 'Escape') cacher();
+    });
+    host.addEventListener('focus', () => { if (actif < 0) montrer(cs.length - 1); });
+
+    // Re-rendu à la rotation / au redimensionnement
+    if (!host._ro && window.ResizeObserver) {
+      let w = W;
+      host._ro = new ResizeObserver(() => {
+        if (Math.abs(host.clientWidth - w) > 4) { w = host.clientWidth; chart(host, o); }
+      });
+      host._ro.observe(host);
+    }
+  }
+
+  const clampX = (cx, W, pad) => Math.max(pad.l - 20, Math.min(W - 4, cx));
+
+  return { chart, COL, fmtJour, fmtLong };
+})();
+
+</script>
+<script>
 /* =========================================================
    GymRec — chrono de récup + suivi de séance + nutrition
    Aucune dépendance, tout est stocké en local (localStorage).
@@ -973,7 +1744,7 @@ $('#btnSound').textContent = state.profile.son ? '🔔 Son : on' : '🔕 Son : o
 $('#exoRest').value = state.profile.restDefault;
 renderAll();
 
-// Mise en cache hors-ligne (ignorée si le fichier est ouvert en file://)
-if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
-}
+
+</script>
+</body>
+</html>
