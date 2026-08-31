@@ -306,3 +306,14 @@ input:focus,select:focus{outline:2px solid var(--steel);outline-offset:0}
 .recap-grid em{font-style:normal;font-size:8.5px;color:var(--muted);text-transform:uppercase;letter-spacing:1.1px;
   display:block;margin-top:4px}
 .recap-macros{margin:14px 0 0}
+
+/* ---------- navigation : le témoin d'enregistrement sur l'onglet ● REC ---------- */
+.tab-rec{display:inline-flex;align-items:center;justify-content:center;gap:5px}
+.tab-rec i{width:7px;height:7px;border-radius:50%;background:transparent;flex:none}
+.tab-rec.enregistre i{background:var(--rec);animation:pulseRec 1.6s ease-in-out infinite}
+.tab-rec.enregistre.active i{background:var(--rec)}
+@media (prefers-reduced-motion:reduce){.tab-rec.enregistre i{animation:none}}
+
+/* ---------- conclusions (§50) : la phrase d'abord, le chiffre à la demande ---------- */
+.insight-txt{margin:0 0 10px;font-size:17px;line-height:1.4;font-weight:600;text-wrap:balance}
+.insight summary{margin-top:2px}

@@ -429,7 +429,7 @@ function demarrerSeance(modeleId) {
     saisie: null,
   };
   state.recapId = null;
-  save(); renderAll();
+  save(); renderAll(); allerA('rec');
   toast('Séance démarrée à ' + hhmm(state.session.start));
 }
 
@@ -457,7 +457,7 @@ function terminerSeance() {
   state.session = null;
   state.recapId = fini.id;      // le récap s'affiche à la place de l'écran du jour (§48)
   pauseTimer();
-  save(); renderAll();
+  save(); renderAll(); allerA('today');
 }
 
 // Fiche d'un exercice, avec son plan (§18) : séries, reps et charge visées
@@ -705,6 +705,147 @@ function modeleDepuisSeance(seance, nom) {
 }
 
 /* ---------------------------------------------------------
+   6 quater. Insights (§50)
+   Des conclusions, pas des statistiques. Chaque analyse porte son
+   seuil de données : en dessous elle se tait, et dit ce qui lui manque.
+   --------------------------------------------------------- */
+
+// Ce qu'une série a réellement produit : reps × masse déplacée
+const perfSet = set => set.reps * (set.mref != null ? set.mref : set.charge);
+
+// Toutes les fois où un exercice a été travaillé, du plus ancien au plus récent
+function seancesDe(nom) {
+  const out = [];
+  for (const seance of toutesLesSeances())
+    for (const exo of seance.exercices || [])
+      if (cle(exo.nom) === cle(nom) && exo.sets.length)
+        out.push({ t: seance.start, exo, sets: exo.sets });
+  return out.sort((a, b) => a.t - b.t);
+}
+
+const chargeMax = sets => Math.max(...sets.map(x => x.charge));
+
+/* « Tu sembles prêt à augmenter la charge. »
+   Deux séances au moins, objectif tenu, et de la marge sur les deux. */
+function insightProgression() {
+  const out = [];
+  for (const r of records()) {
+    const seances = seancesDe(r.nom);
+    if (seances.length < 2) continue;
+    const derniere = seances[seances.length - 1], avant = seances[seances.length - 2];
+    const cible = derniere.exo.repsCible;
+    const notes = derniere.sets.filter(x => x.rir != null);
+    if (!cible || notes.length < 2) continue;
+    if (!derniere.sets.every(x => x.reps >= cible)) continue;
+    if (chargeMax(derniere.sets) !== chargeMax(avant.sets)) continue;   // la charge a déjà bougé
+    const marge = notes.reduce((a, x) => a + x.rir, 0) / notes.length;
+    if (marge < 2) continue;
+    const c = chargeMax(derniere.sets), pas = pasCharge(c);
+    out.push({
+      cat: 'Progression', poids: 3,
+      texte: `Tu sembles prêt à passer à ${c + pas} kg sur ${r.nom}.`,
+      detail: `Sur tes deux dernières séances tu as tenu ${cible} reps à ${c} kg, avec ${round(marge, 1)} reps en réserve en moyenne.`,
+    });
+  }
+  return out;
+}
+
+/* « Tu performes mieux avec environ 2 minutes de récupération sur cet exercice. »
+   On compare ce que rend la série suivante selon le repos réellement pris. */
+const PANIERS_REPOS = [
+  { nom: 'moins de 1 min 30', test: r => r < 90 },
+  { nom: 'environ 2 minutes', test: r => r >= 90 && r < 150 },
+  { nom: 'plus de 2 min 30', test: r => r >= 150 },
+];
+
+function insightRecuperation() {
+  const out = [];
+  for (const r of records()) {
+    const obs = [];
+    for (const { sets } of seancesDe(r.nom)) {
+      for (let i = 1; i < sets.length; i++) {
+        const base = perfSet(sets[i - 1]);
+        if (!sets[i].reposAvant || !base) continue;
+        obs.push({ repos: sets[i].reposAvant, ratio: perfSet(sets[i]) / base });
+      }
+    }
+    if (obs.length < 6) continue;
+    const paniers = PANIERS_REPOS
+      .map(p => ({ ...p, obs: obs.filter(o => p.test(o.repos)) }))
+      .filter(p => p.obs.length >= 3)
+      .map(p => ({ ...p, moy: p.obs.reduce((a, o) => a + o.ratio, 0) / p.obs.length }));
+    if (paniers.length < 2) continue;
+    paniers.sort((a, b) => b.moy - a.moy);
+    const meilleur = paniers[0], pire = paniers[paniers.length - 1];
+    if (meilleur.moy - pire.moy < 0.05) continue;      // écart trop faible pour conclure
+    out.push({
+      cat: 'Récupération', poids: 2,
+      texte: `Tu enchaînes mieux avec ${meilleur.nom} de récupération sur ${r.nom}.`,
+      detail: `Sur ${obs.length} enchaînements, la série suivante rend ${round((meilleur.moy - pire.moy) * 100)} % de plus qu'avec ${pire.nom}.`,
+    });
+  }
+  return out;
+}
+
+/* « Tes performances diminuent fortement après environ 15 séries pecs. »
+   On suit la baisse de rendement au fil des séries d'un même groupe. */
+function insightVolume() {
+  const parGroupe = new Map();     // groupe → [ratios par rang de série]
+  let seancesParGroupe = new Map();
+  for (const seance of toutesLesSeances()) {
+    const parG = new Map();
+    for (const exo of seance.exercices || [])
+      for (const set of exo.sets) {
+        if (!parG.has(exo.groupe)) parG.set(exo.groupe, []);
+        parG.get(exo.groupe).push(set);
+      }
+    for (const [g, sets] of parG) {
+      sets.sort((a, b) => a.ts - b.ts);
+      const base = perfSet(sets[0]);
+      if (!base || sets.length < 4) continue;
+      if (!parGroupe.has(g)) { parGroupe.set(g, []); seancesParGroupe.set(g, 0); }
+      seancesParGroupe.set(g, seancesParGroupe.get(g) + 1);
+      const rangs = parGroupe.get(g);
+      sets.forEach((x, i) => { (rangs[i] = rangs[i] || []).push(perfSet(x) / base); });
+    }
+  }
+  const out = [];
+  for (const [g, rangs] of parGroupe) {
+    if (seancesParGroupe.get(g) < 3) continue;
+    const moy = rangs.map(v => (v.length >= 3 ? v.reduce((a, b) => a + b, 0) / v.length : null));
+    const chute = moy.findIndex((m, i) => m != null && m < 0.85 && moy.slice(0, i).some(x => x != null && x >= 0.95));
+    if (chute < 0) continue;
+    out.push({
+      cat: 'Volume', poids: 1,
+      texte: `Tes performances baissent nettement après environ ${chute} séries pour ${g === 'Abdos' ? 'les abdos' : 'les ' + g.toLowerCase()}.`,
+      detail: `Au-delà, la série rend en moyenne ${round((1 - moy[chute]) * 100)} % de moins que la première du groupe.`,
+    });
+  }
+  return out;
+}
+
+function tousLesInsights() {
+  return [...insightProgression(), ...insightRecuperation(), ...insightVolume()]
+    .sort((a, b) => b.poids - a.poids)
+    .slice(0, 5);
+}
+
+// Ce qu'il manque pour conclure, dit franchement plutôt que d'inventer
+function manqueInsights() {
+  const seances = state.history.length;
+  const avecMarge = toutesLesSeances().some(s => (s.exercices || [])
+    .some(e => e.sets.some(x => x.rir != null)));
+  const avecRepos = toutesLesSeances().some(s => (s.exercices || [])
+    .some(e => e.sets.some(x => x.reposAvant)));
+  const l = [];
+  if (seances < 2) l.push('au moins deux séances enregistrées');
+  if (!avecMarge) l.push('des réponses aux questions qui suivent tes séries');
+  if (!avecRepos) l.push('des récupérations mesurées entre les séries');
+  if (seances < 3) l.push('trois séances pour analyser le volume par groupe musculaire');
+  return l;
+}
+
+/* ---------------------------------------------------------
    7. Rendu
    --------------------------------------------------------- */
 function ligne(label, valeur, cls = '') {
@@ -721,6 +862,8 @@ function renderSeance() {
   $('#ecranRecap').classList.toggle('hidden', !recap);
   $('#ecranActif').classList.toggle('hidden', !s);
   $('#blocSeance').classList.toggle('hidden', !s);
+  $('.tab-rec').classList.toggle('enregistre', !!s);
+  renderTodayApercu();
   if (recap) renderRecap(recap);
   if (!s) renderToday();
   else { renderSerieCourante(); renderFeedback(); renderReco(); }
@@ -936,7 +1079,13 @@ function renderProgres() {
 
 function ouvrirProgres(nom) {
   progSel = nom;
-  $('.tab[data-tab="progres"]').click();
+  allerA('insights');
+}
+
+// Bascule d'onglet depuis le code (démarrage, fin de séance, lien depuis un record)
+function allerA(onglet) {
+  const t = $(`.tab[data-tab="${onglet}"]`);
+  if (t) t.click();
 }
 
 /* ---------------------------------------------------------
@@ -1093,6 +1242,46 @@ function renderRecap(f) {
     </div>`;
 }
 
+/* Les conclusions passent avant les statistiques (§9) : une phrase,
+   et le détail chiffré seulement si on le demande (§7). */
+function renderConclusions() {
+  const l = tousLesInsights();
+  const el = $('#conclusions');
+  if (!l.length) {
+    el.innerHTML = `
+      <div class="card">
+        <h2>Conclusions</h2>
+        <p class="muted small">GymRec n'a pas encore de quoi conclure honnêtement.
+        Il lui faut ${manqueInsights().join(', ')}.</p>
+      </div>`;
+    return;
+  }
+  el.innerHTML = l.map(i => `
+    <div class="card insight">
+      <h2>${i.cat}</h2>
+      <p class="insight-txt">${esc(i.texte)}</p>
+      <details class="foods"><summary>Pourquoi ?</summary><p class="muted small">${esc(i.detail)}</p></details>
+    </div>`).join('');
+}
+
+// §17 : l'écran du jour montre la séance passée et, s'il y en a une, la conclusion la plus utile
+function renderTodayApercu() {
+  const el = $('#todayApercu');
+  if (!el) return;
+  const d = state.history[0];
+  const top = tousLesInsights()[0];
+  el.innerHTML = `
+    ${top ? `<div class="card insight"><h2>${top.cat}</h2>
+        <p class="insight-txt">${esc(top.texte)}</p></div>` : ''}
+    ${d ? `<div class="card">
+        <h2>Dernière séance</h2>
+        <div class="kv">
+          <div class="line"><span>${esc(d.nom || 'Séance')}</span><span>${dateTxt(d.start)}</span></div>
+          <div class="line"><span>Volume</span><span>${d.sets} séries · ${d.reps} reps</span></div>
+          <div class="line"><span>Dépense</span><span>≈ ${d.kcal} kcal</span></div>
+        </div></div>` : ''}`;
+}
+
 let triRecords = 'e1rm';
 function renderRecords() {
   const list = records();
@@ -1159,7 +1348,10 @@ function renderProfil() {
     <p>Ce sont des estimations : ajuste-les selon l'évolution de ton poids sur 2 à 3 semaines.</p>`;
 }
 
-function renderAll() { renderSeance(); renderRecords(); renderProgres(); renderHistorique(); renderProfil(); renderTimer(); }
+function renderAll() {
+  renderSeance(); renderRecords(); renderProgres(); renderConclusions();
+  renderHistorique(); renderProfil(); renderTimer();
+}
 
 /* ---------------------------------------------------------
    8. Toast
@@ -1212,7 +1404,7 @@ function initUI() {
     $$('.panel').forEach(x => x.classList.remove('active'));
     t.classList.add('active');
     $('#tab-' + t.dataset.tab).classList.add('active');
-    if (t.dataset.tab === 'progres') renderProgres();
+    if (t.dataset.tab === 'insights') { renderProgres(); renderConclusions(); }
     window.scrollTo({ top: 0 });
   }));
 

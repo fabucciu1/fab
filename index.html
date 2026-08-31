@@ -38,25 +38,31 @@
 </header>
 
 <nav class="tabs">
-  <button class="tab active" data-tab="seance">Séance</button>
-  <button class="tab" data-tab="progres">Progrès</button>
-  <button class="tab" data-tab="records">Records</button>
-  <button class="tab" data-tab="histo">Historique</button>
-  <button class="tab" data-tab="profil">Profil</button>
+  <button class="tab active" data-tab="today">Today</button>
+  <button class="tab tab-rec" data-tab="rec"><i></i>Rec</button>
+  <button class="tab" data-tab="history">History</button>
+  <button class="tab" data-tab="insights">Insights</button>
+  <button class="tab" data-tab="profile">Profile</button>
 </nav>
 </div>
 
 <main>
 
 <!-- ============ SÉANCE ============ -->
-<section id="tab-seance" class="panel active">
-
+<!-- ============ TODAY (§17) ============ -->
+<section id="tab-today" class="panel active">
   <!-- ---------- Écran du jour : hors séance ---------- -->
   <div id="ecranToday"></div>
 
   <!-- ---------- Récapitulatif de fin de séance ---------- -->
   <div id="ecranRecap" class="hidden"></div>
 
+
+  <div id="todayApercu"></div>
+</section>
+
+<!-- ============ ● REC — la séance en cours, et demain Smart Rec (§32) ============ -->
+<section id="tab-rec" class="panel">
   <!-- ---------- Séance en cours ---------- -->
   <div id="ecranActif" class="hidden">
     <div class="card session-card">
@@ -171,10 +177,13 @@
 
 </section>
 
-<!-- ============ PROGRÈS ============ -->
-<section id="tab-progres" class="panel">
+<!-- ============ INSIGHTS (§50) ============ -->
+<section id="tab-insights" class="panel">
+
+  <div id="conclusions"></div>
+
   <div class="card">
-    <h2>Progression</h2>
+    <h2>Par exercice</h2>
     <div class="row gap filtres">
       <select id="progExo" class="grow" aria-label="Exercice"></select>
       <select id="progPeriode" aria-label="Période">
@@ -217,10 +226,7 @@
       <div id="progTable"></div>
     </details>
   </div>
-</section>
 
-<!-- ============ RECORDS ============ -->
-<section id="tab-records" class="panel">
   <div class="card">
     <h2>Mes records</h2>
     <div class="row gap" id="recordTri">
@@ -234,7 +240,7 @@
 </section>
 
 <!-- ============ HISTORIQUE ============ -->
-<section id="tab-histo" class="panel">
+<section id="tab-history" class="panel">
   <div class="stats">
     <div class="stat"><span id="hSessions">0</span><em>séances</em></div>
     <div class="stat"><span id="hSets">0</span><em>séries</em></div>
@@ -252,7 +258,7 @@
 </section>
 
 <!-- ============ PROFIL ============ -->
-<section id="tab-profil" class="panel">
+<section id="tab-profile" class="panel">
   <div class="card">
     <h2>Mes données</h2>
     <label>Poids (kg)<input id="pPoids" type="number" min="30" max="250" step="0.5" inputmode="decimal"></label>

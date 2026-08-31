@@ -9,6 +9,15 @@ Prototype d'application de musculation, 100 % web, sans dépendance ni serveur.
 Ouvre `index.html` dans un navigateur (ou publie le dossier) et c'est prêt.
 Toutes les données restent sur ton appareil (`localStorage`).
 
+## Navigation (§16)
+
+**TODAY** · **● REC** · **HISTORY** · **INSIGHTS** · **PROFILE**
+
+`TODAY` prépare et lance la séance, montre la dernière séance et la conclusion la plus utile.
+`● REC` porte la séance en cours — série courante, chronomètre, feedback, recommandation, détail —
+et c'est là que Smart Rec viendra se brancher (§32) ; hors séance le chronomètre y reste
+utilisable seul. Un point rouge pulse sur l'onglet tant que la séance enregistre.
+
 ## Ce que ça fait
 
 **Chronomètre de récupération**
@@ -70,9 +79,21 @@ Toutes les données restent sur ton appareil (`localStorage`).
 - La marge moyenne ajuste aussi la dépense énergétique (±15 % max) : s'entraîner près de
   l'échec coûte plus cher que le travail mécanique pur.
 
+**Conclusions** (§50)
+
+Onglet **Insights**, avant les chiffres : des phrases, et le détail seulement si on le demande.
+Trois analyses, chacune avec un seuil de données explicite — en dessous, GymRec se tait et dit
+ce qui lui manque plutôt que d'inventer :
+
+| Conclusion | Ce qu'elle regarde | Seuil |
+|---|---|---|
+| **Progression** — « Tu sembles prêt à passer à 85 kg sur X. » | objectif tenu et marge ≥ 2 sur la dernière séance, charge inchangée depuis la précédente | 2 séances, 2 séries notées |
+| **Récupération** — « Tu enchaînes mieux avec environ 2 minutes de récup sur X. » | ce que rend la série suivante selon le repos réellement pris | 6 enchaînements, 3 par palier, écart ≥ 5 % |
+| **Volume** — « Tes performances baissent après environ N séries pour les pectoraux. » | la baisse de rendement au fil des séries d'un même groupe | 3 séances, 3 observations au rang concerné |
+
 **Graphiques de progression**
 
-Onglet **Progrès** : un exercice + une période (tout / 12 dernières séances / 3 mois) en filtre,
+Dans **Insights**, section « Par exercice » : un exercice + une période (tout / 12 dernières séances / 3 mois) en filtre,
 puis trois graphiques SVG dessinés à la main, sans aucune librairie :
 
 - **1RM estimé** (courbe) — la meilleure série de chaque séance ;
@@ -190,8 +211,11 @@ donnée, choisies pour être distinguables entre elles, pas pour porter la marqu
 Les calories et les macros sont des **estimations** : à ajuster selon l'évolution réelle du
 poids sur 2-3 semaines.
 
+Les conclusions d'Insights sont des corrélations lues sur tes propres séances, pas des
+vérités : elles se déclenchent sur des seuils volontairement prudents, et un écart peut venir
+d'autre chose que de ce qu'elles pointent (sommeil, ordre des exercices, forme du jour).
+
 Par rapport au cahier des charges, il manque encore : **Smart Rec** et la caméra-capteur
-(phases 2-3), l'adaptation inter-séances et les Insights (§50-51), la fusion de capteurs
-(§54-68), et la navigation cible TODAY / ● REC / HISTORY / INSIGHTS / PROFILE (§16) — les
-onglets Progrès et Records correspondent à INSIGHTS. Pas de tempo ni de séries longues
-(drop sets, rest-pause), pas de synchronisation multi-appareils.
+(phases 2-3), l'adaptation inter-séances (§51), le coach adaptatif (§52) et la fusion de
+capteurs (§54-68). Pas de tempo ni de séries longues (drop sets, rest-pause), pas de
+synchronisation multi-appareils.
