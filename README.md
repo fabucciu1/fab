@@ -50,10 +50,9 @@ lecteurs d'écran, et se double d'une **vue tableau** dépliable — aucune vale
 accessible uniquement au survol. Depuis l'onglet Records, « Voir la progression » ouvre
 directement les courbes de l'exercice.
 
-Les trois couleurs (bleu, jaune, aqua) sont validées pour la surface sombre de l'app :
+Les trois couleurs (bleu, orange, aqua) sont validées pour la surface sombre de l'app :
 bande de clarté, plancher de chroma, séparation sous daltonisme (ΔE ≥ 8) et contraste ≥ 3:1.
-Elles restent volontairement à distance du rouge de la marque, pour qu'on ne confonde jamais
-une donnée avec un bouton.
+Ce sont des couleurs de donnée, indépendantes de la marque : l'interface, elle, reste neutre.
 
 **Calories brûlées**
 
@@ -99,12 +98,19 @@ service worker — pratique dans une salle sans réseau.
 
 ## Charte
 
-Thème sombre, une seule couleur d'action : le **rouge du logo** (`--accent: #ff5d5d`), posé
-sur les boutons principaux, l'anneau du chrono, les onglets actifs et les records. Le texte
-sur aplat rouge est un rouge très sombre (`#2a0505`, contraste 5,5:1). Les actions
-destructives partagent la même teinte mais en **contour** plutôt qu'en aplat : « Tout
-effacer » ne peut pas être confondu avec « Valider ». La fin de récup passe à l'ambre
-(`--warn`), la seule autre couleur de statut.
+Thème sombre, et la même logique que le logo : une surface neutre, un point rouge.
+
+- **`--accent: #e8edf4`** — le blanc cassé du G. Tous les aplats d'action : bouton principal,
+  onglet actif, anneau du chrono, pastilles de séries. Texte posé dessus : `--accent-ink`
+  (`#0e1116`, contraste 15:1).
+- **`--rec: #ff5d5d`** — le point du logo. Jamais un aplat, seulement de petits accents :
+  le total de calories, le badge de record, les glucides.
+- **`--danger`** — le même rouge, en **contour** : « Tout effacer » ne peut pas être confondu
+  avec « Valider ».
+- **`--warn`** (ambre) — la fin de récup, la seule couleur de statut.
+
+Les couleurs des graphiques (bleu, orange, aqua) sont à part : ce sont des couleurs de
+donnée, choisies pour être distinguables entre elles, pas pour porter la marque.
 
 ## Fichiers
 

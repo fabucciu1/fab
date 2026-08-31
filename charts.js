@@ -13,7 +13,7 @@ const Viz = (() => {
     ink:     '#e8edf4',
     muted:   '#94a3b8',
     e1rm:    '#3987e5',  // slot 1 — bleu
-    volume:  '#c98500',  // slot 2 — jaune (l'orange était trop proche du rouge de la marque)
+    volume:  '#d95926',  // slot 2 — orange
     rpe:     '#199e70',  // slot 3 — aqua
   };
 

@@ -5,10 +5,11 @@
   --line:#2a323f;
   --txt:#e8edf4;
   --muted:#94a3b8;
-  --accent:#ff5d5d;        /* le rouge du logo : couleur d'action de l'app */
-  --accent2:#e04a4a;       /* survol / état pressé */
-  --accent-ink:#2a0505;    /* texte posé sur un aplat d'accent (5,5:1) */
-  --danger:#ff5d5d;        /* destructif : même rouge, traité en contour */
+  --accent:#e8edf4;        /* le blanc cassé du logo : les aplats d'action */
+  --accent2:#cfd8e3;       /* survol / état pressé */
+  --accent-ink:#0e1116;    /* texte posé sur un aplat d'accent (15:1) */
+  --rec:#ff5d5d;           /* le point du logo : accents ponctuels, jamais des aplats */
+  --danger:#ff5d5d;        /* destructif : le même rouge, traité en contour */
   --warn:#ffb454;
   --radius:16px;
 }
@@ -139,12 +140,12 @@ input:focus,select:focus{outline:2px solid var(--accent);outline-offset:0}
 .kv .line{display:flex;justify-content:space-between;gap:12px}
 .kv .line span:last-child{font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
 .kv .line.total{border-top:1px solid var(--line);padding-top:8px;margin-top:2px;font-size:16px}
-.kv .line.total span:last-child{color:var(--accent)}
+.kv .line.total span:last-child{color:var(--rec)}
 .macros{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
 .macro{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px 6px;text-align:center}
 .macro b{display:block;font-size:22px;font-variant-numeric:tabular-nums}
 .macro em{font-style:normal;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
-.macro.p b{color:#7ec8ff}.macro.g b{color:var(--accent)}.macro.l b{color:#ffc44d}
+.macro.p b{color:#7ec8ff}.macro.g b{color:var(--rec)}.macro.l b{color:#ffc44d}
 .objectif-row{margin-bottom:4px}
 .foods{margin-top:10px;font-size:14px}
 .foods summary{color:var(--muted);cursor:pointer;font-size:13px}
@@ -170,11 +171,11 @@ input:focus,select:focus{outline:2px solid var(--accent);outline-offset:0}
   background:#2a3346;color:#9fc2ff;font-size:11px;font-weight:700;vertical-align:1px;
 }
 .sets li .pr{margin-left:4px;font-size:13px}
-.pr-tag{color:var(--accent);font-size:11px;font-weight:700;letter-spacing:.3px}
+.pr-tag{color:var(--rec);font-size:11px;font-weight:700;letter-spacing:.3px}
 .exo-head .meta:empty{display:none}
 
 .hist.rec .hist-head{align-items:baseline}
-.rec-big{font-size:20px;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums}
+.rec-big{font-size:20px;font-weight:800;color:var(--rec);font-variant-numeric:tabular-nums}
 .rec-kv{margin-top:8px;border-top:1px solid var(--line);padding-top:8px}
 .rec-kv .line{align-items:baseline}
 .rec-kv .line span:last-child{max-width:62%}
