@@ -103,8 +103,10 @@ service worker — pratique dans une salle sans réseau.
 - `charts.js` — boîte à outils de graphiques SVG (courbes, barres, infobulles, clavier)
 - `sw.js`, `manifest.webmanifest` — installation et mode hors-ligne
 - `icon.svg`, `icon-512.png`, `apple-touch-icon.png` — le logo : un anneau de chronomètre
-  ouvert en bas à droite (le temps de récup qui s'écoule) qui dessine un **G**, dont la barre
-  est un haltère. Le même dessin sert de marque dans l'en-tête de l'app.
+  ouvert en bas à droite (le temps de récup qui s'écoule), un haltère, et au centre le **point
+  rouge REC** — la séance qui s'enregistre. Le même dessin sert de marque dans l'en-tête.
+- `logo-variantes.html` — les pistes explorées, chacune montrée à 180 px, en taille favicon
+  (44 / 30 / 20 px) et sous simulation de deutéranopie. À ouvrir pour en changer.
 
 ## Limites (prototype)
 

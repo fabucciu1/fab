@@ -2,10 +2,12 @@
   <rect width="512" height="512" rx="112" fill="#0e1116"/>
   <!-- piste du chronomètre -->
   <circle cx="256" cy="256" r="150" fill="none" stroke="#232a36" stroke-width="36"/>
-  <!-- le G : l'anneau de récup s'ouvre en bas à droite -->
+  <!-- l'anneau de récup, ouvert en bas à droite : le temps qui s'écoule -->
   <path d="M406 256 A150 150 0 1 0 352.4 370.9" fill="none" stroke="#38e07b" stroke-width="36" stroke-linecap="round"/>
-  <!-- la barre du G est un haltère -->
-  <path d="M250 256 H400" stroke="#38e07b" stroke-width="26" stroke-linecap="round"/>
-  <rect x="264" y="218" width="24" height="76" rx="8" fill="#38e07b"/>
-  <rect x="332" y="218" width="24" height="76" rx="8" fill="#38e07b"/>
+  <!-- l'haltère : barre et deux disques -->
+  <path d="M152 256 H360" stroke="#38e07b" stroke-width="22" stroke-linecap="round"/>
+  <rect x="144" y="217" width="24" height="78" rx="8" fill="#38e07b"/>
+  <rect x="344" y="217" width="24" height="78" rx="8" fill="#38e07b"/>
+  <!-- la poignée est le point REC : la séance s'enregistre -->
+  <circle cx="256" cy="256" r="54" fill="#ff5d5d"/>
 </svg>
