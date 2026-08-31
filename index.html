@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e1116">
+<title>FabFit — Chrono &amp; Séances</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="manifest" href="manifest.webmanifest">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">FabFit</div>
+  <div id="sessionClock" class="clock">—</div>
+</header>
+
+<nav class="tabs">
+  <button class="tab active" data-tab="seance">Séance</button>
+  <button class="tab" data-tab="histo">Historique</button>
+  <button class="tab" data-tab="profil">Profil</button>
+</nav>
+
+<main>
+
+<!-- ============ SÉANCE ============ -->
+<section id="tab-seance" class="panel active">
+
+  <!-- Bandeau séance -->
+  <div class="card session-card">
+    <div class="session-times">
+      <div><span class="lbl">Début</span><strong id="startTime">—</strong></div>
+      <div><span class="lbl">Fin</span><strong id="endTime">—</strong></div>
+      <div><span class="lbl">Durée</span><strong id="duration">00:00</strong></div>
+    </div>
+    <div class="row gap">
+      <button id="btnStart" class="btn primary big">Démarrer la séance</button>
+      <button id="btnEnd" class="btn danger big hidden">Terminer</button>
+    </div>
+  </div>
+
+  <!-- Chronomètre de récup -->
+  <div class="card timer-card">
+    <div class="timer-wrap">
+      <svg viewBox="0 0 200 200" class="ring">
+        <circle class="ring-bg" cx="100" cy="100" r="88"></circle>
+        <circle id="ringFg" class="ring-fg" cx="100" cy="100" r="88"></circle>
+      </svg>
+      <div class="timer-center">
+        <div id="timerDisplay" class="timer-display">01:30</div>
+        <div id="timerLabel" class="timer-label">Récupération</div>
+      </div>
+    </div>
+
+    <div class="row gap presets" id="presets">
+      <button class="chip" data-sec="45">45s</button>
+      <button class="chip" data-sec="60">1:00</button>
+      <button class="chip" data-sec="90">1:30</button>
+      <button class="chip" data-sec="120">2:00</button>
+      <button class="chip" data-sec="180">3:00</button>
+    </div>
+
+    <div class="row gap">
+      <button id="btnMinus" class="btn ghost">−15s</button>
+      <button id="btnToggle" class="btn primary grow">Démarrer</button>
+      <button id="btnPlus" class="btn ghost">+15s</button>
+    </div>
+    <div class="row gap">
+      <button id="btnReset" class="btn ghost grow">Réinitialiser</button>
+      <button id="btnSound" class="btn ghost grow">🔔 Son : on</button>
+    </div>
+  </div>
+
+  <!-- Compteurs live -->
+  <div class="stats" id="liveStats">
+    <div class="stat"><span id="stSets">0</span><em>séries</em></div>
+    <div class="stat"><span id="stReps">0</span><em>reps</em></div>
+    <div class="stat"><span id="stTonnage">0</span><em>kg soulevés</em></div>
+    <div class="stat"><span id="stKcal">0</span><em>kcal</em></div>
+  </div>
+
+  <!-- Exercices -->
+  <div class="card">
+    <h2>Exercices du jour</h2>
+    <form id="exoForm" class="exo-form">
+      <input id="exoName" list="exoList" placeholder="Ex : Développé couché" autocomplete="off" required>
+      <datalist id="exoList"></datalist>
+      <div class="row gap">
+        <select id="exoGroup" class="grow"></select>
+        <input id="exoRest" type="number" min="10" step="5" value="90" inputmode="numeric" title="Récup (s)">
+        <button class="btn primary" type="submit">+</button>
+      </div>
+    </form>
+    <div id="exoContainer" class="exo-container"></div>
+    <p id="exoEmpty" class="muted">Aucun exercice. Ajoute le premier ci-dessus.</p>
+  </div>
+
+  <!-- Dépense énergétique -->
+  <div class="card">
+    <h2>Dépense énergétique</h2>
+    <div id="kcalDetail" class="kv"></div>
+  </div>
+
+  <!-- Macros post-training -->
+  <div class="card">
+    <h2>Collation post-training</h2>
+    <div class="row gap objectif-row" id="objectifRow">
+      <button class="chip obj" data-obj="hypertrophie">Hypertrophie</button>
+      <button class="chip obj" data-obj="stabilite">Stabilité</button>
+      <button class="chip obj" data-obj="seche">Sèche</button>
+    </div>
+    <div class="macros" id="macros"></div>
+    <div id="macroNote" class="muted small"></div>
+    <details class="foods">
+      <summary>Exemples d'aliments pour atteindre ces macros</summary>
+      <div id="foodIdeas" class="kv"></div>
+    </details>
+  </div>
+
+  <div class="card">
+    <h2>Journée complète (estimation)</h2>
+    <div id="dailyTargets" class="kv"></div>
+  </div>
+
+</section>
+
+<!-- ============ HISTORIQUE ============ -->
+<section id="tab-histo" class="panel">
+  <div class="stats">
+    <div class="stat"><span id="hSessions">0</span><em>séances</em></div>
+    <div class="stat"><span id="hSets">0</span><em>séries</em></div>
+    <div class="stat"><span id="hTonnage">0</span><em>t soulevées</em></div>
+    <div class="stat"><span id="hKcal">0</span><em>kcal</em></div>
+  </div>
+  <div id="historyList"></div>
+  <p id="histoEmpty" class="muted">Pas encore de séance enregistrée.</p>
+  <div class="card">
+    <div class="row gap">
+      <button id="btnExport" class="btn ghost grow">Exporter (JSON)</button>
+      <button id="btnWipe" class="btn danger grow">Tout effacer</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROFIL ============ -->
+<section id="tab-profil" class="panel">
+  <div class="card">
+    <h2>Mes données</h2>
+    <label>Poids (kg)<input id="pPoids" type="number" min="30" max="250" step="0.5" inputmode="decimal"></label>
+    <label>Taille (cm)<input id="pTaille" type="number" min="120" max="230" step="1" inputmode="numeric"></label>
+    <label>Âge<input id="pAge" type="number" min="14" max="90" step="1" inputmode="numeric"></label>
+    <label>Sexe
+      <select id="pSexe"><option value="h">Homme</option><option value="f">Femme</option></select>
+    </label>
+    <label>Activité hors muscu
+      <select id="pActivite">
+        <option value="1.2">Sédentaire (bureau)</option>
+        <option value="1.375">Légère</option>
+        <option value="1.55">Modérée</option>
+        <option value="1.725">Élevée</option>
+      </select>
+    </label>
+    <label>Objectif
+      <select id="pObjectif">
+        <option value="hypertrophie">Hypertrophie (prise de muscle)</option>
+        <option value="stabilite">Stabilité (maintien)</option>
+        <option value="seche">Sèche (perte de gras)</option>
+      </select>
+    </label>
+    <label>Récup par défaut (s)<input id="pRest" type="number" min="10" max="600" step="5" inputmode="numeric"></label>
+    <label class="check"><input id="pAutoTimer" type="checkbox"> Lancer le chrono automatiquement après chaque série</label>
+    <div id="profilInfo" class="kv"></div>
+  </div>
+  <div class="card">
+    <h2>Comment sont calculés les chiffres ?</h2>
+    <div id="methodo" class="muted small"></div>
+  </div>
+</section>
+
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
