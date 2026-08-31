@@ -1,5 +1,10 @@
 # GymRec — chrono de récup & suivi de séance
 
+> **Référence produit :** [`docs/cahier-des-charges.md`](docs/cahier-des-charges.md) (v0.4).
+> Ce dépôt est le **prototype UX (phase 0)** de la feuille de route qui s'y trouve : il valide la
+> boucle d'entraînement avant toute vision par ordinateur. Smart Rec, la caméra-capteur et le
+> moteur d'adaptation n'y sont pas encore.
+
 Prototype d'application de musculation, 100 % web, sans dépendance ni serveur.
 Ouvre `index.html` dans un navigateur (ou publie le dossier) et c'est prêt.
 Toutes les données restent sur ton appareil (`localStorage`).
