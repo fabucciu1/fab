@@ -1,6 +1,6 @@
 {
-  "name": "FabFit — Chrono & Séances",
-  "short_name": "FabFit",
+  "name": "GymRec — Chrono & Séances",
+  "short_name": "GymRec",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0e1116",

@@ -1,5 +1,5 @@
 /* =========================================================
-   FabFit — chrono de récup + suivi de séance + nutrition
+   GymRec — chrono de récup + suivi de séance + nutrition
    Aucune dépendance, tout est stocké en local (localStorage).
    ========================================================= */
 
@@ -51,7 +51,8 @@ const DEFAULT_ROM = 0.45;
 /* ---------------------------------------------------------
    2. État + persistance
    --------------------------------------------------------- */
-const KEY = 'fabfit.v1';
+const KEY = 'gymrec.v1';
+const KEY_ANCIENNE = 'fabfit.v1';   // ancien nom de l'app : on récupère les données existantes
 
 const defaultProfile = {
   poids: 80, taille: 178, age: 30, sexe: 'h',
@@ -67,7 +68,11 @@ let state = {
 
 function load() {
   try {
-    const raw = localStorage.getItem(KEY);
+    let raw = localStorage.getItem(KEY);
+    if (!raw) {                                  // migration depuis l'ancienne clé
+      raw = localStorage.getItem(KEY_ANCIENNE);
+      if (raw) { localStorage.setItem(KEY, raw); localStorage.removeItem(KEY_ANCIENNE); }
+    }
     if (!raw) return;
     const d = JSON.parse(raw);
     state.profile = { ...defaultProfile, ...(d.profile || {}) };
@@ -908,7 +913,7 @@ function initUI() {
     const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = `fabfit-${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `gymrec-${new Date().toISOString().slice(0, 10)}.json`;
     a.click(); URL.revokeObjectURL(a.href);
   });
   $('#btnWipe').addEventListener('click', () => {

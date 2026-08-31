@@ -1,4 +1,4 @@
-# FabFit — chrono de récup & suivi de séance
+# GymRec — chrono de récup & suivi de séance
 
 Prototype d'application de musculation, 100 % web, sans dépendance ni serveur.
 Ouvre `index.html` dans un navigateur (ou publie le dossier) et c'est prêt.

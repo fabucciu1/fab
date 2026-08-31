@@ -1,5 +1,5 @@
 /* Cache applicatif : l'app reste utilisable sans réseau (utile en sous-sol). */
-const CACHE = 'fabfit-v1';
+const CACHE = 'gymrec-v1';
 const ASSETS = ['./', './index.html', './styles.css', './app.js', './charts.js', './manifest.webmanifest', './icon.svg'];
 
 self.addEventListener('install', e => {
