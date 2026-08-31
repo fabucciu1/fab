@@ -39,8 +39,8 @@ main{max-width:640px;margin:0 auto;padding:12px 12px 60px}
   border-bottom:1px solid var(--line);max-width:640px;margin:0 auto;
 }
 .tab{
-  flex:1;padding:10px 4px;border:0;border-radius:10px;background:var(--card);
-  color:var(--muted);font-weight:600;font-size:13px;cursor:pointer;white-space:nowrap;
+  flex:1;padding:10px 2px;border:0;border-radius:10px;background:var(--card);
+  color:var(--muted);font-weight:600;font-size:12.5px;cursor:pointer;white-space:nowrap;
 }
 .tab.active{background:var(--accent);color:#08210f}
 .panel{display:none}
@@ -180,3 +180,43 @@ input:focus,select:focus{outline:2px solid var(--accent);outline-offset:0}
   display:block;font-style:normal;font-weight:400;font-size:11px;color:var(--muted);margin-top:1px;
 }
 #recordTri{margin-top:2px}
+
+/* ---------- graphiques ---------- */
+.filtres{margin-top:2px}
+.filtres select{margin-top:0}
+#progPeriode{width:132px;flex:none}
+.viz-sub{margin:-4px 0 12px;font-size:12.5px;color:var(--muted);line-height:1.35}
+.viz{position:relative;width:100%}
+.viz-svg{display:block;width:100%;height:auto;touch-action:pan-y}
+.viz:focus{outline:none}
+.viz:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:8px}
+.viz-tick{fill:#94a3b8;font-size:11px;font-variant-numeric:tabular-nums}
+.viz-label{fill:#e8edf4;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums}
+.viz-vide{color:var(--muted);font-size:13px;margin:8px 0}
+.viz-tip{
+  position:absolute;pointer-events:none;z-index:5;
+  background:#0e1116f2;border:1px solid var(--line);border-radius:10px;
+  padding:7px 9px;font-size:12px;max-width:210px;box-shadow:0 6px 18px #0009;
+}
+.viz-tip-date{color:var(--muted);font-size:11px;margin-bottom:4px}
+.viz-tip-l{display:flex;align-items:baseline;gap:6px;line-height:1.5}
+.viz-tip-l b{font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.viz-tip-n{color:var(--muted)}
+.viz-key{width:10px;height:2px;border-radius:2px;flex:none;align-self:center}
+.viz-table summary{color:var(--muted);cursor:pointer;font-size:13px}
+.tbl{width:100%;border-collapse:collapse;margin-top:10px;font-size:12.5px}
+.tbl th,.tbl td{text-align:right;padding:6px 3px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl th:first-child,.tbl td:first-child{text-align:left}
+.tbl th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+.tbl td{font-variant-numeric:tabular-nums}
+#progTable{overflow-x:auto}
+
+/* ---------- chiffre-phare ---------- */
+.hero-card{text-align:center}
+.hero-lbl{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--muted)}
+.hero{font-size:52px;font-weight:800;line-height:1.1;margin:2px 0}
+.hero-sub{font-size:13px;color:var(--muted)}
+.voir-prog{width:100%;margin-top:10px;font-size:13px;padding:9px}
+.hist.rec{cursor:pointer}
+.viz-bar{transition:filter .12s}
+.viz-bar.on{filter:brightness(1.3)}

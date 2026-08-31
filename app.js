@@ -81,6 +81,8 @@ function save() {
 }
 
 const uid = () => Math.random().toString(36).slice(2, 9);
+// Les noms d'exercices sont saisis par l'utilisateur : jamais injectés bruts en HTML
+const esc = t => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 /* ---------------------------------------------------------
    3. Calculs : volume, calories, macros
@@ -267,6 +269,37 @@ function records() {
 
 const recordDe = nom => records().find(r => cle(r.nom) === cle(nom)) || null;
 
+// Une entrée par séance où l'exercice a été travaillé, du plus ancien au plus récent
+function serieExercice(nom) {
+  const out = [];
+  for (const seance of toutesLesSeances()) {
+    const P = seance.poidsCorps || state.profile.poids;
+    let e1 = 0, volume = 0, reps = 0, sets = 0, rpeS = 0, rpeN = 0, best = null;
+    for (const exo of seance.exercices || []) {
+      if (cle(exo.nom) !== cle(nom)) continue;
+      for (const set of exo.sets) {
+        const m = set.mref != null ? set.mref : masseRecord(exo, set, P);
+        const e = e1RM(m, set.reps, set.rpe);
+        sets++; reps += set.reps; volume += m * set.reps;
+        if (set.rpe) { rpeS += set.rpe; rpeN++; }
+        if (e > e1) { e1 = e; best = { reps: set.reps, masse: m, rpe: set.rpe }; }
+      }
+    }
+    if (sets) out.push({
+      t: seance.start, encours: !seance.end,
+      e1rm: e1, volume, sets, reps, best,
+      rpe: rpeN ? rpeS / rpeN : null,
+    });
+  }
+  return out.sort((a, b) => a.t - b.t);
+}
+
+function filtrerPeriode(serie, periode) {
+  if (periode === '12') return serie.slice(-12);
+  if (periode === '90') { const l = Date.now() - 90 * 86400000; return serie.filter(d => d.t >= l); }
+  return serie;
+}
+
 /* ---------------------------------------------------------
    4. Formatage
    --------------------------------------------------------- */
@@ -435,7 +468,7 @@ function ajouterSerie(exoId, reps, charge, rpe) {
     vibrer([80, 60, 80, 60, 160]);
   }
   exo.sets.push(set);
-  save(); renderSeance(); renderRecords();
+  save(); renderSeance(); renderRecords(); renderProgres();
   setDuree(exo.rest, state.profile.autoTimer);
   vibrer(40);
 }
@@ -488,8 +521,8 @@ function renderSeance() {
     el.innerHTML = `
       <div class="exo-head">
         <div>
-          <h3>${i + 1}. ${exo.nom}</h3>
-          <div class="meta">${exo.groupe} · récup ${mmss(exo.rest)} · ${exo.sets.length} série(s) · ${reps} reps · ${round(vol)} kg</div>
+          <h3>${i + 1}. ${esc(exo.nom)}</h3>
+          <div class="meta">${esc(exo.groupe)} · récup ${mmss(exo.rest)} · ${exo.sets.length} série(s) · ${reps} reps · ${round(vol)} kg</div>
           <div class="meta">${prTxt}</div>
         </div>
         <button class="del" data-del="${exo.id}" title="Supprimer">×</button>
@@ -561,7 +594,7 @@ function renderHistorique() {
   $('#hKcal').textContent     = round(h.reduce((a, s) => a + (s.kcal || 0), 0));
 
   $('#historyList').innerHTML = h.map(s => {
-    const exos = (s.exercices || []).map(e => `${e.nom} (${e.sets.length}×)`).join(' · ');
+    const exos = (s.exercices || []).map(e => `${esc(e.nom)} (${e.sets.length}×)`).join(' · ');
     return `<div class="hist">
       <div class="hist-head">
         <b>${dateTxt(s.start)} — ${hhmm(s.start)} → ${s.end ? hhmm(s.end) : '?'}</b>
@@ -573,6 +606,98 @@ function renderHistorique() {
       ${exos ? `<div class="hist-exos">${exos}</div>` : ''}
     </div>`;
   }).join('');
+}
+
+let progSel = null, progPeriode = 'tout';
+
+function renderProgres() {
+  const dispo = records().sort((a, b) => b.derniere - a.derniere);
+  $('#progVide').classList.toggle('hidden', dispo.length > 0);
+  $('#progContenu').classList.toggle('hidden', dispo.length === 0);
+  if (!dispo.length) return;
+
+  if (!dispo.some(r => cle(r.nom) === cle(progSel || ''))) progSel = dispo[0].nom;
+  const sel = $('#progExo');
+  sel.innerHTML = '';
+  for (const r of dispo) {
+    const o = document.createElement('option');
+    o.value = r.nom;
+    o.textContent = `${r.nom} — ${r.seances} séance(s)`;   // noms saisis par l'utilisateur
+    o.selected = cle(r.nom) === cle(progSel);
+    sel.appendChild(o);
+  }
+  $('#progPeriode').value = progPeriode;
+
+  const serie = filtrerPeriode(serieExercice(progSel), progPeriode);
+  const kg = v => round(v) + ' kg';
+
+  // Chiffre-phare : 1RM estimé actuel + écart depuis le début de la période
+  const dernier = serie[serie.length - 1], premier = serie[0];
+  $('#progHero').textContent = dernier ? round(dernier.e1rm) + ' kg' : '—';
+  if (serie.length > 1) {
+    const d = dernier.e1rm - premier.e1rm;
+    const pct = premier.e1rm ? (d / premier.e1rm) * 100 : 0;
+    $('#progHeroSub').textContent =
+      `${d >= 0 ? '+' : '−'}${round(Math.abs(d))} kg (${d >= 0 ? '+' : '−'}${round(Math.abs(pct))} %) depuis le ${Viz.fmtLong(premier.t)} · ${serie.length} séances`;
+  } else {
+    $('#progHeroSub').textContent = dernier
+      ? `Une seule séance pour l'instant — les courbes se dessineront à la prochaine.`
+      : '';
+  }
+
+  const infoBase = d => [
+    ['1RM estimé', kg(d.e1rm)],
+    ['meilleure série', d.best ? `${d.best.reps} × ${round(d.best.masse, 1)} kg${d.best.rpe ? ' @ ' + d.best.rpe : ''}` : '—'],
+    ['séries', d.sets],
+  ];
+
+  Viz.chart($('#chartE1rm'), {
+    type: 'line', color: Viz.COL.e1rm, titre: `1RM estimé — ${progSel}`,
+    data: serie.map(d => ({ t: d.t, v: d.e1rm, info: infoBase(d) })),
+    fmt: v => round(v) + ' kg',
+  });
+  const volMax = Math.max(0, ...serie.map(d => d.volume));
+  const fmtVol = volMax >= 2000 ? (v => round(v / 1000, 1) + ' t') : (v => round(v) + ' kg');
+  Viz.chart($('#chartVol'), {
+    type: 'bar', color: Viz.COL.volume, titre: `Volume par séance — ${progSel}`,
+    data: serie.map(d => ({ t: d.t, v: d.volume, info: [['volume', kg(d.volume)], ['séries', d.sets], ['reps', d.reps]] })),
+    fmt: fmtVol,
+  });
+  const avecRpe = serie.filter(d => d.rpe != null);
+  Viz.chart($('#chartRpe'), {
+    type: 'line', color: Viz.COL.rpe, titre: `RPE moyen — ${progSel}`, domaine: [5, 10],
+    vide: "Aucun RPE renseigné sur cet exercice : saisis-le en validant tes séries.",
+    data: avecRpe.map(d => ({ t: d.t, v: d.rpe, info: [['RPE moyen', round(d.rpe, 1)], ['RIR moyen', round(RIR(d.rpe), 1)], ['Séries', d.sets]] })),
+    fmt: v => round(v, 1),
+  });
+
+  // Vue tableau : aucune valeur n'est accessible seulement au survol
+  const tb = document.createElement('table');
+  tb.className = 'tbl';
+  tb.innerHTML = '<thead><tr><th>Date</th><th>1RM est.</th><th>Volume</th><th>RPE</th><th>Top série</th></tr></thead>';
+  const tbody = document.createElement('tbody');
+  for (const d of [...serie].reverse()) {
+    const tr = document.createElement('tr');
+    for (const txt of [
+      Viz.fmtJour(d.t) + (d.encours ? ' (en cours)' : ''),
+      kg(d.e1rm), kg(d.volume),
+      d.rpe ? round(d.rpe, 1) : '—',
+      d.best ? `${d.best.reps} × ${round(d.best.masse, 1)} kg` : '—',
+    ]) {
+      const td = document.createElement('td');
+      td.textContent = txt;
+      tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  }
+  tb.appendChild(tbody);
+  $('#progTable').innerHTML = '';
+  $('#progTable').appendChild(tb);
+}
+
+function ouvrirProgres(nom) {
+  progSel = nom;
+  $('.tab[data-tab="progres"]').click();
 }
 
 let triRecords = 'e1rm';
@@ -588,12 +713,12 @@ function renderRecords() {
 
   const perf = r => r ? `${r.reps} reps × ${round(r.masse, 1)} kg${r.rpe ? ' @ RPE ' + r.rpe : ''}` : '—';
   $('#recordsList').innerHTML = list.map(r => `
-    <div class="hist rec">
+    <div class="hist rec" data-progres="${esc(r.nom)}">
       <div class="hist-head">
-        <b>${r.nom}</b>
+        <b>${esc(r.nom)}</b>
         <span class="rec-big">${r.e1rm ? round(r.e1rm.v) + ' kg' : '—'}</span>
       </div>
-      <div class="hist-sub">${r.groupe} · ${r.seances} séance(s) · ${r.sets} séries · ${r.reps} reps · ${round(r.tonnage / 1000, 1)} t${r.pdc ? ' · poids du corps inclus' : ''}
+      <div class="hist-sub">${esc(r.groupe)} · ${r.seances} séance(s) · ${r.sets} séries · ${r.reps} reps · ${round(r.tonnage / 1000, 1)} t${r.pdc ? ' · poids du corps inclus' : ''}
         ${r.rpeNb ? '· RPE moyen ' + round(r.rpeSomme / r.rpeNb, 1) : ''}</div>
       <div class="kv rec-kv">
         ${ligne('1RM estimé', `${r.e1rm ? round(r.e1rm.v) + ' kg' : '—'} <em>${perf(r.e1rm)} · ${dateTxt(r.e1rm.date)}</em>`)}
@@ -602,6 +727,7 @@ function renderRecords() {
         ${ligne('Meilleur volume sur une séance', `${round(r.volSeance.v)} kg <em>${dateTxt(r.volSeance.date)}</em>`)}
         ${ligne('Dernière fois', dateTxt(r.derniere))}
       </div>
+      <button class="btn ghost voir-prog">Voir la progression</button>
     </div>`).join('');
 }
 
@@ -638,7 +764,7 @@ function renderProfil() {
     <p>Ce sont des estimations : ajuste-les selon l'évolution de ton poids sur 2 à 3 semaines.</p>`;
 }
 
-function renderAll() { renderSeance(); renderRecords(); renderHistorique(); renderProfil(); renderTimer(); }
+function renderAll() { renderSeance(); renderRecords(); renderProgres(); renderHistorique(); renderProfil(); renderTimer(); }
 
 /* ---------------------------------------------------------
    8. Toast
@@ -662,6 +788,7 @@ function initUI() {
     $$('.panel').forEach(x => x.classList.remove('active'));
     t.classList.add('active');
     $('#tab-' + t.dataset.tab).classList.add('active');
+    if (t.dataset.tab === 'progres') renderProgres();
     window.scrollTo({ top: 0 });
   }));
 
@@ -701,12 +828,12 @@ function initUI() {
     } else if (b.dataset.del) {
       if (confirm('Supprimer cet exercice et ses séries ?')) {
         state.session.exercices = state.session.exercices.filter(e => e.id !== b.dataset.del);
-        save(); renderSeance(); renderRecords();
+        save(); renderSeance(); renderRecords(); renderProgres();
       }
     } else if (b.dataset.rmset) {
       const exo = state.session.exercices.find(e => e.id === b.dataset.rmset);
       exo.sets.splice(+b.dataset.i, 1);
-      save(); renderSeance(); renderRecords();
+      save(); renderSeance(); renderRecords(); renderProgres();
     } else if (b.dataset.timer) {
       const exo = state.session.exercices.find(e => e.id === b.dataset.timer);
       setDuree(exo.rest, true);
@@ -740,6 +867,14 @@ function initUI() {
   });
   $$('#presets .chip').forEach(c => c.addEventListener('click', () => setDuree(+c.dataset.sec, true)));
 
+  // Filtres de progression (une seule rangée, au-dessus des graphiques)
+  $('#progExo').addEventListener('change', e => { progSel = e.target.value; renderProgres(); });
+  $('#progPeriode').addEventListener('change', e => { progPeriode = e.target.value; renderProgres(); });
+  $('#recordsList').addEventListener('click', ev => {
+    const c = ev.target.closest('[data-progres]');
+    if (c) ouvrirProgres(c.dataset.progres);
+  });
+
   // Tri des records
   $$('#recordTri .tri').forEach(b => b.addEventListener('click', () => {
     triRecords = b.dataset.tri;
@@ -766,7 +901,7 @@ function initUI() {
     const b = ev.target.closest('[data-rmhist]');
     if (b && confirm('Supprimer cette séance ?')) {
       state.history = state.history.filter(s => s.id !== b.dataset.rmhist);
-      save(); renderHistorique(); renderRecords();
+      save(); renderHistorique(); renderRecords(); renderProgres();
     }
   });
   $('#btnExport').addEventListener('click', () => {
@@ -778,7 +913,7 @@ function initUI() {
   });
   $('#btnWipe').addEventListener('click', () => {
     if (confirm('Effacer toutes les séances enregistrées ?')) {
-      state.history = []; save(); renderHistorique(); renderRecords();
+      state.history = []; save(); renderHistorique(); renderRecords(); renderProgres(); renderProgres();
     }
   });
 

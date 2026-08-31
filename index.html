@@ -17,6 +17,7 @@
 
 <nav class="tabs">
   <button class="tab active" data-tab="seance">Séance</button>
+  <button class="tab" data-tab="progres">Progrès</button>
   <button class="tab" data-tab="records">Records</button>
   <button class="tab" data-tab="histo">Historique</button>
   <button class="tab" data-tab="profil">Profil</button>
@@ -126,6 +127,54 @@
 
 </section>
 
+<!-- ============ PROGRÈS ============ -->
+<section id="tab-progres" class="panel">
+  <div class="card">
+    <h2>Progression</h2>
+    <div class="row gap filtres">
+      <select id="progExo" class="grow" aria-label="Exercice"></select>
+      <select id="progPeriode" aria-label="Période">
+        <option value="tout">Tout</option>
+        <option value="12">12 dernières</option>
+        <option value="90">3 mois</option>
+      </select>
+    </div>
+  </div>
+
+  <p id="progVide" class="muted">Enregistre des séries pour voir tes courbes de progression.</p>
+
+  <div id="progContenu">
+    <div class="card hero-card">
+      <div class="hero-lbl">1RM estimé actuel</div>
+      <div class="hero" id="progHero">—</div>
+      <div class="hero-sub" id="progHeroSub"></div>
+    </div>
+
+    <div class="card">
+      <h2>1RM estimé</h2>
+      <p class="viz-sub">Charge maximale théorique, série par série (la meilleure de chaque séance).</p>
+      <div id="chartE1rm"></div>
+    </div>
+
+    <div class="card">
+      <h2>Volume par séance</h2>
+      <p class="viz-sub">Kilos déplacés sur l'exercice : charge × reps, cumulés sur la séance.</p>
+      <div id="chartVol"></div>
+    </div>
+
+    <div class="card">
+      <h2>RPE moyen</h2>
+      <p class="viz-sub">Difficulté ressentie moyenne des séries de l'exercice (10 = échec).</p>
+      <div id="chartRpe"></div>
+    </div>
+
+    <details class="card viz-table">
+      <summary>Voir les données</summary>
+      <div id="progTable"></div>
+    </details>
+  </div>
+</section>
+
 <!-- ============ RECORDS ============ -->
 <section id="tab-records" class="panel">
   <div class="card">
@@ -195,6 +244,7 @@
 
 </main>
 
+<script src="charts.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

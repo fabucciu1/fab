@@ -35,6 +35,24 @@ Toutes les données restent sur ton appareil (`localStorage`).
 - Le RPE moyen ajuste aussi la dépense énergétique (±15 % max) : s'entraîner près de l'échec
   coûte plus cher que le travail mécanique pur.
 
+**Graphiques de progression**
+
+Onglet **Progrès** : un exercice + une période (tout / 12 dernières séances / 3 mois) en filtre,
+puis trois graphiques SVG dessinés à la main, sans aucune librairie :
+
+- **1RM estimé** (courbe) — la meilleure série de chaque séance ;
+- **volume par séance** (barres) — kilos déplacés sur l'exercice ;
+- **RPE moyen** (courbe, échelle 5 → 10) — comment la difficulté ressentie évolue à charge égale.
+
+Chaque graphique a son infobulle (viseur qui accroche la date sur les courbes, barre surlignée
+sur l'histogramme), fonctionne au clavier (flèches gauche/droite), annonce son résumé aux
+lecteurs d'écran, et se double d'une **vue tableau** dépliable — aucune valeur n'est
+accessible uniquement au survol. Depuis l'onglet Records, « Voir la progression » ouvre
+directement les courbes de l'exercice.
+
+Les trois couleurs (bleu, orange, aqua) sont validées pour la surface sombre de l'app :
+bande de clarté, plancher de chroma, séparation sous daltonisme (ΔE ≥ 8) et contraste ≥ 3:1.
+
 **Calories brûlées**
 
 Trois composantes, détaillées dans l'app :
@@ -81,11 +99,12 @@ service worker — pratique dans une salle sans réseau.
 
 - `index.html` — structure et écrans
 - `styles.css` — thème sombre, pensé mobile
-- `app.js` — état, chrono, calculs (calories, macros), rendu
+- `app.js` — état, chrono, calculs (calories, macros, records), rendu
+- `charts.js` — boîte à outils de graphiques SVG (courbes, barres, infobulles, clavier)
 - `sw.js`, `manifest.webmanifest`, `icon.svg` — installation et mode hors-ligne
 
 ## Limites (prototype)
 
 Les calories et les macros sont des **estimations** : à ajuster selon l'évolution réelle du
-poids sur 2-3 semaines. Pas encore de tempo, de graphiques de progression, de séances-types
-réutilisables ni de synchronisation multi-appareils.
+poids sur 2-3 semaines. Pas encore de tempo, de séances-types réutilisables ni de
+synchronisation multi-appareils.
