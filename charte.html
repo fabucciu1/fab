@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GymRec — charte</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  main{max-width:860px}
+  .jetons{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+  .jeton{text-align:center}
+  .pastille{width:76px;height:76px;border-radius:50%;margin:0 auto 10px;border:1px solid var(--line)}
+  .jeton b{display:block;font-size:10px;letter-spacing:1.6px;text-transform:uppercase}
+  .jeton span{display:block;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;margin-top:3px}
+  .tailles{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+  .tailles figure{margin:0;text-align:center}
+  .tailles figcaption{font-size:9px;color:var(--muted);letter-spacing:1.4px;margin-top:8px}
+  .lockup-demo{display:flex;align-items:center;gap:16px}
+  .lockup-demo .mark{width:64px;height:64px}
+  .lockup-demo .wordmark{font-size:38px;letter-spacing:5px}
+  .lockup-demo .tagline{font-size:10px;letter-spacing:5.5px;margin-top:6px}
+  .regle{font-size:13px;color:var(--muted);margin:0 0 14px;line-height:1.5}
+  .donnees{display:flex;gap:18px;flex-wrap:wrap}
+  .donnee{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+  .donnee i{width:22px;height:4px;border-radius:2px;display:block}
+</style>
+</head>
+<body>
+<div class="head-sticky">
+  <header class="topbar">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 512 512" aria-hidden="true">
+        <defs>
+          <linearGradient id="gr-acier" gradientUnits="userSpaceOnUse" x1="110" y1="90" x2="420" y2="430">
+            <stop offset="0" stop-color="#ffffff"/><stop offset="0.5" stop-color="#e6e6e6"/><stop offset="1" stop-color="#a2a7af"/>
+          </linearGradient>
+          <clipPath id="gr-disque"><circle cx="256" cy="256" r="180"/></clipPath>
+        </defs>
+        <path d="M396.6 236.2 A142 142 0 1 1 295.1 119.5" fill="none" stroke="url(#gr-acier)" stroke-width="76"/>
+        <path d="M300 256 H450" stroke="url(#gr-acier)" stroke-width="76" clip-path="url(#gr-disque)"/>
+        <circle cx="250" cy="256" r="34" fill="#ff2d2d"/>
+      </svg>
+      <span class="lockup">
+        <span class="wordmark">GYM<i>REC</i></span>
+        <span class="tagline">Charte graphique</span>
+      </span>
+    </div>
+  </header>
+</div>
+
+<main>
+  <div class="card">
+    <h2>Lockup principal</h2>
+    <div class="lockup-demo">
+      <svg class="mark" viewBox="0 0 512 512" aria-hidden="true">
+        <path d="M396.6 236.2 A142 142 0 1 1 295.1 119.5" fill="none" stroke="url(#gr-acier)" stroke-width="76"/>
+        <path d="M300 256 H450" stroke="url(#gr-acier)" stroke-width="76" clip-path="url(#gr-disque)"/>
+        <circle cx="250" cy="256" r="34" fill="#ff2d2d"/>
+      </svg>
+      <span class="lockup">
+        <span class="wordmark">GYM<i>REC</i></span>
+        <span class="tagline">Workout recorder</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Monogramme</h2>
+    <p class="regle">Le G porte un dégradé acier (blanc → #A2A7AF) et le point REC dans sa contre-forme.
+      Il reste lisible jusqu'à 20 px : les détails se fondent, la silhouette tient.</p>
+    <div class="tailles">
+      <figure><img src="icon.svg" width="160" alt=""><figcaption>160 px</figcaption></figure>
+      <figure><img src="icon.svg" width="64" alt=""><figcaption>64 px</figcaption></figure>
+      <figure><img src="icon.svg" width="44" alt=""><figcaption>44 px</figcaption></figure>
+      <figure><img src="icon.svg" width="32" alt=""><figcaption>32 px</figcaption></figure>
+      <figure><img src="icon.svg" width="20" alt=""><figcaption>20 px</figcaption></figure>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Jetons</h2>
+    <div class="jetons">
+      <div class="jeton"><div class="pastille" style="background:#0d0d0f"></div><b>Charcoal</b><span>#0D0D0F</span></div>
+      <div class="jeton"><div class="pastille" style="background:#ffffff"></div><b>White</b><span>#FFFFFF</span></div>
+      <div class="jeton"><div class="pastille" style="background:#ff2d2d"></div><b>Rec red</b><span>#FF2D2D</span></div>
+      <div class="jeton"><div class="pastille" style="background:#e6e6e6"></div><b>Steel</b><span>#E6E6E6</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Règles d'emploi</h2>
+    <p class="regle">
+      Le <strong>charcoal</strong> porte tout : fond de l'app, fond des cartes (un cran plus clair), filets.<br>
+      Le <strong>steel</strong> est la couleur d'action : bouton principal, onglet actif, anneau du chronomètre,
+      pastilles de séries. Le texte posé dessus est en charcoal (17:1).<br>
+      Le <strong>rouge REC</strong> n'est jamais un aplat de grande surface. Il tient le point du logo, le « REC »
+      du logotype, le filet sous les titres, le témoin d'enregistrement, les records et les totaux.<br>
+      Le <strong>blanc</strong> est réservé aux chiffres et aux titres — ce qu'on lit en premier.
+    </p>
+    <div class="row gap" style="flex-wrap:wrap">
+      <button class="btn primary">Action principale</button>
+      <button class="btn ghost">Action secondaire</button>
+      <button class="btn danger">Destructif</button>
+      <span class="rec-live" style="margin-left:8px"><i></i>REC</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Couleurs de donnée</h2>
+    <p class="regle">À part : elles ne portent pas la marque, elles servent à distinguer des mesures entre elles.
+      Validées pour le fond des cartes (clarté, chroma, daltonisme, contraste).</p>
+    <div class="donnees">
+      <span class="donnee"><i style="background:#3987e5"></i>1RM estimé</span>
+      <span class="donnee"><i style="background:#d95926"></i>Volume</span>
+      <span class="donnee"><i style="background:#199e70"></i>RPE</span>
+    </div>
+  </div>
+</main>
+</body>
+</html>

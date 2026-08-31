@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0e1116">
+<meta name="theme-color" content="#0d0d0f">
 <title>GymRec — Chrono &amp; Séances</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="manifest" href="manifest.webmanifest">
@@ -15,15 +15,24 @@
 </head>
 <body>
 
+<div class="head-sticky">
 <header class="topbar">
   <div class="brand">
     <svg class="mark" viewBox="0 0 512 512" aria-hidden="true" focusable="false">
-      <defs><clipPath id="gr-disque"><circle cx="256" cy="256" r="177"/></clipPath></defs>
-      <path d="M404 256 A148 148 0 1 1 286.8 111.2" fill="none" stroke="#e8edf4" stroke-width="58"/>
-      <path d="M250 256 H440" stroke="#e8edf4" stroke-width="58" clip-path="url(#gr-disque)"/>
-      <circle cx="363.2" cy="166" r="40" fill="#ff5d5d"/>
+      <defs>
+        <linearGradient id="gr-acier" gradientUnits="userSpaceOnUse" x1="110" y1="90" x2="420" y2="430">
+          <stop offset="0" stop-color="#ffffff"/><stop offset="0.5" stop-color="#e6e6e6"/><stop offset="1" stop-color="#a2a7af"/>
+        </linearGradient>
+        <clipPath id="gr-disque"><circle cx="256" cy="256" r="180"/></clipPath>
+      </defs>
+      <path d="M396.6 236.2 A142 142 0 1 1 295.1 119.5" fill="none" stroke="url(#gr-acier)" stroke-width="76"/>
+      <path d="M300 256 H450" stroke="url(#gr-acier)" stroke-width="76" clip-path="url(#gr-disque)"/>
+      <circle cx="250" cy="256" r="34" fill="#ff2d2d"/>
     </svg>
-    <span>Gym<i>Rec</i></span>
+    <span class="lockup">
+      <span class="wordmark">GYM<i>REC</i></span>
+      <span class="tagline">Workout recorder</span>
+    </span>
   </div>
   <div id="sessionClock" class="clock">—</div>
 </header>
@@ -35,6 +44,7 @@
   <button class="tab" data-tab="histo">Historique</button>
   <button class="tab" data-tab="profil">Profil</button>
 </nav>
+</div>
 
 <main>
 
@@ -58,6 +68,11 @@
   <div class="card timer-card">
     <div class="timer-wrap">
       <svg viewBox="0 0 200 200" class="ring">
+        <defs>
+          <linearGradient id="gr-ring" gradientUnits="userSpaceOnUse" x1="20" y1="10" x2="180" y2="190">
+            <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#a2a7af"/>
+          </linearGradient>
+        </defs>
         <circle class="ring-bg" cx="100" cy="100" r="88"></circle>
         <circle id="ringFg" class="ring-fg" cx="100" cy="100" r="88"></circle>
       </svg>

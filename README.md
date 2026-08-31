@@ -98,16 +98,25 @@ service worker — pratique dans une salle sans réseau.
 
 ## Charte
 
-Thème sombre, et la même logique que le logo : une surface neutre, un point rouge.
+Quatre jetons, et une règle : le rouge n'appartient qu'à l'enregistrement.
 
-- **`--accent: #e8edf4`** — le blanc cassé du G. Tous les aplats d'action : bouton principal,
-  onglet actif, anneau du chrono, pastilles de séries. Texte posé dessus : `--accent-ink`
-  (`#0e1116`, contraste 15:1).
-- **`--rec: #ff5d5d`** — le point du logo. Jamais un aplat, seulement de petits accents :
-  le total de calories, le badge de record, les glucides.
-- **`--danger`** — le même rouge, en **contour** : « Tout effacer » ne peut pas être confondu
-  avec « Valider ».
-- **`--warn`** (ambre) — la fin de récup, la seule couleur de statut.
+| Jeton | Hex | Emploi |
+|---|---|---|
+| Charcoal | `#0D0D0F` | fond de l'app, cartes (un cran plus clair), filets |
+| Steel | `#E6E6E6` | couleur d'action : bouton principal, onglet actif, anneau du chrono |
+| Rec red | `#FF2D2D` | le point du logo, le « REC », le filet sous les titres, le témoin d'enregistrement, records et totaux |
+| White | `#FFFFFF` | chiffres et titres — ce qu'on lit en premier |
+
+Le texte posé sur un aplat steel est en charcoal (17:1). Les actions destructives portent le
+rouge **en contour**, jamais en aplat : « Tout effacer » ne peut pas être confondu avec
+« Valider ». Signature reprise de la planche : titres en capitales très espacées, soulignés
+d'un filet rouge de 20 px.
+
+Pendant une séance, le bandeau affiche un **témoin REC** — point rouge pulsé + « REC » — repris
+du point du logo.
+
+`charte.html` est la charte vivante : elle utilise la vraie feuille de style de l'app, donc
+elle ne peut pas dériver.
 
 Les couleurs des graphiques (bleu, orange, aqua) sont à part : ce sont des couleurs de
 donnée, choisies pour être distinguables entre elles, pas pour porter la marque.
@@ -119,11 +128,11 @@ donnée, choisies pour être distinguables entre elles, pas pour porter la marqu
 - `app.js` — état, chrono, calculs (calories, macros, records), rendu
 - `charts.js` — boîte à outils de graphiques SVG (courbes, barres, infobulles, clavier)
 - `sw.js`, `manifest.webmanifest` — installation et mode hors-ligne
-- `icon.svg`, `icon-512.png`, `apple-touch-icon.png` — le logo : un **G** géométrique ouvert
-  en haut à droite, avec le **point rouge REC** posé dans l'ouverture. Repris en marque dans
-  l'en-tête, où le logotype suit la même règle : « Gym » en blanc cassé, « Rec » en rouge.
-- `logo-variantes.html` — les pistes explorées, chacune montrée à 180 px, en taille favicon
-  (44 / 30 / 20 px) et sous simulation de deutéranopie. À ouvrir pour en changer.
+- `icon.svg`, `icon-512.png`, `apple-touch-icon.png` — le logo : un **G** épais en dégradé
+  acier, le **point REC** rouge dans sa contre-forme. Repris en marque dans l'en-tête, avec
+  le logotype `GYM` blanc / `REC` rouge.
+- `charte.html` — la charte vivante : lockup, monogramme aux différentes tailles, jetons,
+  règles d'emploi et couleurs de donnée.
 
 ## Limites (prototype)
 

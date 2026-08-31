@@ -8,10 +8,10 @@ const Viz = (() => {
   const NS = 'http://www.w3.org/2000/svg';
 
   const COL = {
-    surface: '#171c24',
-    grid:    '#2a323f',
-    ink:     '#e8edf4',
-    muted:   '#94a3b8',
+    surface: '#141417',
+    grid:    '#26262c',
+    ink:     '#ffffff',
+    muted:   '#8b8b95',
     e1rm:    '#3987e5',  // slot 1 — bleu
     volume:  '#d95926',  // slot 2 — orange
     rpe:     '#199e70',  // slot 3 — aqua

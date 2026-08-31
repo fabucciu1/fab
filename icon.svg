@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="GymRec">
   <defs>
-    <!-- la barre du G est rognée sur le disque extérieur : elle épouse la courbe -->
-    <clipPath id="gr-disque"><circle cx="256" cy="256" r="177"/></clipPath>
+    <linearGradient id="gr-acier" gradientUnits="userSpaceOnUse" x1="110" y1="90" x2="420" y2="430">
+      <stop offset="0" stop-color="#ffffff"/><stop offset="0.5" stop-color="#e6e6e6"/><stop offset="1" stop-color="#a2a7af"/>
+    </linearGradient>
+    <clipPath id="gr-disque"><circle cx="256" cy="256" r="180"/></clipPath>
   </defs>
-  <rect width="512" height="512" rx="112" fill="#171c24"/>
-  <!-- le G : anneau ouvert en haut à droite -->
-  <path d="M404 256 A148 148 0 1 1 286.8 111.2" fill="none" stroke="#e8edf4" stroke-width="58"/>
-  <path d="M250 256 H440" stroke="#e8edf4" stroke-width="58" clip-path="url(#gr-disque)"/>
-  <!-- le point REC, posé dans l'ouverture -->
-  <circle cx="363.2" cy="166" r="40" fill="#ff5d5d"/>
+  <rect width="512" height="512" rx="112" fill="#0d0d0f"/>
+  <path d="M396.6 236.2 A142 142 0 1 1 295.1 119.5" fill="none" stroke="url(#gr-acier)" stroke-width="76"/>
+  <path d="M300 256 H450" stroke="url(#gr-acier)" stroke-width="76" clip-path="url(#gr-disque)"/>
+  <circle cx="250" cy="256" r="34" fill="#ff2d2d"/>
 </svg>

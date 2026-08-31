@@ -491,7 +491,8 @@ function renderSeance() {
 
   // Bandeau
   $('#startTime').textContent = s && s.start ? hhmm(s.start) : '—';
-  $('#endTime').textContent   = s && s.end ? hhmm(s.end) : (s ? 'en cours' : '—');
+  $('#endTime').innerHTML     = s && s.end ? hhmm(s.end)
+    : (s ? '<span class="rec-live"><i></i>REC</span>' : '—');   // témoin d'enregistrement
   $('#duration').textContent  = s ? mmss(dureeSeance(s)) : '00:00';
   $('#btnStart').classList.toggle('hidden', !!s);
   $('#btnEnd').classList.toggle('hidden', !s);
