@@ -249,3 +249,60 @@ input:focus,select:focus{outline:2px solid var(--steel);outline-offset:0}
 .hero-sub{font-size:12.5px;color:var(--muted)}
 .voir-prog{width:100%;margin-top:12px;font-size:11px;padding:10px}
 .hist.rec{cursor:pointer}
+
+/* ---------- écran du jour : séances réutilisables ---------- */
+.pleine{width:100%;margin-top:10px}
+.modele{
+  display:block;width:100%;text-align:left;margin-bottom:8px;padding:14px;
+  background:var(--card2);border:1px solid var(--line);border-radius:12px;color:var(--txt);cursor:pointer;
+}
+.modele-nom{display:block;font-size:16px;font-weight:800;letter-spacing:.3px}
+.modele-meta{display:block;font-size:11.5px;color:var(--muted);margin-top:4px}
+.ligne-modele{display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--line);font-size:14px}
+.ligne-modele:first-of-type{border-top:0}
+.ligne-modele .btn{padding:8px 10px;font-size:10px}
+.plan-exo{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0}
+.plan-head{display:flex;justify-content:space-between;align-items:center}
+.plan-head b{font-size:15px}
+.plan-champs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}
+.plan-champs label{margin:0;font-size:8.5px;letter-spacing:1px}
+.plan-champs input{padding:9px 6px;text-align:center;font-size:15px}
+.plan-ajout{margin:12px 0}
+
+/* ---------- la décision du moment : la série en cours ---------- */
+.serie-card{text-align:center}
+.serie-exo{font-size:17px;font-weight:800;letter-spacing:.3px}
+.serie-charge{display:flex;align-items:baseline;justify-content:center;gap:8px;margin:6px 0 2px}
+.serie-charge b{font-size:64px;font-weight:800;line-height:1;letter-spacing:-2px}
+.serie-charge span{font-size:18px;color:var(--muted);font-weight:700}
+.serie-meta{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1.4px}
+.steppers{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0 12px}
+.stepper{display:flex;align-items:center;justify-content:space-between;gap:4px;
+  background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:4px}
+.stepper span{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
+.stepper button{width:38px;height:38px;border:0;border-radius:8px;background:transparent;
+  color:var(--txt);font-size:20px;font-weight:700;cursor:pointer}
+.stepper button:active{background:var(--line)}
+.serie-nav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:12px}
+.serie-nav .btn{padding:9px 12px;font-size:10px}
+
+/* ---------- feedback et recommandation ---------- */
+.fb-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.fb{
+  display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 6px;
+  background:var(--card2);border:1px solid var(--line);border-radius:12px;color:var(--txt);
+  font-size:10px;text-transform:uppercase;letter-spacing:1.2px;font-weight:700;cursor:pointer;
+}
+.fb b{font-size:26px;line-height:1}
+.fb:active{border-color:var(--steel)}
+.reco-card .reco-val{font-size:34px;font-weight:800;text-align:center;margin:2px 0 14px;letter-spacing:-1px}
+.reco-card .reco-val i{font-style:normal;color:var(--muted);font-size:22px;margin:0 4px}
+
+/* ---------- récapitulatif de fin de séance ---------- */
+.recap-nom{font-size:22px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.recap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.recap-grid div{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px 6px;text-align:center}
+.recap-grid b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+.recap-grid em{font-style:normal;font-size:8.5px;color:var(--muted);text-transform:uppercase;letter-spacing:1.1px;
+  display:block;margin-top:4px}
+.recap-macros{margin:14px 0 0}

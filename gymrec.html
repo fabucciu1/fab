@@ -258,6 +258,63 @@ input:focus,select:focus{outline:2px solid var(--steel);outline-offset:0}
 .voir-prog{width:100%;margin-top:12px;font-size:11px;padding:10px}
 .hist.rec{cursor:pointer}
 
+/* ---------- écran du jour : séances réutilisables ---------- */
+.pleine{width:100%;margin-top:10px}
+.modele{
+  display:block;width:100%;text-align:left;margin-bottom:8px;padding:14px;
+  background:var(--card2);border:1px solid var(--line);border-radius:12px;color:var(--txt);cursor:pointer;
+}
+.modele-nom{display:block;font-size:16px;font-weight:800;letter-spacing:.3px}
+.modele-meta{display:block;font-size:11.5px;color:var(--muted);margin-top:4px}
+.ligne-modele{display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--line);font-size:14px}
+.ligne-modele:first-of-type{border-top:0}
+.ligne-modele .btn{padding:8px 10px;font-size:10px}
+.plan-exo{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0}
+.plan-head{display:flex;justify-content:space-between;align-items:center}
+.plan-head b{font-size:15px}
+.plan-champs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}
+.plan-champs label{margin:0;font-size:8.5px;letter-spacing:1px}
+.plan-champs input{padding:9px 6px;text-align:center;font-size:15px}
+.plan-ajout{margin:12px 0}
+
+/* ---------- la décision du moment : la série en cours ---------- */
+.serie-card{text-align:center}
+.serie-exo{font-size:17px;font-weight:800;letter-spacing:.3px}
+.serie-charge{display:flex;align-items:baseline;justify-content:center;gap:8px;margin:6px 0 2px}
+.serie-charge b{font-size:64px;font-weight:800;line-height:1;letter-spacing:-2px}
+.serie-charge span{font-size:18px;color:var(--muted);font-weight:700}
+.serie-meta{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1.4px}
+.steppers{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0 12px}
+.stepper{display:flex;align-items:center;justify-content:space-between;gap:4px;
+  background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:4px}
+.stepper span{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
+.stepper button{width:38px;height:38px;border:0;border-radius:8px;background:transparent;
+  color:var(--txt);font-size:20px;font-weight:700;cursor:pointer}
+.stepper button:active{background:var(--line)}
+.serie-nav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:12px}
+.serie-nav .btn{padding:9px 12px;font-size:10px}
+
+/* ---------- feedback et recommandation ---------- */
+.fb-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.fb{
+  display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 6px;
+  background:var(--card2);border:1px solid var(--line);border-radius:12px;color:var(--txt);
+  font-size:10px;text-transform:uppercase;letter-spacing:1.2px;font-weight:700;cursor:pointer;
+}
+.fb b{font-size:26px;line-height:1}
+.fb:active{border-color:var(--steel)}
+.reco-card .reco-val{font-size:34px;font-weight:800;text-align:center;margin:2px 0 14px;letter-spacing:-1px}
+.reco-card .reco-val i{font-style:normal;color:var(--muted);font-size:22px;margin:0 4px}
+
+/* ---------- récapitulatif de fin de séance ---------- */
+.recap-nom{font-size:22px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.recap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.recap-grid div{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px 6px;text-align:center}
+.recap-grid b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+.recap-grid em{font-style:normal;font-size:8.5px;color:var(--muted);text-transform:uppercase;letter-spacing:1.1px;
+  display:block;margin-top:4px}
+.recap-macros{margin:14px 0 0}
+
 </style>
 
 <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9Ikd5bVJlYyI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImdyLWFjaWVyIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjExMCIgeTE9IjkwIiB4Mj0iNDIwIiB5Mj0iNDMwIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZmZmZmIi8+PHN0b3Agb2Zmc2V0PSIwLjUiIHN0b3AtY29sb3I9IiNlNmU2ZTYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNhMmE3YWYiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8Y2xpcFBhdGggaWQ9ImdyLWRpc3F1ZSI+PGNpcmNsZSBjeD0iMjU2IiBjeT0iMjU2IiByPSIxODAiLz48L2NsaXBQYXRoPgogIDwvZGVmcz4KICA8cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjExMiIgZmlsbD0iIzBkMGQwZiIvPgogIDxwYXRoIGQ9Ik0zOTYuNiAyMzYuMiBBMTQyIDE0MiAwIDEgMSAyOTUuMSAxMTkuNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI2dyLWFjaWVyKSIgc3Ryb2tlLXdpZHRoPSI3NiIvPgogIDxwYXRoIGQ9Ik0zMDAgMjU2IEg0NTAiIHN0cm9rZT0idXJsKCNnci1hY2llcikiIHN0cm9rZS13aWR0aD0iNzYiIGNsaXAtcGF0aD0idXJsKCNnci1kaXNxdWUpIi8+CiAgPGNpcmNsZSBjeD0iMjUwIiBjeT0iMjU2IiByPSIzNCIgZmlsbD0iI2ZmMmQyZCIvPgo8L3N2Zz4K" type="image/svg+xml">
@@ -304,17 +361,29 @@ input:focus,select:focus{outline:2px solid var(--steel);outline-offset:0}
 <!-- ============ SÉANCE ============ -->
 <section id="tab-seance" class="panel active">
 
-  <!-- Bandeau séance -->
-  <div class="card session-card">
-    <div class="session-times">
-      <div><span class="lbl">Début</span><strong id="startTime">—</strong></div>
-      <div><span class="lbl">Fin</span><strong id="endTime">—</strong></div>
-      <div><span class="lbl">Durée</span><strong id="duration">00:00</strong></div>
+  <!-- ---------- Écran du jour : hors séance ---------- -->
+  <div id="ecranToday"></div>
+
+  <!-- ---------- Récapitulatif de fin de séance ---------- -->
+  <div id="ecranRecap" class="hidden"></div>
+
+  <!-- ---------- Séance en cours ---------- -->
+  <div id="ecranActif" class="hidden">
+    <div class="card session-card">
+      <div class="session-times">
+        <div><span class="lbl">Début</span><strong id="startTime">—</strong></div>
+        <div><span class="lbl">Fin</span><strong id="endTime">—</strong></div>
+        <div><span class="lbl">Durée</span><strong id="duration">00:00</strong></div>
+      </div>
+      <div class="row gap">
+        <button id="btnEnd" class="btn ghost grow">Terminer la séance</button>
+      </div>
     </div>
-    <div class="row gap">
-      <button id="btnStart" class="btn primary big">Démarrer la séance</button>
-      <button id="btnEnd" class="btn primary big hidden">Terminer</button>
-    </div>
+
+    <!-- la décision du moment : quelle série, quelle charge -->
+    <div id="serieCourante"></div>
+    <div id="feedbackCard"></div>
+    <div id="recoCard"></div>
   </div>
 
   <!-- Chronomètre de récup -->
@@ -354,12 +423,15 @@ input:focus,select:focus{outline:2px solid var(--steel);outline-offset:0}
     </div>
   </div>
 
+
+  <!-- ---------- Détail, visible pendant la séance ---------- -->
+  <div id="blocSeance" class="hidden">
   <!-- Compteurs live -->
   <div class="stats" id="liveStats">
     <div class="stat"><span id="stSets">0</span><em>séries</em></div>
     <div class="stat"><span id="stReps">0</span><em>reps</em></div>
     <div class="stat"><span id="stTonnage">0</span><em>kg soulevés</em></div>
-    <div class="stat"><span id="stRpe">—</span><em>RPE moyen</em></div>
+    <div class="stat"><span id="stRepos">—</span><em>repos moyen</em></div>
     <div class="stat"><span id="stKcal">0</span><em>kcal</em></div>
   </div>
 
@@ -405,6 +477,7 @@ input:focus,select:focus{outline:2px solid var(--steel);outline-offset:0}
     <h2>Journée complète (estimation)</h2>
     <div id="dailyTargets" class="kv"></div>
   </div>
+  </div>
 
 </section>
 
@@ -444,8 +517,8 @@ input:focus,select:focus{outline:2px solid var(--steel);outline-offset:0}
     </div>
 
     <div class="card">
-      <h2>RPE moyen</h2>
-      <p class="viz-sub">Difficulté ressentie moyenne des séries de l'exercice (10 = échec).</p>
+      <h2>Marge à l'échec</h2>
+      <p class="viz-sub">Reps qu'il te restait en réserve, en moyenne. Plus la courbe descend, plus tu t'approches de l'échec.</p>
       <div id="chartRpe"></div>
     </div>
 
@@ -833,8 +906,11 @@ const defaultProfile = {
 
 let state = {
   profile: { ...defaultProfile },
+  modeles: [],       // séances réutilisables (§18)
   session: null,     // séance en cours
   history: [],       // séances terminées
+  recapId: null,     // séance dont le récap reste à afficher (§48)
+  editId: null,      // modèle en cours d'édition
 };
 
 function load() {
@@ -847,8 +923,10 @@ function load() {
     if (!raw) return;
     const d = JSON.parse(raw);
     state.profile = { ...defaultProfile, ...(d.profile || {}) };
+    state.modeles = d.modeles || [];
     state.session = d.session || null;
     state.history = d.history || [];
+    state.recapId = d.recapId || null;
   } catch (e) { console.warn('Chargement impossible', e); }
 }
 function save() {
@@ -891,9 +969,10 @@ function volumeSeance(session, poids) {
   return { sets, reps, tonnage, travailJ, rpeMoyen: rpeNb ? rpeSomme / rpeNb : null };
 }
 
-/* --- RPE / RIR / 1RM estimé -------------------------------------------
-   RIR (reps in reserve) = 10 − RPE. Formule d'Epley corrigée du RIR :
-   une série de 8 reps à RPE 8 vaut un maximum de 10 reps.               */
+/* --- Marge à l'échec et 1RM estimé ------------------------------------
+   En interne le moteur raisonne en RPE (échelle 6-10) ; côté écran on ne
+   parle que de reps en réserve. RIR = 10 − RPE. Epley corrigé de la marge :
+   8 reps avec 2 en réserve valent un maximum de 10 reps.                */
 const RIR = rpe => (rpe ? 10 - rpe : 0);
 function e1RM(masse, reps, rpe) {
   const n = reps + RIR(rpe);
@@ -1181,8 +1260,19 @@ function renderTimer() {
 /* ---------------------------------------------------------
    6. Séance
    --------------------------------------------------------- */
-function demarrerSeance() {
-  state.session = { id: uid(), start: Date.now(), end: null, exercices: [] };
+function demarrerSeance(modeleId) {
+  const m = state.modeles.find(x => x.id === modeleId);
+  state.session = {
+    id: uid(), start: Date.now(), end: null,
+    nom: m ? m.nom : 'Séance libre', modeleId: m ? m.id : null,
+    exercices: (m ? m.exercices : []).map(e => ({ ...e, id: uid(), sets: [], chargeSuivante: null })),
+    curExo: 0,
+    finDerniereSerie: null,   // pour mesurer le repos réel (§29)
+    attente: null,            // question de feedback en cours (§23-24)
+    reco: null,               // recommandation inter-séries (§30)
+    saisie: null,
+  };
+  state.recapId = null;
   save(); renderAll();
   toast('Séance démarrée à ' + hhmm(state.session.start));
 }
@@ -1194,9 +1284,12 @@ function terminerSeance() {
   if (v.sets === 0 && !confirm('Aucune série enregistrée. Terminer quand même ?')) return;
   s.end = Date.now();
   const k = calories(s, state.profile);
+  const repos = [];
+  for (const exo of s.exercices) for (const set of exo.sets) if (set.reposAvant) repos.push(set.reposAvant);
   const fini = {
     ...s,
     duree: dureeSeance(s),
+    reposMoyen: repos.length ? Math.round(repos.reduce((a, b) => a + b, 0) / repos.length) : null,
     sets: v.sets, reps: v.reps, tonnage: v.tonnage,
     rpeMoyen: v.rpeMoyen ? round(v.rpeMoyen, 1) : null,
     kcal: round(k.total),
@@ -1206,16 +1299,15 @@ function terminerSeance() {
   };
   state.history.unshift(fini);
   state.session = null;
+  state.recapId = fini.id;      // le récap s'affiche à la place de l'écran du jour (§48)
   pauseTimer();
   save(); renderAll();
-  toast(`Séance enregistrée : ${dureeTxt(fini.duree)}, ${fini.sets} séries, ${fini.kcal} kcal`);
-  $('.tab[data-tab="histo"]').click();
 }
 
-function ajouterExercice(nom, groupe, rest) {
-  if (!state.session) demarrerSeance();
+// Fiche d'un exercice, avec son plan (§18) : séries, reps et charge visées
+function ficheExercice(nom, groupe, rest, plan = {}) {
   const ref = LIB.find(e => e.nom.toLowerCase() === nom.trim().toLowerCase());
-  state.session.exercices.push({
+  return {
     id: uid(),
     nom: ref ? ref.nom : nom.trim(),
     groupe: groupe || (ref ? ref.groupe : 'Autre'),
@@ -1223,30 +1315,237 @@ function ajouterExercice(nom, groupe, rest) {
     rom: ref ? ref.rom : DEFAULT_ROM,
     bw: ref ? ref.bw : 0,
     pdc: ref ? !!ref.pdc : false,
+    series: plan.series || 4,
+    repsCible: plan.repsCible || 10,
+    chargeCible: plan.chargeCible != null ? plan.chargeCible : null,
+    chargeSuivante: null,
     sets: [],
-  });
+  };
+}
+
+function ajouterExercice(nom, groupe, rest) {
+  if (!state.session) demarrerSeance(null);
+  state.session.exercices.push(ficheExercice(nom, groupe, rest));
   save(); renderSeance();
 }
 
-function ajouterSerie(exoId, reps, charge, rpe) {
-  const exo = state.session.exercices.find(e => e.id === exoId);
+function ajouterSerie(exoId, reps, charge) {
+  const s = state.session;
+  const exo = s.exercices.find(e => e.id === exoId);
   if (!exo || !reps) return;
   const avant = recordDe(exo.nom);                       // records d'avant cette série
-  const set = { reps: +reps, charge: +charge || 0, rpe: rpe ? +rpe : null, ts: Date.now() };
-  set.masse = masseSerie(exo, set, state.profile.poids);  // figées : le poids de corps peut changer
+  const now = Date.now();
+  const set = {
+    reps: +reps, charge: +charge || 0, ts: now,
+    // le repos réellement pris, mesuré et non déclaré (§29) : il nourrit le modèle de récupération
+    reposAvant: s.finDerniereSerie ? Math.round((now - s.finDerniereSerie) / 1000) : null,
+    rir: null, rpe: null, difficulte: null,
+    // 1RM de référence avant cette série : le record se juge contre lui
+    ref: avant && avant.e1rm ? avant.e1rm.v : null,
+  };
+  set.masse = masseSerie(exo, set, state.profile.poids); // figées : le poids de corps peut changer
   set.mref  = masseRecord(exo, set, state.profile.poids);
-  const e = e1RM(set.mref, set.reps, set.rpe);
 
-  if (avant && avant.e1rm && e > avant.e1rm.v + 0.01) {
+  exo.sets.push(set);
+  s.finDerniereSerie = now;
+  s.saisie = null;
+  s.curExo = s.exercices.indexOf(exo);
+  s.reco = null;
+
+  // séries prévues faites : on enchaîne, une décision à la fois (§10)
+  if (exo.series && exo.sets.length >= exo.series) {
+    const suivant = s.exercices.findIndex(e => !e.series || e.sets.length < e.series);
+    if (suivant >= 0) s.curExo = suivant;
+  }
+  // Le 1RM estimé croît avec la marge : sans réponse on compare au plancher
+  // (marge nulle), puis de nouveau quand la marge est connue. Un record n'est
+  // donc jamais manqué si le pratiquant ignore la question.
+  verifierRecord(exo, set);
+
+  if (feedbackRequis(exo, set)) {
+    s.attente = { exoId, i: exo.sets.length - 1, etape: 'difficulte' };   // §23 : une question, un tap
+  } else {
+    s.attente = null;
+    poserRir(exo, set, rirAppris(exo.nom), 'historique');                 // §27 : ne pas redemander ce qu'on sait
+  }
+
+  save(); renderSeance(); renderRecords(); renderProgres();
+  setDuree(exo.rest, state.profile.autoTimer);
+  vibrer(40);
+}
+
+// Un record se juge sur le 1RM estimé, qui dépend du RIR : on l'évalue une fois
+// le RIR connu, et on ne le signale qu'une seule fois.
+function verifierRecord(exo, set) {
+  const ref = set.ref;
+  if (!ref || set.pr) return;
+  const e = e1RM(set.mref, set.reps, set.rpe);
+  if (e > ref + 0.01) {
     set.pr = true;
     toast(`🏆 Record ${exo.nom} : 1RM estimé ${round(e)} kg`);
     bip(880, 130); setTimeout(() => bip(1100, 130), 150); setTimeout(() => bip(1320, 280), 300);
     vibrer([80, 60, 80, 60, 160]);
   }
-  exo.sets.push(set);
-  save(); renderSeance(); renderRecords(); renderProgres();
-  setDuree(exo.rest, state.profile.autoTimer);
-  vibrer(40);
+}
+
+/* ---------------------------------------------------------
+   6 bis. Feedback, RIR et recommandation
+   Le pratiquant ne saisit jamais un RIR : il répond à une question
+   simple (§24), GymRec en déduit la donnée interne (§25).
+   --------------------------------------------------------- */
+
+// Difficulté ressentie → reps en réserve. Grille volontairement grossière :
+// la question binaire l'affine quand la confiance est faible.
+const RIR_PAR_DIFFICULTE = { facile: 3, bien: 2, dur: 1 };
+
+function setsDe(nom) {
+  const out = [];
+  for (const seance of toutesLesSeances())
+    for (const exo of seance.exercices || [])
+      if (cle(exo.nom) === cle(nom)) out.push(...exo.sets);
+  return out;
+}
+
+const nbFeedbacks = nom => setsDe(nom).filter(x => x.difficulte).length;
+
+// Ce que GymRec a appris de cet exercice : le RIR habituel du pratiquant
+function rirAppris(nom) {
+  const notes = setsDe(nom).filter(x => x.rir != null).slice(-5);
+  if (!notes.length) return 2;
+  return Math.round(notes.reduce((a, x) => a + x.rir, 0) / notes.length);
+}
+
+/* Active learning (§27) : beaucoup de questions au début, puis seulement
+   quand la confiance est faible ou la série atypique. */
+function feedbackRequis(exo, set) {
+  if (nbFeedbacks(exo.nom) < 3) return true;                       // confiance faible
+  if (exo.repsCible && set.reps !== exo.repsCible) return true;    // objectif non tenu
+  const precedent = exo.sets[exo.sets.length - 2];
+  if (precedent && precedent.charge !== set.charge) return true;   // la charge a changé
+  return false;
+}
+
+const confianceFaible = nom => nbFeedbacks(nom) < 3;
+
+function poserRir(exo, set, rir, source) {
+  set.rir = rir;
+  set.rpe = 10 - rir;            // le moteur (1RM estimé, calories) raisonne en RPE
+  set.rirSource = source;
+  verifierRecord(exo, set);
+  calculerReco(exo, set);
+}
+
+function repondreDifficulte(d) {
+  const s = state.session, a = s && s.attente;
+  if (!a) return;
+  const exo = s.exercices.find(e => e.id === a.exoId);
+  const set = exo.sets[a.i];
+  set.difficulte = d;
+  if (confianceFaible(exo.nom)) {
+    a.etape = 'encore2';         // on précise, tant qu'on connaît mal le pratiquant
+  } else {
+    s.attente = null;
+    poserRir(exo, set, RIR_PAR_DIFFICULTE[d], 'feedback');
+  }
+  save(); renderSeance();
+}
+
+function repondreQuestion(oui) {
+  const s = state.session, a = s && s.attente;
+  if (!a) return;
+  const exo = s.exercices.find(e => e.id === a.exoId);
+  const set = exo.sets[a.i];
+  if (a.etape === 'encore2') {
+    if (oui) { s.attente = null; poserRir(exo, set, 2, 'question'); }
+    else a.etape = 'encore1';
+  } else {
+    s.attente = null;
+    poserRir(exo, set, oui ? 1 : 0, 'question');
+  }
+  save(); renderSeance();
+}
+
+/* Règles d'adaptation du MVP (§31). Le pas suit la charge : on ne propose pas
+   +5 kg sur un curl à 12 kg. */
+const pasCharge = c => (c >= 60 ? 5 : c >= 20 ? 2.5 : 1);
+
+function calculerReco(exo, set) {
+  const cible = exo.repsCible || set.reps;
+  const pas = pasCharge(set.charge);
+  // la marge fait foi : la question binaire est plus précise que le ressenti
+  const marge = set.rir != null ? set.rir : RIR_PAR_DIFFICULTE[set.difficulte] || 2;
+  let charge = set.charge, motif;
+
+  if (set.reps >= cible && marge >= 3) {
+    charge = set.charge + pas;
+    motif = `Objectif atteint avec ${marge} reps en réserve : la charge peut monter.`;
+  } else if (set.reps < cible - 1 || (marge === 0 && set.reps < cible)) {
+    charge = Math.max(0, set.charge - pas);
+    motif = `Objectif non atteint (${set.reps} au lieu de ${cible}) : on redescend pour garder la qualité d'exécution.`;
+  }
+  // intelligence silencieuse (§11) : on ne dérange que si la consigne change
+  state.session.reco = charge === set.charge
+    ? null
+    : { exoId: exo.id, charge, reps: cible, motif, change: true };
+}
+
+function accepterReco() {
+  const s = state.session, r = s && s.reco;
+  if (!r) return;
+  const exo = s.exercices.find(e => e.id === r.exoId);
+  exo.chargeSuivante = r.charge;
+  s.reco = null; s.saisie = null;
+  save(); renderSeance();
+  toast(`Prochaine série : ${r.charge} kg × ${r.reps}`);
+}
+
+function refuserReco() {
+  state.session.reco = null;
+  save(); renderSeance();
+}
+
+/* ---------------------------------------------------------
+   6 ter. Séance courante et modèles
+   --------------------------------------------------------- */
+function exoCourant() {
+  const s = state.session;
+  if (!s || !s.exercices.length) return null;
+  return s.exercices[Math.min(s.curExo || 0, s.exercices.length - 1)];
+}
+
+// Valeurs pré-remplies de la prochaine série : le plan d'abord, sinon la série précédente
+function saisiePour(exo) {
+  const s = state.session;
+  if (!s.saisie || s.saisie.exoId !== exo.id) {
+    const last = exo.sets[exo.sets.length - 1];
+    s.saisie = {
+      exoId: exo.id,
+      reps: exo.repsCible || (last ? last.reps : 10),
+      charge: exo.chargeSuivante != null ? exo.chargeSuivante
+            : exo.chargeCible != null ? exo.chargeCible
+            : last ? last.charge : 0,
+    };
+  }
+  return s.saisie;
+}
+
+// Durée estimée d'une séance : temps sous tension + récupérations
+function dureeEstimee(modele) {
+  let sec = 0;
+  for (const e of modele.exercices) sec += (e.series || 4) * ((e.repsCible || 10) * 3 + (e.rest || 90));
+  return sec;
+}
+
+function modeleDepuisSeance(seance, nom) {
+  return {
+    id: uid(), nom,
+    exercices: seance.exercices.map(e => ({
+      nom: e.nom, groupe: e.groupe, rest: e.rest, rom: e.rom, bw: e.bw, pdc: e.pdc,
+      series: e.sets.length || e.series || 4,
+      repsCible: e.repsCible || (e.sets[0] ? e.sets[0].reps : 10),
+      chargeCible: e.chargeCible != null ? e.chargeCible : (e.sets[0] ? e.sets[0].charge : null),
+    })),
+  };
 }
 
 /* ---------------------------------------------------------
@@ -1260,13 +1559,21 @@ function renderSeance() {
   const s = state.session;
   const P = state.profile.poids;
 
+  // Quel écran : le jour, le récap de la séance qui vient de finir, ou la séance en cours
+  const recap = state.recapId ? state.history.find(h => h.id === state.recapId) : null;
+  $('#ecranToday').classList.toggle('hidden', !!s || !!recap);
+  $('#ecranRecap').classList.toggle('hidden', !recap);
+  $('#ecranActif').classList.toggle('hidden', !s);
+  $('#blocSeance').classList.toggle('hidden', !s);
+  if (recap) renderRecap(recap);
+  if (!s) renderToday();
+  else { renderSerieCourante(); renderFeedback(); renderReco(); }
+
   // Bandeau
   $('#startTime').textContent = s && s.start ? hhmm(s.start) : '—';
   $('#endTime').innerHTML     = s && s.end ? hhmm(s.end)
     : (s ? '<span class="rec-live"><i></i>REC</span>' : '—');   // témoin d'enregistrement
   $('#duration').textContent  = s ? mmss(dureeSeance(s)) : '00:00';
-  $('#btnStart').classList.toggle('hidden', !!s);
-  $('#btnEnd').classList.toggle('hidden', !s);
 
   const vide = { sets: 0, reps: 0, tonnage: 0, travailJ: 0 };
   const v = s ? volumeSeance(s, P) : vide;
@@ -1276,7 +1583,8 @@ function renderSeance() {
   $('#stSets').textContent    = v.sets;
   $('#stReps').textContent    = v.reps;
   $('#stTonnage').textContent = v.tonnage >= 1000 ? round(v.tonnage / 1000, 1) + 't' : round(v.tonnage);
-  $('#stRpe').textContent     = v.rpeMoyen ? round(v.rpeMoyen, 1) : '—';
+  const repos = s ? s.exercices.flatMap(e => e.sets.map(x => x.reposAvant)).filter(Boolean) : [];
+  $('#stRepos').textContent   = repos.length ? mmss(Math.round(repos.reduce((a, b) => a + b, 0) / repos.length)) : '—';
   $('#stKcal').textContent    = round(k.total);
 
   // Exercices
@@ -1285,7 +1593,6 @@ function renderSeance() {
   const exos = s ? s.exercices : [];
   $('#exoEmpty').classList.toggle('hidden', exos.length > 0);
 
-  const RPE_OPTS = [10, 9.5, 9, 8.5, 8, 7.5, 7, 6.5, 6];
   exos.forEach((exo, i) => {
     const last = exo.sets[exo.sets.length - 1];
     const rec = recordDe(exo.nom);
@@ -1309,7 +1616,7 @@ function renderSeance() {
           <li>
             <span class="n">${j + 1}</span>
             <span class="info">${set.reps} reps × ${set.charge ? set.charge + ' kg' : 'poids du corps'}
-              ${set.rpe ? `<span class="rpe">RPE ${set.rpe}</span>` : ''}${set.pr ? '<span class="pr">🏆</span>' : ''}
+              ${set.difficulte ? `<span class="rpe">${({ facile: '😌', bien: '👌', dur: '🔥' })[set.difficulte]}</span>` : ''}${set.pr ? '<span class="pr">🏆</span>' : ''}
               <span class="vol">· 1RM est. ${round(e1RM(set.mref != null ? set.mref : masseRecord(exo, set, P), set.reps, set.rpe))} kg
                 · ${round(set.reps * (set.masse != null ? set.masse : masseSerie(exo, set, P)))} kg déplacés · ${hhmm(set.ts)}</span>
             </span>
@@ -1319,10 +1626,6 @@ function renderSeance() {
       <div class="add-set">
         <input type="number" inputmode="numeric" min="1" placeholder="reps" value="${last ? last.reps : ''}" data-reps="${exo.id}">
         <input type="number" inputmode="decimal" min="0" step="0.5" placeholder="kg" value="${last ? last.charge : ''}" data-charge="${exo.id}">
-        <select class="rpe-select" data-rpe="${exo.id}" title="RPE (difficulté ressentie)">
-          <option value="">RPE</option>
-          ${RPE_OPTS.map(r => `<option value="${r}" ${last && last.rpe === r ? 'selected' : ''}>${r}</option>`).join('')}
-        </select>
         <button class="btn primary" data-addset="${exo.id}">Valider</button>
         <button class="btn ghost pdc" data-timer="${exo.id}" title="Lancer la récup">⏱</button>
       </div>`;
@@ -1333,12 +1636,12 @@ function renderSeance() {
   $('#kcalDetail').innerHTML =
     ligne('Durée effective', dureeTxt(dureeSeance(s || {}))) +
     ligne('Densité (temps sous tension)', round(k.densite * 100) + ' %') +
-    ligne('RPE moyen', k.rpeMoyen ? `${round(k.rpeMoyen, 1)} (RIR ~${round(RIR(k.rpeMoyen), 1)}) · ×${round(k.fRpe, 2)}` : 'non renseigné') +
+    ligne('Effort (reps en réserve)', k.rpeMoyen ? `${round(RIR(k.rpeMoyen), 1)} · coût ×${round(k.fRpe, 2)}` : 'non renseigné') +
     ligne('Travail mécanique', round((v.travailJ || 0) / 1000) + ' kJ') +
     ligne('Coût de présence (MET 3)', round(k.base) + ' kcal') +
     ligne('Coût du travail (rendement 22 %)', round(k.meca) + ' kcal') +
     ligne('EPOC (après la séance)', round(k.epoc) + ' kcal') +
-    ligne('Total estimé', round(k.total) + ' kcal', 'total');
+    ligne('Total', '≈ ' + round(k.total) + ' kcal', 'total');
 
   // Macros post-training
   const m = macrosPost(k.total, state.profile);
@@ -1377,7 +1680,7 @@ function renderHistorique() {
         <b>${dateTxt(s.start)} — ${hhmm(s.start)} → ${s.end ? hhmm(s.end) : '?'}</b>
         <button class="rm" data-rmhist="${s.id}">×</button>
       </div>
-      <div class="hist-sub">${dureeTxt(s.duree)} · ${s.sets} séries · ${s.reps} reps · ${round(s.tonnage)} kg${s.rpeMoyen ? ' · RPE ' + s.rpeMoyen : ''} · <strong>${s.kcal} kcal</strong></div>
+      <div class="hist-sub">${dureeTxt(s.duree)} · ${s.sets} séries · ${s.reps} reps · ${round(s.tonnage)} kg${s.rpeMoyen ? ' · marge ' + round(RIR(s.rpeMoyen), 1) : ''} · <strong>${s.kcal} kcal</strong></div>
       <div class="hist-sub">Post-training (${OBJECTIFS[s.objectif] ? OBJECTIFS[s.objectif].label : s.objectif}) :
         ${s.macros ? `${s.macros.prot} g P / ${s.macros.gluc} g G / ${s.macros.lip} g L` : '—'}</div>
       ${exos ? `<div class="hist-exos">${exos}</div>` : ''}
@@ -1440,25 +1743,28 @@ function renderProgres() {
     data: serie.map(d => ({ t: d.t, v: d.volume, info: [['volume', kg(d.volume)], ['séries', d.sets], ['reps', d.reps]] })),
     fmt: fmtVol,
   });
-  const avecRpe = serie.filter(d => d.rpe != null);
+  const avecEffort = serie.filter(d => d.rpe != null);
   Viz.chart($('#chartRpe'), {
-    type: 'line', color: Viz.COL.rpe, titre: `RPE moyen — ${progSel}`, domaine: [5, 10],
-    vide: "Aucun RPE renseigné sur cet exercice : saisis-le en validant tes séries.",
-    data: avecRpe.map(d => ({ t: d.t, v: d.rpe, info: [['RPE moyen', round(d.rpe, 1)], ['RIR moyen', round(RIR(d.rpe), 1)], ['Séries', d.sets]] })),
+    type: 'line', color: Viz.COL.rpe, titre: `Marge à l'échec — ${progSel}`, domaine: [0, 5],
+    vide: "Pas encore de retour sur cet exercice : réponds aux questions qui suivent tes séries.",
+    data: avecEffort.map(d => ({
+      t: d.t, v: RIR(d.rpe),
+      info: [['reps en réserve', round(RIR(d.rpe), 1)], ['séries', d.sets]],
+    })),
     fmt: v => round(v, 1),
   });
 
   // Vue tableau : aucune valeur n'est accessible seulement au survol
   const tb = document.createElement('table');
   tb.className = 'tbl';
-  tb.innerHTML = '<thead><tr><th>Date</th><th>1RM est.</th><th>Volume</th><th>RPE</th><th>Top série</th></tr></thead>';
+  tb.innerHTML = '<thead><tr><th>Date</th><th>1RM est.</th><th>Volume</th><th>Marge</th><th>Top série</th></tr></thead>';
   const tbody = document.createElement('tbody');
   for (const d of [...serie].reverse()) {
     const tr = document.createElement('tr');
     for (const txt of [
       Viz.fmtJour(d.t) + (d.encours ? ' (en cours)' : ''),
       kg(d.e1rm), kg(d.volume),
-      d.rpe ? round(d.rpe, 1) : '—',
+      d.rpe ? round(RIR(d.rpe), 1) : '—',
       d.best ? `${d.best.reps} × ${round(d.best.masse, 1)} kg` : '—',
     ]) {
       const td = document.createElement('td');
@@ -1477,6 +1783,160 @@ function ouvrirProgres(nom) {
   $('.tab[data-tab="progres"]').click();
 }
 
+/* ---------------------------------------------------------
+   7 bis. Écran du jour, série courante, feedback, recommandation, récap
+   --------------------------------------------------------- */
+function renderToday() {
+  const el = $('#ecranToday');
+  if (state.editId) { el.innerHTML = editeurModele(); return; }
+  const m = state.modeles;
+  el.innerHTML = `
+    <div class="card">
+      <h2>Aujourd'hui</h2>
+      ${m.length ? m.map(x => `
+        <button class="modele" data-demarrer="${x.id}">
+          <span class="modele-nom">${esc(x.nom)}</span>
+          <span class="modele-meta">${x.exercices.length} exercice(s) · ${x.exercices.reduce((a, e) => a + (e.series || 4), 0)} séries · ≈ ${dureeTxt(dureeEstimee(x))}</span>
+        </button>`).join('')
+        : `<p class="muted small">Aucune séance enregistrée. Démarre une séance libre : tu pourras la garder comme modèle à la fin.</p>`}
+      <button class="btn ${m.length ? 'ghost' : 'primary'} pleine" id="btnLibre">Séance libre</button>
+    </div>
+    <div class="card">
+      <h2>Mes séances</h2>
+      ${m.length ? m.map(x => `
+        <div class="ligne-modele">
+          <span class="grow">${esc(x.nom)}</span>
+          <button class="btn ghost" data-editer="${x.id}">Modifier</button>
+          <button class="btn danger" data-suppmod="${x.id}" title="Supprimer">×</button>
+        </div>`).join('') : '<p class="muted small">Rien pour l\'instant.</p>'}
+      <button class="btn primary pleine" id="btnNouveauModele">Nouvelle séance</button>
+    </div>`;
+}
+
+function editeurModele() {
+  const m = state.modeles.find(x => x.id === state.editId);
+  if (!m) { state.editId = null; return ''; }
+  return `
+    <div class="card">
+      <h2>Composition de la séance</h2>
+      <label>Nom<input id="modNom" value="${esc(m.nom)}"></label>
+      ${m.exercices.map((e, i) => `
+        <div class="plan-exo">
+          <div class="plan-head"><b>${esc(e.nom)}</b><button class="del" data-suppexo="${i}">×</button></div>
+          <div class="plan-champs">
+            <label>Séries<input type="number" min="1" max="12" value="${e.series}" data-plan="series" data-i="${i}" inputmode="numeric"></label>
+            <label>Reps<input type="number" min="1" max="50" value="${e.repsCible}" data-plan="repsCible" data-i="${i}" inputmode="numeric"></label>
+            <label>Charge<input type="number" min="0" step="0.5" value="${e.chargeCible != null ? e.chargeCible : ''}" data-plan="chargeCible" data-i="${i}" inputmode="decimal"></label>
+            <label>Récup (s)<input type="number" min="10" step="5" value="${e.rest}" data-plan="rest" data-i="${i}" inputmode="numeric"></label>
+          </div>
+        </div>`).join('')}
+      <form id="planForm" class="row gap plan-ajout">
+        <input id="planNom" list="exoList" class="grow" placeholder="Ajouter un exercice" autocomplete="off">
+        <button class="btn primary" type="submit">+</button>
+      </form>
+      <div class="row gap">
+        <button class="btn ghost grow" id="btnFinEdit">Enregistrer</button>
+        <button class="btn primary grow" data-demarrer="${m.id}">Démarrer</button>
+      </div>
+    </div>`;
+}
+
+function renderSerieCourante() {
+  const s = state.session, exo = exoCourant();
+  if (!exo) {
+    $('#serieCourante').innerHTML =
+      `<div class="card"><h2>Séance libre</h2>
+       <p class="muted small">Ajoute un exercice plus bas pour commencer à enregistrer.</p></div>`;
+    return;
+  }
+  const sa = saisiePour(exo);
+  const n = exo.sets.length + 1;
+  const total = exo.series || 0;
+  const reste = total ? Math.min(n, total) : n;
+  $('#serieCourante').innerHTML = `
+    <div class="card serie-card">
+      <div class="serie-exo">${esc(exo.nom)}</div>
+      <div class="serie-charge"><b>${sa.charge || 0}</b><span>kg</span></div>
+      <div class="serie-meta">${total ? `Série ${reste} / ${total}` : `Série ${n}`} · objectif ${sa.reps} reps · récup ${mmss(exo.rest)}</div>
+      <div class="steppers">
+        <div class="stepper"><button data-pas="reps:-1">−</button><span>${sa.reps} reps</span><button data-pas="reps:1">+</button></div>
+        <div class="stepper"><button data-pas="charge:-1">−</button><span>${sa.charge} kg</span><button data-pas="charge:1">+</button></div>
+      </div>
+      <button class="btn primary big pleine" id="btnValiderSerie">Valider la série</button>
+      ${s.exercices.length > 1 ? `
+        <div class="serie-nav">
+          <button class="btn ghost" data-exo="-1">← Précédent</button>
+          <span class="muted small">${(s.curExo || 0) + 1} / ${s.exercices.length}</span>
+          <button class="btn ghost" data-exo="1">Suivant →</button>
+        </div>` : ''}
+      ${total && exo.sets.length >= total ? '<p class="muted small">Séries prévues terminées.</p>' : ''}
+    </div>`;
+}
+
+function renderFeedback() {
+  const a = state.session && state.session.attente;
+  const el = $('#feedbackCard');
+  if (!a) { el.innerHTML = ''; return; }
+  if (a.etape === 'difficulte') {
+    el.innerHTML = `
+      <div class="card fb-card">
+        <h2>Comment était cette série ?</h2>
+        <div class="fb-row">
+          <button class="fb" data-fb="facile"><b>😌</b>Facile</button>
+          <button class="fb" data-fb="bien"><b>👌</b>Bien</button>
+          <button class="fb" data-fb="dur"><b>🔥</b>Dur</button>
+        </div>
+      </div>`;
+  } else {
+    el.innerHTML = `
+      <div class="card fb-card">
+        <h2>${a.etape === 'encore2' ? 'Aurais-tu pu faire 2 reps de plus ?' : 'Et une seule de plus ?'}</h2>
+        <div class="row gap">
+          <button class="btn primary grow" data-rep="oui">Oui</button>
+          <button class="btn ghost grow" data-rep="non">Non</button>
+        </div>
+      </div>`;
+  }
+}
+
+function renderReco() {
+  const r = state.session && state.session.reco;
+  const el = $('#recoCard');
+  if (!r) { el.innerHTML = ''; return; }
+  const exo = state.session.exercices.find(e => e.id === r.exoId);
+  const derniere = exo.sets[exo.sets.length - 1];
+  el.innerHTML = `
+    <div class="card reco-card">
+      <h2>Prochaine série</h2>
+      <div class="reco-val">${r.charge} kg <i>×</i> ${r.reps}</div>
+      <div class="row gap">
+        <button class="btn primary grow" data-reco="ok">Accepter</button>
+        <button class="btn ghost grow" data-reco="non">Garder ${derniere.charge} kg</button>
+      </div>
+      <details class="foods"><summary>Pourquoi ?</summary><p class="muted small">${esc(r.motif)}</p></details>
+    </div>`;
+}
+
+function renderRecap(f) {
+  const bloc = (v, l) => `<div><b>${v}</b><em>${l}</em></div>`;
+  $('#ecranRecap').innerHTML = `
+    <div class="card recap-card">
+      <h2>Séance terminée</h2>
+      <div class="recap-nom">${esc(f.nom || 'Séance')}</div>
+      <div class="recap-grid">
+        ${bloc(dureeTxt(f.duree), 'durée')}
+        ${bloc(f.sets, 'séries')}
+        ${bloc(f.reps, 'reps')}
+        ${bloc(f.tonnage >= 1000 ? round(f.tonnage / 1000, 1) + ' t' : round(f.tonnage) + ' kg', 'soulevés')}
+        ${bloc(f.reposMoyen ? mmss(f.reposMoyen) : '—', 'repos moyen')}
+        ${bloc('≈ ' + f.kcal, 'kcal')}
+      </div>
+      ${f.macros ? `<p class="muted small recap-macros">Collation : ${f.macros.prot} g de protéines, ${f.macros.gluc} g de glucides, ${f.macros.lip} g de lipides.</p>` : ''}
+      ${!f.modeleId ? '<button class="btn ghost pleine" id="btnGarderModele">Garder comme séance réutilisable</button>' : ''}
+      <button class="btn primary big pleine" id="btnFermerRecap">Terminé</button>
+    </div>`;
+}
+
 let triRecords = 'e1rm';
 function renderRecords() {
   const list = records();
@@ -1488,7 +1948,7 @@ function renderRecords() {
   };
   list.sort(tris[triRecords] || tris.e1rm);
 
-  const perf = r => r ? `${r.reps} reps × ${round(r.masse, 1)} kg${r.rpe ? ' @ RPE ' + r.rpe : ''}` : '—';
+  const perf = r => r ? `${r.reps} reps × ${round(r.masse, 1)} kg${r.rpe ? ` · ${RIR(r.rpe)} en réserve` : ''}` : '—';
   $('#recordsList').innerHTML = list.map(r => `
     <div class="hist rec" data-progres="${esc(r.nom)}">
       <div class="hist-head">
@@ -1496,7 +1956,7 @@ function renderRecords() {
         <span class="rec-big">${r.e1rm ? round(r.e1rm.v) + ' kg' : '—'}</span>
       </div>
       <div class="hist-sub">${esc(r.groupe)} · ${r.seances} séance(s) · ${r.sets} séries · ${r.reps} reps · ${round(r.tonnage / 1000, 1)} t${r.pdc ? ' · poids du corps inclus' : ''}
-        ${r.rpeNb ? '· RPE moyen ' + round(r.rpeSomme / r.rpeNb, 1) : ''}</div>
+        ${r.rpeNb ? '· marge moyenne ' + round(RIR(r.rpeSomme / r.rpeNb), 1) : ''}</div>
       <div class="kv rec-kv">
         ${ligne('1RM estimé', `${r.e1rm ? round(r.e1rm.v) + ' kg' : '—'} <em>${perf(r.e1rm)} · ${dateTxt(r.e1rm.date)}</em>`)}
         ${ligne('Charge max', `${round(r.masse.v, 1)} kg <em>${perf(r.masse)} · ${dateTxt(r.masse.date)}</em>`)}
@@ -1524,11 +1984,13 @@ function renderProfil() {
     le coût mécanique réel de tes séries (masse déplacée × 9,81 × amplitude × reps, majoré de 20 % pour
     l'excentrique, divisé par un rendement musculaire de 22 %) et l'EPOC (6 à 12 % selon la densité de la séance).
     Les exercices au poids du corps comptent la fraction de ton poids réellement déplacée.</p>
-    <p><strong>RPE.</strong> C'est la difficulté ressentie de la série : RPE 8 = il te restait
-    2 reps en réserve (RIR 2), RPE 10 = échec. Il sert à deux choses : le 1RM estimé
-    (Epley corrigé du RIR : 8 reps à RPE 8 = un max de 10 reps) qui alimente les records,
-    et un ajustement du coût métabolique (±15 % au maximum) — s'entraîner près de l'échec
-    coûte plus cher que le travail mécanique pur.</p>
+    <p><strong>Marge à l'échec.</strong> Après une série, GymRec demande simplement comment
+    elle s'est passée, et au besoin « aurais-tu pu faire 2 reps de plus ? ». Il en déduit la
+    marge (les reps qu'il te restait), qui sert à trois choses : le 1RM estimé
+    (Epley corrigé de la marge : 8 reps avec 2 en réserve valent un maximum de 10 reps) qui
+    alimente les records, l'ajustement du coût métabolique (±15 % au maximum, s'entraîner
+    près de l'échec coûte plus cher que le travail mécanique pur), et la recommandation de
+    charge pour la série suivante. Les questions s'espacent à mesure que GymRec te connaît.</p>
     <p><strong>Records.</strong> Calculés sur l'historique et la séance en cours, exercice par
     exercice : 1RM estimé, charge maximale (la barre seule, sauf aux tractions, dips et
     pompes où le poids du corps est la charge), meilleure
@@ -1603,8 +2065,100 @@ function initUI() {
   $('#exoGroup').innerHTML = GROUPES.map(g => `<option>${g}</option>`).join('');
 
   // Séance
-  $('#btnStart').addEventListener('click', demarrerSeance);
   $('#btnEnd').addEventListener('click', terminerSeance);
+
+  // Écran du jour : modèles de séance
+  $('#ecranToday').addEventListener('click', ev => {
+    const b = ev.target.closest('button');
+    if (!b) return;
+    if (b.dataset.demarrer) { state.editId = null; demarrerSeance(b.dataset.demarrer); }
+    else if (b.id === 'btnLibre') demarrerSeance(null);
+    else if (b.id === 'btnNouveauModele') {
+      const m = { id: uid(), nom: 'Nouvelle séance', exercices: [] };
+      state.modeles.push(m); state.editId = m.id; save(); renderToday();
+    }
+    else if (b.dataset.editer) { state.editId = b.dataset.editer; renderToday(); }
+    else if (b.dataset.suppmod) {
+      if (confirm('Supprimer cette séance ?')) {
+        state.modeles = state.modeles.filter(x => x.id !== b.dataset.suppmod);
+        save(); renderToday();
+      }
+    }
+    else if (b.id === 'btnFinEdit') { state.editId = null; save(); renderToday(); }
+    else if (b.dataset.suppexo) {
+      const m = state.modeles.find(x => x.id === state.editId);
+      m.exercices.splice(+b.dataset.suppexo, 1); save(); renderToday();
+    }
+  });
+  $('#ecranToday').addEventListener('change', ev => {
+    const m = state.modeles.find(x => x.id === state.editId);
+    if (!m) return;
+    const t = ev.target;
+    if (t.id === 'modNom') m.nom = t.value.trim() || 'Séance';
+    else if (t.dataset.plan) {
+      const v = t.value === '' ? null : Number(t.value);
+      m.exercices[+t.dataset.i][t.dataset.plan] = t.dataset.plan === 'chargeCible' ? v : (v || 1);
+    }
+    save();
+  });
+  $('#ecranToday').addEventListener('submit', ev => {
+    ev.preventDefault();
+    const m = state.modeles.find(x => x.id === state.editId);
+    const nom = $('#planNom') && $('#planNom').value.trim();
+    if (!m || !nom) return;
+    m.exercices.push(ficheExercice(nom, null, null));
+    save(); renderToday();
+  });
+
+  // Série courante : valider en un tap, corriger sans clavier
+  $('#serieCourante').addEventListener('click', ev => {
+    const b = ev.target.closest('button');
+    if (!b) return;
+    const s = state.session, exo = exoCourant();
+    if (b.id === 'btnValiderSerie' && exo) {
+      const sa = saisiePour(exo);
+      ajouterSerie(exo.id, sa.reps, sa.charge);
+    } else if (b.dataset.pas && exo) {
+      const [champ, sens] = b.dataset.pas.split(':');
+      const sa = saisiePour(exo);
+      if (champ === 'reps') sa.reps = Math.max(1, sa.reps + (+sens));
+      else sa.charge = Math.max(0, round(sa.charge + (+sens) * pasCharge(sa.charge), 1));
+      save(); renderSerieCourante();
+    } else if (b.dataset.exo) {
+      s.curExo = (s.curExo + (+b.dataset.exo) + s.exercices.length) % s.exercices.length;
+      s.saisie = null; save(); renderSeance();
+    }
+  });
+
+  // Micro-feedback puis question binaire (§23-24)
+  $('#feedbackCard').addEventListener('click', ev => {
+    const b = ev.target.closest('button');
+    if (!b) return;
+    if (b.dataset.fb) repondreDifficulte(b.dataset.fb);
+    else if (b.dataset.rep) repondreQuestion(b.dataset.rep === 'oui');
+  });
+
+  // Recommandation inter-séries (§30)
+  $('#recoCard').addEventListener('click', ev => {
+    const b = ev.target.closest('button');
+    if (!b || !b.dataset.reco) return;
+    b.dataset.reco === 'ok' ? accepterReco() : refuserReco();
+  });
+
+  // Récapitulatif de fin de séance (§48)
+  $('#ecranRecap').addEventListener('click', ev => {
+    const b = ev.target.closest('button');
+    if (!b) return;
+    if (b.id === 'btnFermerRecap') { state.recapId = null; save(); renderSeance(); }
+    else if (b.id === 'btnGarderModele') {
+      const f = state.history.find(h => h.id === state.recapId);
+      const nom = prompt('Nom de la séance ?', f.nom === 'Séance libre' ? 'Ma séance' : f.nom);
+      if (!nom) return;
+      state.modeles.push(modeleDepuisSeance(f, nom.trim()));
+      save(); renderSeance();
+      toast('Séance enregistrée dans « Mes séances »');
+    }
+  });
 
   // Ajout d'exercice : pré-remplissage groupe + récup depuis la bibliothèque
   $('#exoName').addEventListener('input', () => {
@@ -1628,9 +2182,8 @@ function initUI() {
       const id = b.dataset.addset;
       const reps = $(`[data-reps="${id}"]`).value;
       const charge = $(`[data-charge="${id}"]`).value;
-      const rpe = $(`[data-rpe="${id}"]`).value;
       if (!reps) { toast('Indique le nombre de reps'); return; }
-      ajouterSerie(id, reps, charge, rpe);
+      ajouterSerie(id, reps, charge);
     } else if (b.dataset.del) {
       if (confirm('Supprimer cet exercice et ses séries ?')) {
         state.session.exercices = state.session.exercices.filter(e => e.id !== b.dataset.del);

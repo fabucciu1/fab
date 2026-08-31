@@ -17,19 +17,49 @@ Toutes les données restent sur ton appareil (`localStorage`).
 - La récup se lance automatiquement dès que tu valides une série (désactivable dans Profil).
 - Chaque exercice a sa propre durée de récup (pré-remplie depuis la bibliothèque).
 
-**Séance**
-- Heure de début, heure de fin, durée en direct.
-- Compteur de séries, de reps, de tonnage (kg soulevés) et de calories, mis à jour à chaque série.
-- Composition de la séance : exercices (bibliothèque de 27 mouvements avec auto-complétion,
-  ou nom libre), et pour chaque série les reps, la charge et le **RPE**.
+**Séances réutilisables** (§18)
+- Modèles de séance : nom, exercices, séries prévues, reps et charge visées, récupération.
+- L'écran du jour propose ces séances avec leur durée estimée ; une séance libre reste possible,
+  et se garde comme modèle en fin de séance.
+
+**Séance active** (§21-22)
+- Un écran, une décision : l'exercice en cours, la charge en grand, « Série 2/4 · objectif
+  10 reps · récup 01:30 ».
+- **Validation en un tap.** Les valeurs viennent du plan ; deux boutons ± corrigent reps et
+  charge sans jamais ouvrir le clavier.
+- L'app enchaîne toute seule sur l'exercice suivant quand les séries prévues sont faites.
+- Heure de début, témoin REC, durée en direct ; compteurs séries / reps / tonnage / repos
+  moyen / calories.
+
+**Marge à l'échec, sans jargon** (§23-25, §74)
+- Après la série : « Comment était cette série ? » 😌 / 👌 / 🔥 — un tap.
+- Quand GymRec te connaît mal : « Aurais-tu pu faire 2 reps de plus ? », puis « Et une seule
+  de plus ? ». Il en déduit la marge (RIR) en interne ; le mot RIR n'apparaît jamais à l'écran.
+- **Les questions s'espacent** (§27) : passé trois retours sur un exercice, GymRec ne demande
+  plus que sur les séries atypiques (objectif manqué, charge changée).
+
+**Recommandation inter-séries** (§30-31)
+- Objectif atteint avec 3 reps en réserve → propose de monter ; objectif manqué → propose de
+  descendre ; zone visée → **ne dit rien** (§11, intelligence silencieuse).
+- Le pas suit la charge : +1 kg sur un curl, +5 kg sur un squat.
+
+**Repos réel** (§29)
+- Le temps effectivement pris entre deux séries est mesuré, jamais déclaré. C'est la donnée
+  qui alimentera le modèle de récupération individuel (§57-58) — et elle n'est pas
+  reconstituable après coup.
+
+**Récapitulatif de fin de séance** (§48)
+- Durée, séries, reps, tonnage, repos moyen, ≈ kcal, et la collation qui suit.
+
+**Historique et données**
 - Historique des séances terminées, export JSON, statistiques cumulées.
 
-**RPE et records**
+**Records**
 
-- RPE saisi série par série (6 → 10, par pas de 0,5), repris automatiquement d'une série à l'autre.
-  RPE 8 = 2 reps en réserve (RIR 2), RPE 10 = échec.
-- **1RM estimé** par série : Epley corrigé du RIR — `charge × (1 + (reps + RIR) / 30)`.
-  Une série de 8 reps à RPE 8 vaut donc un maximum de 10 reps.
+- **1RM estimé** par série : Epley corrigé de la marge — `charge × (1 + (reps + marge) / 30)`.
+  Une série de 8 reps avec 2 en réserve vaut donc un maximum de 10 reps.
+- Le record est d'abord jugé sur la marge nulle (le plancher), puis réévalué quand la réponse
+  arrive : ignorer les questions ne fait jamais rater un record.
 - Onglet **Records**, exercice par exercice (historique + séance en cours) : 1RM estimé,
   charge max, meilleure série en volume, meilleur volume sur une séance, RPE moyen, dernière fois.
   Tri par 1RM, par charge ou par date.
@@ -37,8 +67,8 @@ Toutes les données restent sur ton appareil (`localStorage`).
 - Deux notions de charge, volontairement distinctes : les records affichent la **barre seule**
   (110 kg au squat reste 110 kg), sauf aux tractions / dips / pompes / abdos où le poids du corps
   *est* la charge ; le calcul des calories, lui, utilise la masse réellement déplacée.
-- Le RPE moyen ajuste aussi la dépense énergétique (±15 % max) : s'entraîner près de l'échec
-  coûte plus cher que le travail mécanique pur.
+- La marge moyenne ajuste aussi la dépense énergétique (±15 % max) : s'entraîner près de
+  l'échec coûte plus cher que le travail mécanique pur.
 
 **Graphiques de progression**
 
@@ -158,5 +188,10 @@ donnée, choisies pour être distinguables entre elles, pas pour porter la marqu
 ## Limites (prototype)
 
 Les calories et les macros sont des **estimations** : à ajuster selon l'évolution réelle du
-poids sur 2-3 semaines. Pas encore de tempo, de séances-types réutilisables ni de
-synchronisation multi-appareils.
+poids sur 2-3 semaines.
+
+Par rapport au cahier des charges, il manque encore : **Smart Rec** et la caméra-capteur
+(phases 2-3), l'adaptation inter-séances et les Insights (§50-51), la fusion de capteurs
+(§54-68), et la navigation cible TODAY / ● REC / HISTORY / INSIGHTS / PROFILE (§16) — les
+onglets Progrès et Records correspondent à INSIGHTS. Pas de tempo ni de séries longues
+(drop sets, rest-pause), pas de synchronisation multi-appareils.

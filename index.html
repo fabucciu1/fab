@@ -51,17 +51,29 @@
 <!-- ============ SÉANCE ============ -->
 <section id="tab-seance" class="panel active">
 
-  <!-- Bandeau séance -->
-  <div class="card session-card">
-    <div class="session-times">
-      <div><span class="lbl">Début</span><strong id="startTime">—</strong></div>
-      <div><span class="lbl">Fin</span><strong id="endTime">—</strong></div>
-      <div><span class="lbl">Durée</span><strong id="duration">00:00</strong></div>
+  <!-- ---------- Écran du jour : hors séance ---------- -->
+  <div id="ecranToday"></div>
+
+  <!-- ---------- Récapitulatif de fin de séance ---------- -->
+  <div id="ecranRecap" class="hidden"></div>
+
+  <!-- ---------- Séance en cours ---------- -->
+  <div id="ecranActif" class="hidden">
+    <div class="card session-card">
+      <div class="session-times">
+        <div><span class="lbl">Début</span><strong id="startTime">—</strong></div>
+        <div><span class="lbl">Fin</span><strong id="endTime">—</strong></div>
+        <div><span class="lbl">Durée</span><strong id="duration">00:00</strong></div>
+      </div>
+      <div class="row gap">
+        <button id="btnEnd" class="btn ghost grow">Terminer la séance</button>
+      </div>
     </div>
-    <div class="row gap">
-      <button id="btnStart" class="btn primary big">Démarrer la séance</button>
-      <button id="btnEnd" class="btn primary big hidden">Terminer</button>
-    </div>
+
+    <!-- la décision du moment : quelle série, quelle charge -->
+    <div id="serieCourante"></div>
+    <div id="feedbackCard"></div>
+    <div id="recoCard"></div>
   </div>
 
   <!-- Chronomètre de récup -->
@@ -101,12 +113,15 @@
     </div>
   </div>
 
+
+  <!-- ---------- Détail, visible pendant la séance ---------- -->
+  <div id="blocSeance" class="hidden">
   <!-- Compteurs live -->
   <div class="stats" id="liveStats">
     <div class="stat"><span id="stSets">0</span><em>séries</em></div>
     <div class="stat"><span id="stReps">0</span><em>reps</em></div>
     <div class="stat"><span id="stTonnage">0</span><em>kg soulevés</em></div>
-    <div class="stat"><span id="stRpe">—</span><em>RPE moyen</em></div>
+    <div class="stat"><span id="stRepos">—</span><em>repos moyen</em></div>
     <div class="stat"><span id="stKcal">0</span><em>kcal</em></div>
   </div>
 
@@ -152,6 +167,7 @@
     <h2>Journée complète (estimation)</h2>
     <div id="dailyTargets" class="kv"></div>
   </div>
+  </div>
 
 </section>
 
@@ -191,8 +207,8 @@
     </div>
 
     <div class="card">
-      <h2>RPE moyen</h2>
-      <p class="viz-sub">Difficulté ressentie moyenne des séries de l'exercice (10 = échec).</p>
+      <h2>Marge à l'échec</h2>
+      <p class="viz-sub">Reps qu'il te restait en réserve, en moyenne. Plus la courbe descend, plus tu t'approches de l'échec.</p>
       <div id="chartRpe"></div>
     </div>
 
