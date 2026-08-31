@@ -317,3 +317,9 @@ input:focus,select:focus{outline:2px solid var(--steel);outline-offset:0}
 /* ---------- conclusions (§50) : la phrase d'abord, le chiffre à la demande ---------- */
 .insight-txt{margin:0 0 10px;font-size:17px;line-height:1.4;font-weight:600;text-wrap:balance}
 .insight summary{margin-top:2px}
+
+/* Cinq onglets en français : sur les écrans les plus étroits, on resserre le lettrage */
+@media (max-width:374px){
+  .tabs{gap:3px;padding:8px 10px}
+  .tab{font-size:9.5px;letter-spacing:.3px;padding:10px 1px}
+}

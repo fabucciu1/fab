@@ -11,10 +11,12 @@ Toutes les données restent sur ton appareil (`localStorage`).
 
 ## Navigation (§16)
 
-**TODAY** · **● REC** · **HISTORY** · **INSIGHTS** · **PROFILE**
+**Aujourd’hui** · **● Rec** · **Historique** · **Analyses** · **Profil**
+(soit TODAY / ● REC / HISTORY / INSIGHTS / PROFILE du cahier des charges, en français —
+« Rec » reste tel quel, c'est le mot de la marque)
 
-`TODAY` prépare et lance la séance, montre la dernière séance et la conclusion la plus utile.
-`● REC` porte la séance en cours — série courante, chronomètre, feedback, recommandation, détail —
+`Aujourd’hui` prépare et lance la séance, montre la dernière séance et la conclusion la plus
+utile. `● Rec` porte la séance en cours — série courante, chronomètre, feedback, recommandation, détail —
 et c'est là que Smart Rec viendra se brancher (§32) ; hors séance le chronomètre y reste
 utilisable seul. Un point rouge pulse sur l'onglet tant que la séance enregistre.
 
@@ -81,7 +83,7 @@ utilisable seul. Un point rouge pulse sur l'onglet tant que la séance enregistr
 
 **Conclusions** (§50)
 
-Onglet **Insights**, avant les chiffres : des phrases, et le détail seulement si on le demande.
+Onglet **Analyses**, avant les chiffres : des phrases, et le détail seulement si on le demande.
 Trois analyses, chacune avec un seuil de données explicite — en dessous, GymRec se tait et dit
 ce qui lui manque plutôt que d'inventer :
 
@@ -93,7 +95,7 @@ ce qui lui manque plutôt que d'inventer :
 
 **Graphiques de progression**
 
-Dans **Insights**, section « Par exercice » : un exercice + une période (tout / 12 dernières séances / 3 mois) en filtre,
+Dans **Analyses**, section « Par exercice » : un exercice + une période (tout / 12 dernières séances / 3 mois) en filtre,
 puis trois graphiques SVG dessinés à la main, sans aucune librairie :
 
 - **1RM estimé** (courbe) — la meilleure série de chaque séance ;
@@ -211,7 +213,7 @@ donnée, choisies pour être distinguables entre elles, pas pour porter la marqu
 Les calories et les macros sont des **estimations** : à ajuster selon l'évolution réelle du
 poids sur 2-3 semaines.
 
-Les conclusions d'Insights sont des corrélations lues sur tes propres séances, pas des
+Les conclusions des Analyses sont des corrélations lues sur tes propres séances, pas des
 vérités : elles se déclenchent sur des seuils volontairement prudents, et un écart peut venir
 d'autre chose que de ce qu'elles pointent (sommeil, ordre des exercices, forme du jour).
 
