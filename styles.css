@@ -5,9 +5,10 @@
   --line:#2a323f;
   --txt:#e8edf4;
   --muted:#94a3b8;
-  --accent:#38e07b;
-  --accent2:#2bb463;
-  --danger:#ff5d5d;
+  --accent:#ff5d5d;        /* le rouge du logo : couleur d'action de l'app */
+  --accent2:#e04a4a;       /* survol / état pressé */
+  --accent-ink:#2a0505;    /* texte posé sur un aplat d'accent (5,5:1) */
+  --danger:#ff5d5d;        /* destructif : même rouge, traité en contour */
   --warn:#ffb454;
   --radius:16px;
 }
@@ -43,7 +44,7 @@ main{max-width:640px;margin:0 auto;padding:12px 12px 60px}
   flex:1;padding:10px 2px;border:0;border-radius:10px;background:var(--card);
   color:var(--muted);font-weight:600;font-size:12.5px;cursor:pointer;white-space:nowrap;
 }
-.tab.active{background:var(--accent);color:#08210f}
+.tab.active{background:var(--accent);color:var(--accent-ink)}
 .panel{display:none}
 .panel.active{display:block}
 
@@ -71,15 +72,15 @@ input:focus,select:focus{outline:2px solid var(--accent);outline-offset:0}
   background:var(--card2);color:var(--txt);cursor:pointer;white-space:nowrap;
 }
 .btn:active{transform:translateY(1px)}
-.btn.primary{background:var(--accent);color:#08210f}
-.btn.danger{background:var(--danger);color:#2a0505}
+.btn.primary{background:var(--accent);color:var(--accent-ink)}
+.btn.danger{background:transparent;color:var(--danger);border:1px solid var(--danger)}
 .btn.ghost{background:var(--card2);color:var(--txt);border:1px solid var(--line)}
 .btn.big{flex:1;padding:16px;font-size:17px}
 .chip{
   border:1px solid var(--line);background:var(--card2);color:var(--muted);
   border-radius:999px;padding:8px 12px;font-size:14px;font-weight:600;cursor:pointer;flex:1;
 }
-.chip.active{background:var(--accent);color:#08210f;border-color:var(--accent)}
+.chip.active{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 
 /* ---------- session ---------- */
 .session-card .session-times{display:flex;justify-content:space-between;margin-bottom:12px}
@@ -123,7 +124,7 @@ input:focus,select:focus{outline:2px solid var(--accent);outline-offset:0}
   display:flex;align-items:center;gap:8px;padding:7px 0;border-top:1px solid var(--line);
   font-variant-numeric:tabular-nums;font-size:15px;
 }
-.sets li .n{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#08210f;
+.sets li .n{width:26px;height:26px;border-radius:50%;background:var(--accent);color:var(--accent-ink);
   display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex:none}
 .sets li .info{flex:1}
 .sets li .vol{color:var(--muted);font-size:12px}
@@ -143,7 +144,7 @@ input:focus,select:focus{outline:2px solid var(--accent);outline-offset:0}
 .macro{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px 6px;text-align:center}
 .macro b{display:block;font-size:22px;font-variant-numeric:tabular-nums}
 .macro em{font-style:normal;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
-.macro.p b{color:#7ec8ff}.macro.g b{color:var(--accent)}.macro.l b{color:var(--warn)}
+.macro.p b{color:#7ec8ff}.macro.g b{color:var(--accent)}.macro.l b{color:#ffc44d}
 .objectif-row{margin-bottom:4px}
 .foods{margin-top:10px;font-size:14px}
 .foods summary{color:var(--muted);cursor:pointer;font-size:13px}
@@ -158,7 +159,7 @@ input:focus,select:focus{outline:2px solid var(--accent);outline-offset:0}
 .hist-exos{font-size:13px;color:var(--muted);margin-top:6px}
 .toast{
   position:fixed;left:50%;bottom:24px;transform:translateX(-50%);
-  background:var(--accent);color:#08210f;font-weight:700;padding:12px 18px;border-radius:12px;
+  background:var(--accent);color:var(--accent-ink);font-weight:700;padding:12px 18px;border-radius:12px;
   z-index:50;box-shadow:0 8px 24px #0008;
 }
 

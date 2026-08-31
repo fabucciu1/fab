@@ -50,8 +50,10 @@ lecteurs d'écran, et se double d'une **vue tableau** dépliable — aucune vale
 accessible uniquement au survol. Depuis l'onglet Records, « Voir la progression » ouvre
 directement les courbes de l'exercice.
 
-Les trois couleurs (bleu, orange, aqua) sont validées pour la surface sombre de l'app :
+Les trois couleurs (bleu, jaune, aqua) sont validées pour la surface sombre de l'app :
 bande de clarté, plancher de chroma, séparation sous daltonisme (ΔE ≥ 8) et contraste ≥ 3:1.
+Elles restent volontairement à distance du rouge de la marque, pour qu'on ne confonde jamais
+une donnée avec un bouton.
 
 **Calories brûlées**
 
@@ -94,6 +96,15 @@ protéines / glucides / lipides du jour.
 
 Installable en PWA (« Ajouter à l'écran d'accueil ») et utilisable hors-ligne grâce au
 service worker — pratique dans une salle sans réseau.
+
+## Charte
+
+Thème sombre, une seule couleur d'action : le **rouge du logo** (`--accent: #ff5d5d`), posé
+sur les boutons principaux, l'anneau du chrono, les onglets actifs et les records. Le texte
+sur aplat rouge est un rouge très sombre (`#2a0505`, contraste 5,5:1). Les actions
+destructives partagent la même teinte mais en **contour** plutôt qu'en aplat : « Tout
+effacer » ne peut pas être confondu avec « Valider ». La fin de récup passe à l'ambre
+(`--warn`), la seule autre couleur de statut.
 
 ## Fichiers
 
