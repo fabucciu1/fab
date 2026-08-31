@@ -16,8 +16,24 @@ Toutes les données restent sur ton appareil (`localStorage`).
 - Heure de début, heure de fin, durée en direct.
 - Compteur de séries, de reps, de tonnage (kg soulevés) et de calories, mis à jour à chaque série.
 - Composition de la séance : exercices (bibliothèque de 27 mouvements avec auto-complétion,
-  ou nom libre), et pour chaque série les reps + la charge.
+  ou nom libre), et pour chaque série les reps, la charge et le **RPE**.
 - Historique des séances terminées, export JSON, statistiques cumulées.
+
+**RPE et records**
+
+- RPE saisi série par série (6 → 10, par pas de 0,5), repris automatiquement d'une série à l'autre.
+  RPE 8 = 2 reps en réserve (RIR 2), RPE 10 = échec.
+- **1RM estimé** par série : Epley corrigé du RIR — `charge × (1 + (reps + RIR) / 30)`.
+  Une série de 8 reps à RPE 8 vaut donc un maximum de 10 reps.
+- Onglet **Records**, exercice par exercice (historique + séance en cours) : 1RM estimé,
+  charge max, meilleure série en volume, meilleur volume sur une séance, RPE moyen, dernière fois.
+  Tri par 1RM, par charge ou par date.
+- Un record est signalé (toast, sonnerie, badge 🏆 sur la série) au moment où tu le poses.
+- Deux notions de charge, volontairement distinctes : les records affichent la **barre seule**
+  (110 kg au squat reste 110 kg), sauf aux tractions / dips / pompes / abdos où le poids du corps
+  *est* la charge ; le calcul des calories, lui, utilise la masse réellement déplacée.
+- Le RPE moyen ajuste aussi la dépense énergétique (±15 % max) : s'entraîner près de l'échec
+  coûte plus cher que le travail mécanique pur.
 
 **Calories brûlées**
 
@@ -26,7 +42,7 @@ Trois composantes, détaillées dans l'app :
 | Composante | Calcul |
 |---|---|
 | Coût de présence | MET 3 × 3,5 × poids / 200 × minutes |
-| Coût du travail | masse déplacée × 9,81 × amplitude × reps × 1,2 (excentrique) ÷ rendement 22 % |
+| Coût du travail | masse déplacée × 9,81 × amplitude × reps × 1,2 (excentrique) ÷ rendement 22 %, ajusté du RPE moyen |
 | EPOC | 6 à 12 % du total, selon la densité de la séance |
 
 La masse déplacée inclut la part du poids de corps réellement soulevée (95 % aux tractions,
@@ -71,5 +87,5 @@ service worker — pratique dans une salle sans réseau.
 ## Limites (prototype)
 
 Les calories et les macros sont des **estimations** : à ajuster selon l'évolution réelle du
-poids sur 2-3 semaines. Pas encore de RPE, de tempo, de records par exercice, de graphiques
-de progression ni de synchronisation multi-appareils.
+poids sur 2-3 semaines. Pas encore de tempo, de graphiques de progression, de séances-types
+réutilisables ni de synchronisation multi-appareils.

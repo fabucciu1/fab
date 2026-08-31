@@ -17,6 +17,7 @@
 
 <nav class="tabs">
   <button class="tab active" data-tab="seance">Séance</button>
+  <button class="tab" data-tab="records">Records</button>
   <button class="tab" data-tab="histo">Historique</button>
   <button class="tab" data-tab="profil">Profil</button>
 </nav>
@@ -76,6 +77,7 @@
     <div class="stat"><span id="stSets">0</span><em>séries</em></div>
     <div class="stat"><span id="stReps">0</span><em>reps</em></div>
     <div class="stat"><span id="stTonnage">0</span><em>kg soulevés</em></div>
+    <div class="stat"><span id="stRpe">—</span><em>RPE moyen</em></div>
     <div class="stat"><span id="stKcal">0</span><em>kcal</em></div>
   </div>
 
@@ -122,6 +124,20 @@
     <div id="dailyTargets" class="kv"></div>
   </div>
 
+</section>
+
+<!-- ============ RECORDS ============ -->
+<section id="tab-records" class="panel">
+  <div class="card">
+    <h2>Mes records</h2>
+    <div class="row gap" id="recordTri">
+      <button class="chip tri active" data-tri="e1rm">1RM est.</button>
+      <button class="chip tri" data-tri="masse">Charge max</button>
+      <button class="chip tri" data-tri="recent">Récents</button>
+    </div>
+  </div>
+  <div id="recordsList"></div>
+  <p id="recordsEmpty" class="muted">Aucun record : enregistre des séries pour commencer à en poser.</p>
 </section>
 
 <!-- ============ HISTORIQUE ============ -->

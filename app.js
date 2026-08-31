@@ -15,35 +15,36 @@ const round = (v, d = 0) => { const p = 10 ** d; return Math.round(v * p) / p; }
    --------------------------------------------------------- */
 const GROUPES = ['Pectoraux', 'Dos', 'Épaules', 'Bras', 'Jambes', 'Abdos', 'Cardio', 'Autre'];
 
+// pdc = true : le poids du corps est la charge de référence (records exprimés PDC inclus)
 const LIB = [
-  ['Développé couché',          'Pectoraux', 120, 0.40, 0.00],
-  ['Développé incliné',         'Pectoraux', 120, 0.40, 0.00],
-  ['Écarté poulie',             'Pectoraux',  75, 0.55, 0.00],
-  ['Dips',                      'Pectoraux',  90, 0.45, 0.95],
-  ['Pompes',                    'Pectoraux',  60, 0.35, 0.65],
-  ['Tractions',                 'Dos',       120, 0.55, 0.95],
-  ['Rowing barre',              'Dos',       120, 0.45, 0.00],
-  ['Tirage vertical',           'Dos',        90, 0.55, 0.00],
-  ['Tirage horizontal',         'Dos',        90, 0.50, 0.00],
-  ['Soulevé de terre',          'Dos',       180, 0.55, 0.45],
-  ['Développé militaire',       'Épaules',   120, 0.50, 0.00],
-  ['Élévations latérales',      'Épaules',    60, 0.45, 0.00],
-  ['Oiseau / rear delt',        'Épaules',    60, 0.40, 0.00],
-  ['Curl biceps',               'Bras',       60, 0.40, 0.00],
-  ['Curl marteau',              'Bras',       60, 0.40, 0.00],
-  ['Extension triceps poulie',  'Bras',       60, 0.35, 0.00],
-  ['Barre au front',            'Bras',       75, 0.40, 0.00],
-  ['Squat',                     'Jambes',    180, 0.55, 0.85],
-  ['Presse à cuisses',          'Jambes',    150, 0.45, 0.00],
-  ['Fentes',                    'Jambes',    120, 0.45, 0.85],
-  ['Leg extension',             'Jambes',     90, 0.45, 0.00],
-  ['Leg curl',                  'Jambes',     90, 0.40, 0.00],
-  ['Hip thrust',                'Jambes',    120, 0.30, 0.50],
-  ['Mollets debout',            'Jambes',     60, 0.15, 0.85],
-  ['Crunch',                    'Abdos',      45, 0.30, 0.35],
-  ['Relevé de jambes',          'Abdos',      60, 0.45, 0.35],
-  ['Gainage',                   'Abdos',      45, 0.05, 0.00],
-].map(([nom, groupe, rest, rom, bw]) => ({ nom, groupe, rest, rom, bw }));
+  ['Développé couché',          'Pectoraux', 120, 0.40, 0.00, false],
+  ['Développé incliné',         'Pectoraux', 120, 0.40, 0.00, false],
+  ['Écarté poulie',             'Pectoraux',  75, 0.55, 0.00, false],
+  ['Dips',                      'Pectoraux',  90, 0.45, 0.95, true],
+  ['Pompes',                    'Pectoraux',  60, 0.35, 0.65, true],
+  ['Tractions',                 'Dos',       120, 0.55, 0.95, true],
+  ['Rowing barre',              'Dos',       120, 0.45, 0.00, false],
+  ['Tirage vertical',           'Dos',        90, 0.55, 0.00, false],
+  ['Tirage horizontal',         'Dos',        90, 0.50, 0.00, false],
+  ['Soulevé de terre',          'Dos',       180, 0.55, 0.45, false],
+  ['Développé militaire',       'Épaules',   120, 0.50, 0.00, false],
+  ['Élévations latérales',      'Épaules',    60, 0.45, 0.00, false],
+  ['Oiseau / rear delt',        'Épaules',    60, 0.40, 0.00, false],
+  ['Curl biceps',               'Bras',       60, 0.40, 0.00, false],
+  ['Curl marteau',              'Bras',       60, 0.40, 0.00, false],
+  ['Extension triceps poulie',  'Bras',       60, 0.35, 0.00, false],
+  ['Barre au front',            'Bras',       75, 0.40, 0.00, false],
+  ['Squat',                     'Jambes',    180, 0.55, 0.85, false],
+  ['Presse à cuisses',          'Jambes',    150, 0.45, 0.00, false],
+  ['Fentes',                    'Jambes',    120, 0.45, 0.85, false],
+  ['Leg extension',             'Jambes',     90, 0.45, 0.00, false],
+  ['Leg curl',                  'Jambes',     90, 0.40, 0.00, false],
+  ['Hip thrust',                'Jambes',    120, 0.30, 0.50, false],
+  ['Mollets debout',            'Jambes',     60, 0.15, 0.85, false],
+  ['Crunch',                    'Abdos',      45, 0.30, 0.35, true],
+  ['Relevé de jambes',          'Abdos',      60, 0.45, 0.35, true],
+  ['Gainage',                   'Abdos',      45, 0.05, 0.00, true],
+].map(([nom, groupe, rest, rom, bw, pdc]) => ({ nom, groupe, rest, rom, bw, pdc }));
 
 const DEFAULT_ROM = 0.45;
 
@@ -85,24 +86,40 @@ const uid = () => Math.random().toString(36).slice(2, 9);
    3. Calculs : volume, calories, macros
    --------------------------------------------------------- */
 
-// Masse réellement déplacée sur une série (charge externe + part du poids de corps)
+// Masse réellement déplacée sur une série : sert au calcul de la dépense énergétique
 function masseSerie(exo, set, poids) {
   return set.charge + (exo.bw || 0) * poids;
 }
 
+// Charge de référence pour les records : la barre seule, sauf pour les mouvements
+// au poids du corps (tractions, dips, pompes…) où le corps EST la charge.
+function masseRecord(exo, set, poids) {
+  return set.charge + (exo.pdc ? (exo.bw || 0) * poids : 0);
+}
+
 function volumeSeance(session, poids) {
-  let sets = 0, reps = 0, tonnage = 0, travailJ = 0;
+  let sets = 0, reps = 0, tonnage = 0, travailJ = 0, rpeSomme = 0, rpeNb = 0;
   for (const exo of session.exercices) {
     for (const s of exo.sets) {
       sets++;
       reps += s.reps;
       tonnage += s.charge * s.reps;
+      if (s.rpe) { rpeSomme += s.rpe; rpeNb++; }
       const m = masseSerie(exo, s, poids);
       // travail mécanique concentrique + surcoût excentrique (facteur 1.2)
       travailJ += m * 9.81 * (exo.rom || DEFAULT_ROM) * s.reps * 1.2;
     }
   }
-  return { sets, reps, tonnage, travailJ };
+  return { sets, reps, tonnage, travailJ, rpeMoyen: rpeNb ? rpeSomme / rpeNb : null };
+}
+
+/* --- RPE / RIR / 1RM estimé -------------------------------------------
+   RIR (reps in reserve) = 10 − RPE. Formule d'Epley corrigée du RIR :
+   une série de 8 reps à RPE 8 vaut un maximum de 10 reps.               */
+const RIR = rpe => (rpe ? 10 - rpe : 0);
+function e1RM(masse, reps, rpe) {
+  const n = reps + RIR(rpe);
+  return masse * (1 + n / 30);
 }
 
 function dureeSeance(session) {
@@ -119,10 +136,12 @@ function calories(session, profile) {
   const P = profile.poids;
   const secondes = dureeSeance(session);
   const minutes = secondes / 60;
-  const { travailJ, reps, sets, tonnage } = volumeSeance(session, P);
+  const { travailJ, reps, sets, tonnage, rpeMoyen } = volumeSeance(session, P);
 
   const kcalBase = 3.0 * 3.5 * P / 200 * minutes;      // MET 3 : debout, déplacements, échauffement
-  const kcalMeca = travailJ / 0.22 / 4184;             // rendement 22 %
+  // Plus les séries sont proches de l'échec, plus le coût métabolique dépasse le travail pur
+  const fRpe = rpeMoyen ? clamp(1 + (rpeMoyen - 7) * 0.035, 0.9, 1.15) : 1;
+  const kcalMeca = travailJ / 0.22 / 4184 * fRpe;      // rendement 22 %
   const densite = secondes ? clamp((reps * 3) / secondes, 0, 0.6) : 0;
   const epocPct = 0.06 + densite * 0.10;               // 6 % → 12 % selon la densité
   const kcalEpoc = (kcalBase + kcalMeca) * epocPct;
@@ -130,7 +149,7 @@ function calories(session, profile) {
   return {
     base: kcalBase, meca: kcalMeca, epoc: kcalEpoc,
     total: kcalBase + kcalMeca + kcalEpoc,
-    minutes, densite, reps, sets, tonnage, travailJ,
+    minutes, densite, reps, sets, tonnage, travailJ, rpeMoyen, fRpe,
   };
 }
 
@@ -199,6 +218,54 @@ function aliments(m) {
     ['Amandes', `${round(gAmandes)} g`],
   ];
 }
+
+/* ---------------------------------------------------------
+   3 bis. Records par exercice
+   --------------------------------------------------------- */
+const cle = nom => nom.trim().toLowerCase();
+
+// Historique + séance en cours, pour que les records tiennent compte du jour même
+function toutesLesSeances() {
+  const l = [...state.history];
+  if (state.session) l.push({ ...state.session, poidsCorps: state.profile.poids });
+  return l;
+}
+
+function records() {
+  const map = new Map();
+  for (const seance of toutesLesSeances()) {
+    const P = seance.poidsCorps || state.profile.poids;
+    for (const exo of seance.exercices || []) {
+      if (!exo.sets || !exo.sets.length) continue;
+      const k = cle(exo.nom);
+      let r = map.get(k);
+      if (!r) {
+        r = { nom: exo.nom, groupe: exo.groupe, pdc: !!exo.pdc, seances: 0, sets: 0, reps: 0, tonnage: 0,
+              e1rm: null, masse: null, serie: null, volSeance: null, derniere: 0, rpeSomme: 0, rpeNb: 0 };
+        map.set(k, r);
+      }
+      r.seances++;
+      let volSeance = 0;
+      for (const set of exo.sets) {
+        const m = set.mref != null ? set.mref : masseRecord(exo, set, P);
+        const perf = { date: set.ts || seance.start, reps: set.reps, charge: set.charge, rpe: set.rpe || null, masse: m };
+        const e = e1RM(m, set.reps, set.rpe);
+        const vol = m * set.reps;
+        r.sets++; r.reps += set.reps; r.tonnage += set.charge * set.reps;
+        volSeance += vol;
+        if (set.rpe) { r.rpeSomme += set.rpe; r.rpeNb++; }
+        if (!r.e1rm  || e   > r.e1rm.v)  r.e1rm  = { v: e, ...perf };
+        if (!r.masse || m   > r.masse.v) r.masse = { v: m, ...perf };
+        if (!r.serie || vol > r.serie.v) r.serie = { v: vol, ...perf };
+        r.derniere = Math.max(r.derniere, perf.date);
+      }
+      if (!r.volSeance || volSeance > r.volSeance.v) r.volSeance = { v: volSeance, date: seance.start };
+    }
+  }
+  return [...map.values()];
+}
+
+const recordDe = nom => records().find(r => cle(r.nom) === cle(nom)) || null;
 
 /* ---------------------------------------------------------
    4. Formatage
@@ -322,6 +389,7 @@ function terminerSeance() {
     ...s,
     duree: dureeSeance(s),
     sets: v.sets, reps: v.reps, tonnage: v.tonnage,
+    rpeMoyen: v.rpeMoyen ? round(v.rpeMoyen, 1) : null,
     kcal: round(k.total),
     poidsCorps: state.profile.poids,
     objectif: state.profile.objectif,
@@ -345,16 +413,29 @@ function ajouterExercice(nom, groupe, rest) {
     rest: rest || (ref ? ref.rest : state.profile.restDefault),
     rom: ref ? ref.rom : DEFAULT_ROM,
     bw: ref ? ref.bw : 0,
+    pdc: ref ? !!ref.pdc : false,
     sets: [],
   });
   save(); renderSeance();
 }
 
-function ajouterSerie(exoId, reps, charge) {
+function ajouterSerie(exoId, reps, charge, rpe) {
   const exo = state.session.exercices.find(e => e.id === exoId);
   if (!exo || !reps) return;
-  exo.sets.push({ reps: +reps, charge: +charge || 0, ts: Date.now() });
-  save(); renderSeance();
+  const avant = recordDe(exo.nom);                       // records d'avant cette série
+  const set = { reps: +reps, charge: +charge || 0, rpe: rpe ? +rpe : null, ts: Date.now() };
+  set.masse = masseSerie(exo, set, state.profile.poids);  // figées : le poids de corps peut changer
+  set.mref  = masseRecord(exo, set, state.profile.poids);
+  const e = e1RM(set.mref, set.reps, set.rpe);
+
+  if (avant && avant.e1rm && e > avant.e1rm.v + 0.01) {
+    set.pr = true;
+    toast(`🏆 Record ${exo.nom} : 1RM estimé ${round(e)} kg`);
+    bip(880, 130); setTimeout(() => bip(1100, 130), 150); setTimeout(() => bip(1320, 280), 300);
+    vibrer([80, 60, 80, 60, 160]);
+  }
+  exo.sets.push(set);
+  save(); renderSeance(); renderRecords();
   setDuree(exo.rest, state.profile.autoTimer);
   vibrer(40);
 }
@@ -385,6 +466,7 @@ function renderSeance() {
   $('#stSets').textContent    = v.sets;
   $('#stReps').textContent    = v.reps;
   $('#stTonnage').textContent = v.tonnage >= 1000 ? round(v.tonnage / 1000, 1) + 't' : round(v.tonnage);
+  $('#stRpe').textContent     = v.rpeMoyen ? round(v.rpeMoyen, 1) : '—';
   $('#stKcal').textContent    = round(k.total);
 
   // Exercices
@@ -393,8 +475,12 @@ function renderSeance() {
   const exos = s ? s.exercices : [];
   $('#exoEmpty').classList.toggle('hidden', exos.length > 0);
 
+  const RPE_OPTS = [10, 9.5, 9, 8.5, 8, 7.5, 7, 6.5, 6];
   exos.forEach((exo, i) => {
     const last = exo.sets[exo.sets.length - 1];
+    const rec = recordDe(exo.nom);
+    const prTxt = rec && rec.e1rm
+      ? `<span class="pr-tag">PR 1RM est. ${round(rec.e1rm.v)} kg</span>` : '';
     const vol = exo.sets.reduce((a, x) => a + x.reps * x.charge, 0);
     const reps = exo.sets.reduce((a, x) => a + x.reps, 0);
     const el = document.createElement('div');
@@ -404,6 +490,7 @@ function renderSeance() {
         <div>
           <h3>${i + 1}. ${exo.nom}</h3>
           <div class="meta">${exo.groupe} · récup ${mmss(exo.rest)} · ${exo.sets.length} série(s) · ${reps} reps · ${round(vol)} kg</div>
+          <div class="meta">${prTxt}</div>
         </div>
         <button class="del" data-del="${exo.id}" title="Supprimer">×</button>
       </div>
@@ -412,7 +499,9 @@ function renderSeance() {
           <li>
             <span class="n">${j + 1}</span>
             <span class="info">${set.reps} reps × ${set.charge ? set.charge + ' kg' : 'poids du corps'}
-              <span class="vol">· ${round(set.reps * masseSerie(exo, set, P))} kg déplacés · ${hhmm(set.ts)}</span>
+              ${set.rpe ? `<span class="rpe">RPE ${set.rpe}</span>` : ''}${set.pr ? '<span class="pr">🏆</span>' : ''}
+              <span class="vol">· 1RM est. ${round(e1RM(set.mref != null ? set.mref : masseRecord(exo, set, P), set.reps, set.rpe))} kg
+                · ${round(set.reps * (set.masse != null ? set.masse : masseSerie(exo, set, P)))} kg déplacés · ${hhmm(set.ts)}</span>
             </span>
             <button class="rm" data-rmset="${exo.id}" data-i="${j}">×</button>
           </li>`).join('')}
@@ -420,6 +509,10 @@ function renderSeance() {
       <div class="add-set">
         <input type="number" inputmode="numeric" min="1" placeholder="reps" value="${last ? last.reps : ''}" data-reps="${exo.id}">
         <input type="number" inputmode="decimal" min="0" step="0.5" placeholder="kg" value="${last ? last.charge : ''}" data-charge="${exo.id}">
+        <select class="rpe-select" data-rpe="${exo.id}" title="RPE (difficulté ressentie)">
+          <option value="">RPE</option>
+          ${RPE_OPTS.map(r => `<option value="${r}" ${last && last.rpe === r ? 'selected' : ''}>${r}</option>`).join('')}
+        </select>
         <button class="btn primary" data-addset="${exo.id}">Valider</button>
         <button class="btn ghost pdc" data-timer="${exo.id}" title="Lancer la récup">⏱</button>
       </div>`;
@@ -430,6 +523,7 @@ function renderSeance() {
   $('#kcalDetail').innerHTML =
     ligne('Durée effective', dureeTxt(dureeSeance(s || {}))) +
     ligne('Densité (temps sous tension)', round(k.densite * 100) + ' %') +
+    ligne('RPE moyen', k.rpeMoyen ? `${round(k.rpeMoyen, 1)} (RIR ~${round(RIR(k.rpeMoyen), 1)}) · ×${round(k.fRpe, 2)}` : 'non renseigné') +
     ligne('Travail mécanique', round((v.travailJ || 0) / 1000) + ' kJ') +
     ligne('Coût de présence (MET 3)', round(k.base) + ' kcal') +
     ligne('Coût du travail (rendement 22 %)', round(k.meca) + ' kcal') +
@@ -473,12 +567,42 @@ function renderHistorique() {
         <b>${dateTxt(s.start)} — ${hhmm(s.start)} → ${s.end ? hhmm(s.end) : '?'}</b>
         <button class="rm" data-rmhist="${s.id}">×</button>
       </div>
-      <div class="hist-sub">${dureeTxt(s.duree)} · ${s.sets} séries · ${s.reps} reps · ${round(s.tonnage)} kg · <strong>${s.kcal} kcal</strong></div>
+      <div class="hist-sub">${dureeTxt(s.duree)} · ${s.sets} séries · ${s.reps} reps · ${round(s.tonnage)} kg${s.rpeMoyen ? ' · RPE ' + s.rpeMoyen : ''} · <strong>${s.kcal} kcal</strong></div>
       <div class="hist-sub">Post-training (${OBJECTIFS[s.objectif] ? OBJECTIFS[s.objectif].label : s.objectif}) :
         ${s.macros ? `${s.macros.prot} g P / ${s.macros.gluc} g G / ${s.macros.lip} g L` : '—'}</div>
       ${exos ? `<div class="hist-exos">${exos}</div>` : ''}
     </div>`;
   }).join('');
+}
+
+let triRecords = 'e1rm';
+function renderRecords() {
+  const list = records();
+  $('#recordsEmpty').classList.toggle('hidden', list.length > 0);
+  const tris = {
+    e1rm:   (a, b) => (b.e1rm ? b.e1rm.v : 0) - (a.e1rm ? a.e1rm.v : 0),
+    masse:  (a, b) => (b.masse ? b.masse.v : 0) - (a.masse ? a.masse.v : 0),
+    recent: (a, b) => b.derniere - a.derniere,
+  };
+  list.sort(tris[triRecords] || tris.e1rm);
+
+  const perf = r => r ? `${r.reps} reps × ${round(r.masse, 1)} kg${r.rpe ? ' @ RPE ' + r.rpe : ''}` : '—';
+  $('#recordsList').innerHTML = list.map(r => `
+    <div class="hist rec">
+      <div class="hist-head">
+        <b>${r.nom}</b>
+        <span class="rec-big">${r.e1rm ? round(r.e1rm.v) + ' kg' : '—'}</span>
+      </div>
+      <div class="hist-sub">${r.groupe} · ${r.seances} séance(s) · ${r.sets} séries · ${r.reps} reps · ${round(r.tonnage / 1000, 1)} t${r.pdc ? ' · poids du corps inclus' : ''}
+        ${r.rpeNb ? '· RPE moyen ' + round(r.rpeSomme / r.rpeNb, 1) : ''}</div>
+      <div class="kv rec-kv">
+        ${ligne('1RM estimé', `${r.e1rm ? round(r.e1rm.v) + ' kg' : '—'} <em>${perf(r.e1rm)} · ${dateTxt(r.e1rm.date)}</em>`)}
+        ${ligne('Charge max', `${round(r.masse.v, 1)} kg <em>${perf(r.masse)} · ${dateTxt(r.masse.date)}</em>`)}
+        ${ligne('Meilleure série (volume)', `${round(r.serie.v)} kg <em>${perf(r.serie)} · ${dateTxt(r.serie.date)}</em>`)}
+        ${ligne('Meilleur volume sur une séance', `${round(r.volSeance.v)} kg <em>${dateTxt(r.volSeance.date)}</em>`)}
+        ${ligne('Dernière fois', dateTxt(r.derniere))}
+      </div>
+    </div>`).join('');
 }
 
 function renderProfil() {
@@ -497,6 +621,16 @@ function renderProfil() {
     le coût mécanique réel de tes séries (masse déplacée × 9,81 × amplitude × reps, majoré de 20 % pour
     l'excentrique, divisé par un rendement musculaire de 22 %) et l'EPOC (6 à 12 % selon la densité de la séance).
     Les exercices au poids du corps comptent la fraction de ton poids réellement déplacée.</p>
+    <p><strong>RPE.</strong> C'est la difficulté ressentie de la série : RPE 8 = il te restait
+    2 reps en réserve (RIR 2), RPE 10 = échec. Il sert à deux choses : le 1RM estimé
+    (Epley corrigé du RIR : 8 reps à RPE 8 = un max de 10 reps) qui alimente les records,
+    et un ajustement du coût métabolique (±15 % au maximum) — s'entraîner près de l'échec
+    coûte plus cher que le travail mécanique pur.</p>
+    <p><strong>Records.</strong> Calculés sur l'historique et la séance en cours, exercice par
+    exercice : 1RM estimé, charge maximale (la barre seule, sauf aux tractions, dips et
+    pompes où le poids du corps est la charge), meilleure
+    série en volume et meilleur volume sur une séance. Un record est signalé au moment où tu
+    valides la série.</p>
     <p><strong>Collation post-training.</strong> Protéines 0,35 à 0,45 g/kg selon l'objectif, glucides
     modulés par le coût de la séance, lipides volontairement bas pour ne pas ralentir la digestion.</p>
     <p><strong>Journée.</strong> Mifflin-St Jeor × facteur d'activité + calories de la séance, puis
@@ -504,7 +638,7 @@ function renderProfil() {
     <p>Ce sont des estimations : ajuste-les selon l'évolution de ton poids sur 2 à 3 semaines.</p>`;
 }
 
-function renderAll() { renderSeance(); renderHistorique(); renderProfil(); renderTimer(); }
+function renderAll() { renderSeance(); renderRecords(); renderHistorique(); renderProfil(); renderTimer(); }
 
 /* ---------------------------------------------------------
    8. Toast
@@ -561,17 +695,18 @@ function initUI() {
       const id = b.dataset.addset;
       const reps = $(`[data-reps="${id}"]`).value;
       const charge = $(`[data-charge="${id}"]`).value;
+      const rpe = $(`[data-rpe="${id}"]`).value;
       if (!reps) { toast('Indique le nombre de reps'); return; }
-      ajouterSerie(id, reps, charge);
+      ajouterSerie(id, reps, charge, rpe);
     } else if (b.dataset.del) {
       if (confirm('Supprimer cet exercice et ses séries ?')) {
         state.session.exercices = state.session.exercices.filter(e => e.id !== b.dataset.del);
-        save(); renderSeance();
+        save(); renderSeance(); renderRecords();
       }
     } else if (b.dataset.rmset) {
       const exo = state.session.exercices.find(e => e.id === b.dataset.rmset);
       exo.sets.splice(+b.dataset.i, 1);
-      save(); renderSeance();
+      save(); renderSeance(); renderRecords();
     } else if (b.dataset.timer) {
       const exo = state.session.exercices.find(e => e.id === b.dataset.timer);
       setDuree(exo.rest, true);
@@ -605,6 +740,13 @@ function initUI() {
   });
   $$('#presets .chip').forEach(c => c.addEventListener('click', () => setDuree(+c.dataset.sec, true)));
 
+  // Tri des records
+  $$('#recordTri .tri').forEach(b => b.addEventListener('click', () => {
+    triRecords = b.dataset.tri;
+    $$('#recordTri .tri').forEach(x => x.classList.toggle('active', x === b));
+    renderRecords();
+  }));
+
   // Objectif (raccourci depuis la séance)
   $$('#objectifRow .obj').forEach(b => b.addEventListener('click', () => {
     state.profile.objectif = b.dataset.obj; save(); renderSeance(); renderProfil();
@@ -624,7 +766,7 @@ function initUI() {
     const b = ev.target.closest('[data-rmhist]');
     if (b && confirm('Supprimer cette séance ?')) {
       state.history = state.history.filter(s => s.id !== b.dataset.rmhist);
-      save(); renderHistorique();
+      save(); renderHistorique(); renderRecords();
     }
   });
   $('#btnExport').addEventListener('click', () => {
@@ -636,7 +778,7 @@ function initUI() {
   });
   $('#btnWipe').addEventListener('click', () => {
     if (confirm('Effacer toutes les séances enregistrées ?')) {
-      state.history = []; save(); renderHistorique();
+      state.history = []; save(); renderHistorique(); renderRecords();
     }
   });
 
