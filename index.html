@@ -7,11 +7,25 @@
 <title>GymRec — Chrono &amp; Séances</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GymRec">
 </head>
 <body>
 
 <header class="topbar">
-  <div class="brand">GymRec</div>
+  <div class="brand">
+    <svg class="mark" viewBox="0 0 512 512" aria-hidden="true" focusable="false">
+      <circle cx="256" cy="256" r="150" fill="none" stroke="#232a36" stroke-width="36"/>
+      <path d="M406 256 A150 150 0 1 0 352.4 370.9" fill="none" stroke="#38e07b" stroke-width="36" stroke-linecap="round"/>
+      <path d="M250 256 H400" stroke="#38e07b" stroke-width="26" stroke-linecap="round"/>
+      <rect x="264" y="218" width="24" height="76" rx="8" fill="#38e07b"/>
+      <rect x="332" y="218" width="24" height="76" rx="8" fill="#38e07b"/>
+    </svg>
+    <span>GymRec</span>
+  </div>
   <div id="sessionClock" class="clock">—</div>
 </header>
 

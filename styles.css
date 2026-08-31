@@ -30,8 +30,8 @@ main{max-width:640px;margin:0 auto;padding:12px 12px 60px}
   background:linear-gradient(180deg,#0e1116,#0e1116f0);
   border-bottom:1px solid var(--line);
 }
-.brand{font-weight:800;letter-spacing:.5px;font-size:20px}
-.brand::first-letter{color:var(--accent)}
+.brand{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:.5px;font-size:20px}
+.mark{width:26px;height:26px;flex:none;display:block}
 .clock{font-variant-numeric:tabular-nums;color:var(--muted);font-size:14px}
 .tabs{
   position:sticky;top:57px;z-index:19;

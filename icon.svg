@@ -1,6 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="96" fill="#0e1116"/>
-  <circle cx="256" cy="256" r="150" fill="none" stroke="#1f2530" stroke-width="34"/>
-  <path d="M256 106a150 150 0 0 1 106 44" fill="none" stroke="#38e07b" stroke-width="34" stroke-linecap="round"/>
-  <path d="M150 300h30v-88h-30zm182 0h30v-88h-30zM180 268h152v-24H180z" fill="#38e07b"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="GymRec">
+  <rect width="512" height="512" rx="112" fill="#0e1116"/>
+  <!-- piste du chronomètre -->
+  <circle cx="256" cy="256" r="150" fill="none" stroke="#232a36" stroke-width="36"/>
+  <!-- le G : l'anneau de récup s'ouvre en bas à droite -->
+  <path d="M406 256 A150 150 0 1 0 352.4 370.9" fill="none" stroke="#38e07b" stroke-width="36" stroke-linecap="round"/>
+  <!-- la barre du G est un haltère -->
+  <path d="M250 256 H400" stroke="#38e07b" stroke-width="26" stroke-linecap="round"/>
+  <rect x="264" y="218" width="24" height="76" rx="8" fill="#38e07b"/>
+  <rect x="332" y="218" width="24" height="76" rx="8" fill="#38e07b"/>
 </svg>

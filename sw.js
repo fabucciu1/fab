@@ -1,6 +1,6 @@
 /* Cache applicatif : l'app reste utilisable sans réseau (utile en sous-sol). */
 const CACHE = 'gymrec-v1';
-const ASSETS = ['./', './index.html', './styles.css', './app.js', './charts.js', './manifest.webmanifest', './icon.svg'];
+const ASSETS = ['./', './index.html', './styles.css', './app.js', './charts.js', './manifest.webmanifest', './icon.svg', './icon-512.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));

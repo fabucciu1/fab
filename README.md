@@ -101,7 +101,10 @@ service worker — pratique dans une salle sans réseau.
 - `styles.css` — thème sombre, pensé mobile
 - `app.js` — état, chrono, calculs (calories, macros, records), rendu
 - `charts.js` — boîte à outils de graphiques SVG (courbes, barres, infobulles, clavier)
-- `sw.js`, `manifest.webmanifest`, `icon.svg` — installation et mode hors-ligne
+- `sw.js`, `manifest.webmanifest` — installation et mode hors-ligne
+- `icon.svg`, `icon-512.png`, `apple-touch-icon.png` — le logo : un anneau de chronomètre
+  ouvert en bas à droite (le temps de récup qui s'écoule) qui dessine un **G**, dont la barre
+  est un haltère. Le même dessin sert de marque dans l'en-tête de l'app.
 
 ## Limites (prototype)
 
