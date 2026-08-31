@@ -102,9 +102,9 @@ service worker — pratique dans une salle sans réseau.
 - `app.js` — état, chrono, calculs (calories, macros, records), rendu
 - `charts.js` — boîte à outils de graphiques SVG (courbes, barres, infobulles, clavier)
 - `sw.js`, `manifest.webmanifest` — installation et mode hors-ligne
-- `icon.svg`, `icon-512.png`, `apple-touch-icon.png` — le logo : un anneau de chronomètre
-  ouvert en bas à droite (le temps de récup qui s'écoule), un haltère, et au centre le **point
-  rouge REC** — la séance qui s'enregistre. Le même dessin sert de marque dans l'en-tête.
+- `icon.svg`, `icon-512.png`, `apple-touch-icon.png` — le logo : un **G** géométrique ouvert
+  en haut à droite, avec le **point rouge REC** posé dans l'ouverture. Repris en marque dans
+  l'en-tête, où le logotype suit la même règle : « Gym » en blanc cassé, « Rec » en rouge.
 - `logo-variantes.html` — les pistes explorées, chacune montrée à 180 px, en taille favicon
   (44 / 30 / 20 px) et sous simulation de deutéranopie. À ouvrir pour en changer.
 
