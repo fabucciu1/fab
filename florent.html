@@ -1,0 +1,438 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="glasspop">
+<meta name="theme-color" content="#0E1518">
+<title>Carte de Florent Costantini</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap">
+<style>
+  /* Single dark look, matching the printed glasspop card */
+  :root {
+    color-scheme: dark;
+    --ground: #080C0E;
+    --card-a: #1A2629;
+    --card-b: #0E1417;
+    --mint: #82FAD2;
+    --ink: #F2F5F4;
+    --muted: #B7C2C0;
+    --dim: #6F7D7B;
+    --line: #243236;
+    --font: "Quicksand", "Avenir Next", "Nunito", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { background: var(--ground); }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font: 500 15px/1.5 var(--font);
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 460px;
+    margin: 0 auto;
+    padding-inline: 16px;
+    padding-block: 20px 40px;
+    display: grid;
+    gap: 18px;
+  }
+
+  /* Flip card, 85 × 55 mm */
+  .flip {
+    perspective: 1400px;
+    aspect-ratio: 85 / 55;
+    max-width: 100%;
+    width: 100%;
+    border: 0;
+    padding: 0;
+    background: none;
+    cursor: pointer;
+    display: block;
+    font: inherit;
+    color: inherit;
+    text-align: left;
+    border-radius: 4px;
+  }
+  .flip:focus-visible { outline: 2px solid var(--mint); outline-offset: 4px; }
+  .flip-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+  }
+  .flip.is-front .flip-inner { transform: rotateY(180deg); }
+  @media (prefers-reduced-motion: no-preference) {
+    .flip-inner { transition: transform .6s cubic-bezier(.3,.7,.2,1); }
+  }
+  .face {
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
+    overflow: hidden;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    background: radial-gradient(120% 110% at 50% 38%, var(--card-a) 0%, var(--card-b) 70%);
+    box-shadow: 0 0 0 1px rgba(255,255,255,.06), 0 18px 40px -16px rgba(0,0,0,.8);
+    container-type: inline-size;
+  }
+  /* Positions measured on the printed card; card height = 64.7cqw */
+  .face.front .logo { position: absolute; left: 30cqw; top: 14.2cqw; width: 40cqw; height: auto; color: var(--mint); }
+  .face.front .wordmark { position: absolute; left: 36.5cqw; top: 41.6cqw; width: 27cqw; height: auto; color: var(--mint); }
+  .face.front { transform: rotateY(180deg); }
+
+  .back .logo { position: absolute; top: 3.9cqw; left: 4.4cqw; width: 12cqw; height: auto; color: var(--mint); }
+  .back .name {
+    position: absolute; left: 4.6cqw; right: 4.6cqw; top: 27.6cqw;
+    margin: 0;
+    font-weight: 400;
+    font-size: 5.9cqw;
+    line-height: 1.15;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .back .name b { font-weight: 700; }
+  .back .role {
+    position: absolute; left: 4.6cqw; right: 22cqw; top: 35.4cqw;
+    margin: 0;
+    color: var(--mint);
+    font-weight: 500;
+    font-size: 3cqw;
+    line-height: 1.2;
+    letter-spacing: .2em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .back .rule { position: absolute; left: 4.6cqw; top: 41.6cqw; width: 9.5cqw; height: max(2px, .25cqw); background: var(--mint); border-radius: 1px; }
+  .back .lines {
+    position: absolute;
+    left: 4.6cqw;
+    top: 49.9cqw;
+    right: 24cqw;
+    display: grid;
+    font-size: 3.1cqw;
+    line-height: 1.38;
+    color: #D5DCDB;
+  }
+  .back .lines span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .back .mini-qr {
+    position: absolute;
+    left: 78.9cqw;
+    top: 42.7cqw;
+    width: 17.7cqw;
+    aspect-ratio: 1;
+    background: var(--mint);
+    border-radius: 1.8cqw;
+    padding: 1.9cqw;
+  }
+  .mini-qr svg, .qr-tile svg { width: 100%; height: 100%; display: block; }
+
+  .hint { margin: -6px 0 0; text-align: center; color: var(--dim); font-size: 13px; }
+
+  /* Big QR to show across the table */
+  .scan {
+    display: grid;
+    gap: 14px;
+    justify-items: center;
+    text-align: center;
+    padding: 22px 18px;
+    border-radius: 16px;
+    background: radial-gradient(120% 100% at 50% 0%, var(--card-a), var(--card-b));
+    border: 1px solid var(--line);
+  }
+  .scan h2 { margin: 0; font-weight: 700; font-size: 18px; letter-spacing: .01em; }
+  .scan p { margin: 0; color: var(--muted); font-size: 14px; max-width: 34ch; }
+  .qr-tile {
+    width: min(100%, 290px);
+    max-width: 100%;
+    aspect-ratio: 1;
+    background: var(--mint);
+    border-radius: 18px;
+    padding: 18px;
+  }
+  .qr-error { color: #0E1417; font-size: 13px; margin: 0; }
+
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  button.btn {
+    flex: 1 1 auto;
+    min-height: 46px;
+    padding: 12px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--ink);
+    font: 600 15px/1 var(--font);
+    cursor: pointer;
+  }
+  button.btn.primary { background: var(--mint); border-color: var(--mint); color: #0B1214; }
+  button.btn[aria-pressed="true"] { border-color: var(--mint); color: var(--mint); }
+  button.btn:focus-visible, input:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
+  .status { min-height: 1.2em; margin: 0; text-align: center; color: var(--mint); font-size: 14px; }
+
+  form {
+    display: grid;
+    gap: 14px;
+    padding: 18px;
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    background: var(--card-b);
+  }
+  form h2 { margin: 0; font-size: 17px; font-weight: 700; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  label { display: grid; gap: 5px; color: var(--muted); font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+  input {
+    width: 100%;
+    min-width: 0;
+    font: 500 16px/1.3 var(--font);
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--ink);
+    background: #121B1E;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 11px 12px;
+  }
+  input::placeholder { color: var(--dim); }
+
+  details.help { border: 1px solid var(--line); border-radius: 16px; padding: 14px 18px; }
+  details.help summary { cursor: pointer; font-weight: 700; }
+  details.help ol { margin: 10px 0 0; padding-left: 20px; display: grid; gap: 8px; color: var(--muted); font-size: 14px; }
+  details.help b { color: var(--ink); }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- Traced from the printed glasspop card -->
+    <symbol id="gp-logo" viewBox="0 0 2166 1232"><path fill="currentColor" fill-rule="evenodd" d="M1058 1229C1058 1228 1050 1228 1042 1227C1021 1226 997 1223 985 1221C964 1218 944 1214 937 1212C933 1210 928 1209 924 1208C921 1208 915 1207 910 1205C905 1203 900 1202 897 1202C892 1201 859 1189 851 1185C848 1184 844 1182 842 1181C839 1180 832 1177 826 1174C820 1171 813 1168 811 1167C809 1166 802 1163 796 1160C790 1157 778 1150 768 1145C758 1140 748 1133 745 1131C742 1129 735 1124 730 1121C726 1117 718 1112 714 1109C711 1105 703 1100 699 1096C694 1093 687 1088 683 1084C679 1081 675 1077 672 1076C670 1074 663 1067 657 1061C646 1051 641 1046 622 1025C615 1018 610 1011 604 1004C602 1001 598 996 594 992C584 979 581 976 577 969C573 960 571 957 565 950C562 947 559 942 558 939C556 936 553 930 551 927C549 923 547 920 547 920C547 919 545 916 543 913C539 906 536 901 529 890C525 881 522 880 521 885C520 886 520 913 521 944C523 1063 524 1148 523 1153C522 1168 512 1166 474 1142C471 1140 463 1135 456 1131C443 1123 428 1112 414 1102C410 1098 403 1093 399 1089C395 1086 388 1080 384 1077C381 1073 376 1069 374 1068C371 1066 363 1058 354 1050C346 1042 338 1033 336 1032C334 1030 328 1022 322 1014C315 1007 309 1000 308 998C305 996 299 988 293 978C290 973 285 967 282 963C280 959 273 950 269 942C264 933 257 923 254 918C251 913 247 906 246 902C244 898 239 889 236 882C232 875 229 869 229 868C229 868 228 865 227 862C223 853 214 831 213 828C213 826 212 823 211 821C205 810 195 778 193 761C192 756 189 744 187 734C181 706 179 691 176 651C174 629 175 572 177 556C178 550 179 540 180 536C182 515 184 502 186 494C188 490 189 484 189 481C190 478 191 473 192 469C194 466 196 459 197 454C198 449 200 443 201 440C202 437 204 428 206 421C209 414 211 406 212 405C213 403 215 398 216 394C219 384 229 362 232 358C233 356 235 353 236 351C238 344 251 319 257 310C260 305 266 296 269 289C273 283 278 275 281 271C284 268 288 262 290 259C292 255 295 252 296 252C296 251 300 247 303 242C311 230 320 220 334 205C355 183 385 154 394 147C397 145 402 141 406 138C409 135 414 131 417 130C420 128 427 123 433 118C439 113 447 108 449 106C461 100 466 96 472 92C475 90 481 87 484 86C486 85 491 83 493 82C501 77 504 79 505 90C506 98 508 172 509 222C509 247 509 271 509 276C510 281 510 302 510 322C510 357 511 365 514 366C516 367 517 365 523 354C526 348 530 342 531 340C532 337 534 334 535 331C536 329 540 322 543 317C546 312 550 305 551 302C553 299 555 295 557 294C558 292 561 288 563 284C565 280 568 276 569 275C569 274 573 270 576 266C582 256 590 245 596 238C608 222 612 218 620 210C625 205 631 198 633 196C641 187 669 159 679 151C684 147 691 141 695 138C699 135 704 131 706 130C708 128 713 125 716 122C720 119 725 115 728 113C731 111 739 106 746 101C753 97 760 92 762 91C764 90 771 86 778 82C785 78 793 74 795 73C798 72 804 69 809 66C814 64 821 61 824 60C828 58 835 55 840 53C844 50 850 48 851 48C852 47 860 44 868 42C893 33 929 22 944 19C959 16 978 13 984 13C988 12 996 11 1004 10C1028 6 1034 6 1060 5C1090 5 1122 6 1156 11C1180 14 1228 23 1249 29C1254 31 1260 33 1262 34C1264 34 1268 36 1271 36C1274 37 1279 39 1283 40C1287 42 1292 45 1295 45C1298 46 1303 49 1306 50C1310 52 1317 55 1323 57C1340 65 1354 72 1361 76C1364 78 1370 81 1374 83C1378 85 1385 89 1390 91C1394 94 1401 99 1405 101C1409 104 1414 107 1416 108C1418 110 1421 113 1424 114C1439 124 1452 134 1462 142C1465 146 1472 152 1477 155C1481 159 1485 163 1485 163C1485 163 1491 169 1498 176C1511 188 1532 209 1540 219C1555 238 1557 241 1559 243C1568 254 1577 265 1584 276C1589 283 1594 290 1596 293C1598 295 1599 298 1599 298C1599 299 1601 302 1603 306C1605 309 1608 314 1608 315C1609 317 1612 323 1616 328C1619 333 1623 340 1624 342C1627 348 1630 349 1631 345C1632 343 1632 282 1632 209C1633 78 1633 75 1635 72L1636 68L1643 68C1648 68 1649 68 1652 70C1655 72 1662 76 1669 80C1690 91 1726 114 1733 121C1735 122 1740 126 1745 130C1750 133 1756 138 1758 140C1761 143 1767 147 1770 150C1784 160 1830 206 1837 218C1839 220 1843 225 1845 227C1851 233 1857 241 1866 252C1869 257 1873 263 1875 266C1878 269 1881 274 1883 276C1884 279 1887 284 1889 288C1892 291 1896 297 1899 302C1902 307 1907 316 1910 322C1913 328 1917 335 1918 338C1920 341 1922 344 1922 344C1922 345 1925 352 1930 360C1934 369 1938 379 1940 384C1941 389 1943 395 1944 397C1945 399 1946 402 1947 404C1948 407 1950 411 1951 415C1953 419 1955 426 1957 432C1958 438 1961 448 1963 454C1969 474 1979 525 1982 548C1987 595 1986 665 1980 694C1979 699 1978 708 1978 713C1977 718 1976 726 1975 730C1974 735 1973 742 1972 746C1971 754 1967 769 1963 782C1961 786 1959 795 1957 801C1956 807 1952 817 1950 824C1947 831 1943 843 1940 852C1937 860 1933 868 1932 871C1931 873 1927 880 1924 887C1913 910 1908 919 1901 930C1897 936 1891 944 1888 949C1886 954 1882 960 1879 963C1877 966 1872 973 1868 978C1864 982 1860 989 1858 992C1856 995 1853 998 1852 1000C1849 1002 1840 1014 1838 1018C1836 1021 1791 1066 1778 1077C1774 1080 1766 1087 1761 1090C1757 1094 1750 1100 1747 1102C1734 1113 1712 1127 1684 1144C1680 1147 1675 1149 1674 1151C1662 1161 1644 1166 1639 1162C1634 1158 1634 1159 1634 1020C1633 877 1634 885 1627 891C1625 893 1622 899 1619 904C1614 915 1609 922 1604 931C1602 934 1599 938 1598 940C1594 950 1584 964 1572 979C1569 983 1564 989 1561 993C1559 997 1554 1003 1550 1007C1547 1011 1541 1018 1537 1023C1529 1033 1475 1085 1461 1095C1458 1098 1454 1101 1453 1102C1451 1104 1441 1112 1423 1124C1421 1125 1417 1128 1414 1131C1411 1133 1406 1136 1404 1137C1402 1138 1397 1141 1395 1143C1392 1145 1386 1148 1382 1150C1378 1152 1373 1155 1371 1156C1367 1159 1352 1166 1345 1168C1342 1169 1338 1171 1335 1173C1333 1175 1329 1176 1328 1177C1326 1177 1321 1179 1318 1181C1304 1188 1265 1202 1248 1205C1242 1206 1233 1208 1228 1210C1189 1220 1182 1221 1154 1224C1147 1225 1136 1226 1129 1226C1117 1228 1059 1230 1058 1229ZM2029 990C2024 988 2024 991 2024 871C2024 810 2024 760 2024 760C2025 760 2025 674 2025 570C2026 279 2027 254 2031 251C2034 249 2037 251 2051 271C2052 273 2056 278 2059 283C2063 287 2067 293 2069 296C2070 299 2072 303 2074 305C2082 319 2084 322 2086 325C2088 327 2092 337 2097 346C2101 356 2106 366 2107 368C2112 378 2121 400 2123 408C2124 413 2127 421 2128 425C2133 438 2137 450 2140 462C2142 469 2144 479 2145 484C2150 499 2157 544 2157 557C2157 560 2158 565 2159 568C2161 578 2162 638 2160 657C2159 665 2158 675 2158 680C2157 688 2153 718 2153 719C2152 719 2151 728 2148 743C2147 750 2140 780 2138 784C2137 787 2136 792 2135 795C2134 799 2127 821 2123 834C2119 846 2113 858 2109 867C2107 872 2105 876 2105 876C2105 877 2091 903 2082 920C2078 927 2072 937 2069 941C2067 945 2064 950 2063 952C2062 953 2059 957 2057 960C2055 964 2052 969 2050 972C2043 984 2034 993 2032 991C2032 991 2030 990 2029 990ZM129 980C126 979 104 947 100 938C98 936 94 930 91 924C87 918 83 912 82 910C81 905 74 892 71 888C69 885 60 867 59 863C58 862 56 857 53 852C51 847 48 840 48 836C47 833 45 827 43 823C41 819 39 813 38 810C37 807 36 802 34 800C33 797 31 789 29 782C27 776 25 767 24 762C20 749 12 711 11 700C10 695 9 686 8 682C8 677 7 669 7 665C7 660 7 651 6 644C4 616 5 549 8 538C9 537 9 531 10 524C11 518 11 511 12 510C14 505 19 479 20 472C20 469 21 465 21 464C23 459 29 438 30 434C30 432 31 428 33 424C34 421 37 412 39 406C44 390 51 372 56 366C57 363 59 358 60 356C62 350 76 322 80 316C81 314 85 308 87 304C94 291 112 263 115 261C118 259 121 260 123 263C124 266 125 311 126 392C127 416 127 453 128 476C129 498 129 544 130 576C131 610 131 651 132 670C132 688 133 714 133 727C134 740 134 765 135 782C137 855 138 975 137 979C135 982 133 983 129 980ZM1109 891C1115 890 1122 889 1125 888C1128 887 1133 886 1136 885C1143 884 1180 872 1186 869C1188 867 1192 866 1194 865C1200 863 1208 859 1211 856C1213 855 1217 852 1220 850C1234 843 1273 807 1282 793C1283 791 1286 787 1288 785C1296 776 1301 769 1304 764C1314 747 1316 743 1321 732C1329 712 1330 708 1332 700C1332 696 1334 691 1335 689C1340 678 1345 610 1342 594C1341 590 1340 582 1339 578C1338 569 1332 544 1330 540C1329 539 1328 535 1327 531C1322 516 1311 493 1304 484C1302 481 1299 476 1296 472C1284 451 1251 416 1232 405C1229 403 1223 400 1220 397C1189 376 1156 364 1110 355C1102 353 1055 353 1046 354C998 360 962 372 941 387C937 389 931 393 928 394C904 405 853 458 838 488C836 492 832 499 830 503C827 507 825 511 825 512C825 513 823 518 821 523C805 566 799 609 805 652C805 659 806 667 806 671C807 674 808 680 809 683C810 687 812 692 812 696C813 700 814 704 815 706C816 708 818 712 819 715C820 720 824 728 833 747C838 758 846 770 860 789C866 798 902 834 907 837C909 837 913 840 915 842C925 850 933 854 960 868C1001 888 1054 897 1109 891Z"/></symbol>
+    <symbol id="gp-word" viewBox="0 0 1438 322"><path fill="currentColor" fill-rule="evenodd" d="M80 317C73 316 66 314 63 313C61 313 56 311 53 309C38 304 16 282 13 269C9 253 14 251 52 251C70 251 73 252 81 259C92 269 107 271 124 263C130 260 131 259 135 251C143 239 141 234 131 240C118 246 112 247 92 247C71 246 70 246 52 237C31 227 20 212 10 182C-6 132 18 77 63 62C82 55 108 55 124 62C134 66 137 66 144 64C152 61 187 61 192 64C198 67 198 68 200 167C201 231 201 238 198 255C192 281 181 295 156 308C136 318 110 321 80 317ZM1245 302C1240 301 1237 297 1237 291C1236 283 1234 195 1233 129C1233 58 1231 63 1262 62C1280 62 1284 62 1290 67C1295 71 1299 71 1308 65C1321 58 1343 55 1363 58C1374 60 1387 65 1390 67C1391 69 1395 71 1397 73C1403 77 1413 88 1416 94C1418 96 1420 101 1422 104C1434 124 1438 165 1430 188C1419 216 1404 233 1378 245C1361 252 1328 252 1312 244C1309 242 1304 241 1301 240C1294 239 1294 239 1294 269C1294 304 1295 302 1268 303C1257 303 1247 302 1245 302ZM838 301C823 300 823 301 823 262C822 247 822 211 821 184C821 157 820 120 820 102C821 58 820 60 848 60C866 61 869 62 878 68L881 70L893 65C910 57 915 56 930 56C969 56 1002 81 1013 121C1020 144 1022 145 1027 126C1033 105 1055 76 1069 70C1072 69 1077 67 1080 65C1086 62 1097 59 1112 57C1126 55 1161 61 1170 67C1188 78 1205 96 1212 109C1223 134 1224 166 1213 191C1206 208 1188 229 1174 237C1158 246 1147 249 1125 248C1103 248 1093 246 1074 237C1054 227 1034 204 1029 186C1026 173 1022 162 1021 163C1019 166 1015 180 1014 186C1010 207 989 232 965 242C946 251 918 251 898 243C880 236 880 236 880 269C879 296 879 299 873 301C870 302 851 302 838 301ZM370 248C364 247 345 240 338 236C320 226 302 200 298 177C293 148 297 118 309 100C310 98 313 93 315 90C323 76 348 61 368 58C386 55 406 57 419 63C428 68 429 68 437 64C442 62 443 62 463 62C489 62 490 63 493 78C494 84 495 178 494 218C494 243 494 243 464 242C447 242 445 242 441 240C434 237 430 237 423 241C407 248 387 251 370 248ZM566 247C549 245 531 236 523 225C517 218 511 203 510 197C510 192 510 191 513 188L516 186L538 185L560 185L565 190C572 198 576 200 582 200C596 200 600 188 589 182C586 180 579 177 572 174C531 157 529 156 522 148C508 132 505 111 514 92C520 81 534 67 543 64C564 56 564 57 580 57C615 57 643 76 647 105C649 117 648 118 622 118C600 118 595 118 591 112C583 104 569 105 570 114C571 119 581 127 587 127C589 127 621 138 627 141C634 144 649 159 651 164C652 167 654 172 655 176C658 186 661 189 665 187C670 185 704 184 709 186C711 187 715 190 718 193C725 199 727 200 735 200C743 200 748 197 749 191C750 184 743 179 721 172C678 158 662 143 662 117C662 92 676 71 698 63C717 56 738 54 749 58C750 59 754 60 757 60C773 63 794 82 799 98C803 115 800 117 782 118C759 119 751 118 744 113C732 105 720 107 724 117C726 121 731 124 752 131C782 141 791 147 799 162C809 178 810 189 805 206C794 240 747 258 704 244C683 237 673 228 665 209C660 196 658 196 652 210C646 221 638 231 629 237C620 242 588 250 579 249C578 249 573 248 566 247ZM236 243C230 242 226 239 225 235C223 230 221 169 220 76C220 5 219 9 228 6C234 3 264 3 270 6C280 10 280 8 281 132C282 245 282 239 275 242C271 244 244 245 236 243ZM1348 193C1374 185 1383 154 1366 131C1350 109 1318 108 1301 130C1288 147 1290 169 1306 184C1318 196 1330 198 1348 193ZM933 192C952 186 963 166 959 146C951 112 907 101 886 129C872 147 876 174 895 188C903 195 922 196 933 192ZM1136 193C1153 186 1160 174 1160 156C1161 142 1158 135 1150 127C1126 101 1084 118 1084 155C1083 182 1112 202 1136 193ZM121 188C140 178 146 150 134 132C125 118 115 112 102 113C81 115 69 125 64 145C61 162 68 177 86 188L94 192L104 192C114 191 116 191 121 188ZM410 189C419 186 429 176 431 166C435 148 433 135 425 127C408 112 388 109 371 120C358 129 353 141 355 158C357 171 369 185 383 191C386 193 404 191 410 189Z"/></symbol>
+  </defs>
+</svg>
+
+<main class="wrap">
+  <button type="button" class="flip" id="flip" aria-label="Retourner la carte">
+    <div class="flip-inner">
+      <div class="face back" aria-hidden="false" id="backFace">
+        <svg class="logo" viewBox="0 0 2166 1232"><use href="#gp-logo"/></svg>
+        <p class="name" id="cName"></p>
+        <p class="role" id="cTitle"></p>
+        <div class="rule"></div>
+        <div class="lines" id="cLines"></div>
+        <div class="mini-qr" id="miniQr"></div>
+      </div>
+      <div class="face front" aria-hidden="true" id="frontFace">
+        <svg class="logo" viewBox="0 0 2166 1232"><use href="#gp-logo"/></svg>
+        <svg class="wordmark" viewBox="0 0 1438 322" role="img" aria-label="glasspop"><use href="#gp-word"/></svg>
+      </div>
+    </div>
+  </button>
+  <p class="hint">Touchez la carte pour la retourner</p>
+
+  <section class="scan" aria-labelledby="scanTitle">
+    <h2 id="scanTitle">Scannez pour m'ajouter</h2>
+    <div class="qr-tile" id="qr" role="img" aria-label="QR code contenant mes coordonnées"></div>
+    <p>Visez le code avec l'appareil photo de votre téléphone, puis touchez « Ajouter aux contacts ».</p>
+  </section>
+
+  <div class="actions">
+    <button type="button" class="btn primary" id="wakeBtn" aria-pressed="false">Garder l'écran allumé</button>
+    <button type="button" class="btn" id="copyBtn">Copier mes coordonnées</button>
+    <button type="button" class="btn" id="editBtn">Modifier</button>
+    <button type="button" class="btn" id="vcfBtn" hidden>Télécharger la fiche contact (.vcf)</button>
+  </div>
+  <p class="status" id="status" role="status" aria-live="polite"></p>
+
+  <form id="form" hidden>
+    <h2>Mes coordonnées</h2>
+    <div class="row">
+      <label for="f-first">Prénom<input id="f-first" name="first" autocomplete="given-name"></label>
+      <label for="f-last">Nom<input id="f-last" name="last" autocomplete="family-name"></label>
+    </div>
+    <label for="f-title">Fonction<input id="f-title" name="title" autocomplete="organization-title"></label>
+    <label for="f-org">Entreprise<input id="f-org" name="org" autocomplete="organization"></label>
+    <label for="f-tel">Mobile<input id="f-tel" name="tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="+33 6 12 34 56 78"></label>
+    <label for="f-email">E-mail<input id="f-email" name="email" type="email" inputmode="email" autocomplete="email"></label>
+    <label for="f-url">Site<input id="f-url" name="url" inputmode="url" autocomplete="url"></label>
+    <div class="actions">
+      <button type="submit" class="btn primary">Enregistrer</button>
+      <button type="button" class="btn" id="cancelBtn">Annuler</button>
+    </div>
+  </form>
+
+  <details class="help">
+    <summary>Sur iPhone</summary>
+    <ol>
+      <li><b>Écran d'accueil</b> : dans Safari, bouton Partager, puis « Sur l'écran d'accueil ». La carte s'ouvre comme une app.</li>
+      <li><b>Sans réseau</b> : faites une capture d'écran du QR code et mettez-la en Favori dans Photos.</li>
+      <li><b>Entre deux iPhone</b> : NameDrop (iOS 17+) envoie votre fiche Contacts en approchant les téléphones.</li>
+    </ol>
+  </details>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>
+(function () {
+  var KEY = "glasspop-card-florent-v1";
+  var DEFAULTS = {
+    first: "Florent", last: "Costantini", title: "CEO", org: "glasspop",
+    tel: "", email: "florentcostantini@glasspop.co", url: "glasspop.co"
+  };
+  var FIELDS = ["first", "last", "title", "org", "tel", "email", "url"];
+
+  var data = Object.assign({}, DEFAULTS);
+  try {
+    var raw = localStorage.getItem(KEY);
+    if (raw) data = Object.assign(data, JSON.parse(raw));
+  } catch (e) {}
+
+  var $ = function (id) { return document.getElementById(id); };
+  var statusTimer;
+  function say(msg) {
+    $("status").textContent = msg;
+    clearTimeout(statusTimer);
+    statusTimer = setTimeout(function () { $("status").textContent = ""; }, 3000);
+  }
+
+  function esc(v) {
+    return String(v || "").replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/,/g, "\\,").replace(/;/g, "\\;");
+  }
+  function fullName(d) { return [d.first, d.last].filter(Boolean).join(" "); }
+  function fullUrl(u) { return !u ? "" : /^https?:\/\//i.test(u) ? u : "https://" + u; }
+  function shortUrl(u) { return (u || "").replace(/^https?:\/\//i, "").replace(/\/$/, ""); }
+
+  function vcard(d) {
+    var l = ["BEGIN:VCARD", "VERSION:3.0",
+      "N:" + esc(d.last) + ";" + esc(d.first) + ";;;",
+      "FN:" + esc(fullName(d) || d.org)];
+    if (d.org) l.push("ORG:" + esc(d.org));
+    if (d.title) l.push("TITLE:" + esc(d.title));
+    if (d.tel) l.push("TEL;TYPE=CELL:" + d.tel.replace(/[^\d+]/g, ""));
+    if (d.email) l.push("EMAIL;TYPE=INTERNET:" + esc(d.email));
+    if (d.url) l.push("URL:" + esc(fullUrl(d.url)));
+    l.push("END:VCARD");
+    return l.join("\r\n");
+  }
+  function plainText(d) {
+    return [fullName(d), [d.title, d.org].filter(Boolean).join(" · "), d.tel, d.email, fullUrl(d.url)]
+      .filter(Boolean).join("\n");
+  }
+
+  function qrSvg(text) {
+    if (typeof qrcode !== "function") return null;
+    qrcode.stringToBytes = qrcode.stringToBytesFuncs["UTF-8"];
+    var q = qrcode(0, "M");
+    q.addData(text, "Byte");
+    q.make();
+    // Dark modules on the mint tile, like the printed card
+    return q.createSvgTag({ cellSize: 4, margin: 0, scalable: true })
+      .replace(/fill="black"/g, 'fill="#0B1214"').replace(/fill="white"/g, 'fill="transparent"');
+  }
+
+  function render() {
+    var name = $("cName");
+    name.textContent = "";
+    if (data.first) name.appendChild(document.createTextNode(data.first + " "));
+    if (data.last) { var b = document.createElement("b"); b.textContent = data.last; name.appendChild(b); }
+    $("cTitle").textContent = data.title || "";
+    var lines = $("cLines");
+    lines.textContent = "";
+    [data.tel, data.email, shortUrl(data.url)].filter(Boolean).forEach(function (t) {
+      var s = document.createElement("span"); s.textContent = t; lines.appendChild(s);
+    });
+
+    var svg = qrSvg(vcard(data));
+    if (svg) {
+      $("qr").innerHTML = svg;
+      $("miniQr").innerHTML = svg;
+    } else {
+      $("qr").innerHTML = '<p class="qr-error">Le QR code n\'a pas pu se charger. Vérifiez la connexion puis rechargez la page.</p>';
+    }
+  }
+
+  // Flip
+  var flip = $("flip");
+  flip.addEventListener("click", function () {
+    var front = flip.classList.toggle("is-front");
+    $("frontFace").setAttribute("aria-hidden", String(!front));
+    $("backFace").setAttribute("aria-hidden", String(front));
+  });
+
+  // Edit
+  var form = $("form");
+  $("editBtn").addEventListener("click", function () {
+    FIELDS.forEach(function (k) { form.elements[k].value = data[k] || ""; });
+    form.hidden = false;
+    form.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  $("cancelBtn").addEventListener("click", function () { form.hidden = true; });
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var next = {};
+    FIELDS.forEach(function (k) { next[k] = form.elements[k].value.trim(); });
+    if (!next.first && !next.last && !next.org) { say("Indiquez au moins un nom ou une entreprise."); return; }
+    data = next;
+    var ok = true;
+    try { localStorage.setItem(KEY, JSON.stringify(data)); } catch (err) { ok = false; }
+    form.hidden = true;
+    render();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    say(ok ? "Carte enregistrée sur ce téléphone." : "Carte mise à jour, mais elle ne sera pas conservée (navigation privée ?).");
+  });
+
+  // Copy
+  $("copyBtn").addEventListener("click", function () {
+    var text = plainText(data);
+    function fallback() {
+      var ta = document.createElement("textarea");
+      ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand("copy"); } catch (e) {}
+      document.body.removeChild(ta);
+      say(ok ? "Coordonnées copiées." : "Copie impossible ici. Utilisez le QR code.");
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say("Coordonnées copiées."); }, fallback);
+    } else { fallback(); }
+  });
+
+  // Keep the screen on while someone scans
+  var lock = null, wakeBtn = $("wakeBtn");
+  if (!("wakeLock" in navigator)) wakeBtn.hidden = true;
+  wakeBtn.addEventListener("click", function () {
+    if (lock) { lock.release(); return; }
+    navigator.wakeLock.request("screen").then(function (l) {
+      lock = l;
+      wakeBtn.setAttribute("aria-pressed", "true");
+      wakeBtn.textContent = "Écran maintenu allumé";
+      l.addEventListener("release", function () {
+        lock = null;
+        wakeBtn.setAttribute("aria-pressed", "false");
+        wakeBtn.textContent = "Garder l'écran allumé";
+      });
+    }, function () { say("Le navigateur refuse de garder l'écran allumé."); });
+  });
+
+  // .vcf download works only when the page is opened directly, not inside an embedded viewer
+  var standalone = false;
+  try { standalone = window.self === window.top; } catch (e) {}
+  if (standalone) {
+    var vcfBtn = $("vcfBtn");
+    vcfBtn.hidden = false;
+    vcfBtn.addEventListener("click", function () {
+      var blob = new Blob([vcard(data)], { type: "text/vcard;charset=utf-8" });
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = (fullName(data) || "contact").replace(/[^\w\- ]+/g, "") + ".vcf";
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+    });
+  }
+
+  render();
+})();
+</script>
