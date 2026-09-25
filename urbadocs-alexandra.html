@@ -1,0 +1,326 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Urbadocs">
+<meta name="theme-color" content="#F3F2F2">
+<title>Carte d'Alexandra Costantini</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap">
+<style>
+  /* Single light look, following urbadocs.com: white cells, deep purple ink, hairline grid */
+  :root {
+    color-scheme: light;
+    --ground: #F3F2F2;
+    --paper: #FFFFFF;
+    --purple: #230635;
+    --ink: #130C02;
+    --muted: #5E566A;
+    --rule: #230635;
+    --soft: #D9D5DE;
+    --title: "Titillium Web", "Segoe UI", system-ui, sans-serif;
+    --body: "Inter", -apple-system, "Helvetica Neue", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { background: var(--ground); }
+  body { margin: 0; background: var(--ground); color: var(--ink); font: 400 15px/1.5 var(--body); -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 460px; margin: 0 auto; padding-inline: 16px; padding-block: 20px 40px; display: grid; gap: 18px; }
+
+  /* Flip card, 85 × 55 mm */
+  .flip { perspective: 1400px; aspect-ratio: 85 / 55; max-width: 100%; width: 100%; border: 0; padding: 0; background: none; cursor: pointer; display: block; font: inherit; color: inherit; text-align: left; }
+  .flip:focus-visible { outline: 2px solid var(--purple); outline-offset: 4px; }
+  .flip-inner { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; }
+  .flip.is-front .flip-inner { transform: rotateY(180deg); }
+  @media (prefers-reduced-motion: no-preference) { .flip-inner { transition: transform .6s cubic-bezier(.3,.7,.2,1); } }
+  .face { position: absolute; inset: 0; overflow: hidden; backface-visibility: hidden; -webkit-backface-visibility: hidden; container-type: inline-size; box-shadow: 0 1px 2px rgba(35,6,53,.10), 0 16px 36px -18px rgba(35,6,53,.45); }
+
+  /* Back: white card cut into cells by hairlines, like the site header */
+  .face.back { background: var(--paper); border: 1px solid var(--rule); display: grid; grid-template-rows: 27% minmax(0,1fr) 30%; }
+  .cell-row { display: grid; }
+  .back .top { grid-template-columns: 1fr 24%; border-bottom: 1px solid var(--rule); }
+  .back .top .logo-cell { display: flex; align-items: center; padding-left: 5cqw; }
+  .back .top .logo-cell svg { width: 46cqw; height: auto; color: var(--purple); }
+  .back .top .tag { border-left: 1px solid var(--rule); display: grid; place-items: center; font: 600 2.3cqw/1.2 var(--title); letter-spacing: .14em; text-transform: uppercase; color: var(--purple); text-align: center; }
+  .back .who { padding: 0 5cqw; display: grid; align-content: center; }
+  .back .name { margin: 0; font: 300 6.4cqw/1.05 var(--title); color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .back .name b { font-weight: 700; color: var(--purple); }
+  .back .role { margin: 1.4cqw 0 0; font: 600 2.7cqw/1.2 var(--title); letter-spacing: .22em; text-transform: uppercase; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .back .bottom { grid-template-columns: 1fr 22%; border-top: 1px solid var(--rule); }
+  .back .lines { padding: 0 5cqw; display: grid; align-content: center; gap: .8cqw; font: 500 3cqw/1.3 var(--body); color: var(--ink); min-width: 0; }
+  .back .lines span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .back .mini-qr { border-left: 1px solid var(--rule); padding: 2.2cqw; display: flex; align-items: center; justify-content: center; min-height: 0; overflow: hidden; }
+  .back .mini-qr svg { height: 100%; width: auto; max-width: 100%; aspect-ratio: 1; display: block; }
+
+  /* Front: deep purple, white logo */
+  .face.front { transform: rotateY(180deg); background: var(--purple); color: #FFFFFF; display: grid; grid-template-rows: 1fr auto; }
+  .front .mid { display: grid; place-items: center; }
+  .front .mid svg { width: 68cqw; height: auto; color: #FFFFFF; }
+  .front .foot { border-top: 1px solid rgba(255,255,255,.35); display: grid; grid-template-columns: 1fr auto; font: 400 2.4cqw/1 var(--title); letter-spacing: 0; white-space: nowrap; }
+  .front .foot span { padding: 3.4cqw 4.5cqw; overflow: hidden; text-overflow: ellipsis; }
+  .front .foot span + span { border-left: 1px solid rgba(255,255,255,.35); font-weight: 600; }
+
+  .hint { margin: -6px 0 0; text-align: center; color: var(--muted); font-size: 13px; }
+
+  .scan { background: var(--paper); border: 1px solid var(--rule); display: grid; }
+  .scan h2 { margin: 0; padding: 14px 18px; border-bottom: 1px solid var(--rule); font: 600 18px/1.2 var(--title); color: var(--purple); }
+  .scan .qr-tile { padding: 26px; display: grid; place-items: center; }
+  .scan .qr-tile > * { width: min(100%, 280px); aspect-ratio: 1; }
+  .scan .qr-tile svg { width: 100%; height: 100%; display: block; }
+  .scan p { margin: 0; padding: 14px 18px; border-top: 1px solid var(--rule); color: var(--muted); font-size: 14px; }
+  .qr-error { color: var(--muted); font-size: 13px; margin: 0; }
+
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  button.btn { flex: 1 1 auto; min-height: 46px; padding: 12px 16px; border-radius: 0; border: 1px solid var(--rule); background: var(--paper); color: var(--purple); font: 600 15px/1 var(--title); letter-spacing: .02em; cursor: pointer; }
+  button.btn.primary { background: var(--ink); border-color: var(--ink); color: #FFFFFF; }
+  button.btn[aria-pressed="true"] { background: var(--purple); border-color: var(--purple); }
+  button.btn:focus-visible, input:focus-visible { outline: 2px solid var(--purple); outline-offset: 2px; }
+  .status { min-height: 1.2em; margin: 0; text-align: center; color: var(--purple); font-size: 14px; font-weight: 500; }
+
+  form { display: grid; gap: 14px; padding: 18px; border: 1px solid var(--rule); background: var(--paper); }
+  form h2 { margin: 0; font: 600 18px/1.2 var(--title); color: var(--purple); }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  label { display: grid; gap: 5px; color: var(--muted); font: 600 12px/1.2 var(--title); letter-spacing: .1em; text-transform: uppercase; }
+  input { width: 100%; min-width: 0; font: 400 16px/1.3 var(--body); letter-spacing: 0; text-transform: none; color: var(--ink); background: var(--ground); border: 1px solid var(--soft); border-radius: 0; padding: 11px 12px; }
+
+  details.help { border: 1px solid var(--rule); background: var(--paper); padding: 14px 18px; }
+  details.help summary { cursor: pointer; font: 600 16px/1.3 var(--title); color: var(--purple); }
+  details.help ol { margin: 10px 0 0; padding-left: 20px; display: grid; gap: 8px; color: var(--muted); font-size: 14px; }
+  details.help b { color: var(--ink); }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- Traced from the urbadocs.com logo -->
+    <symbol id="ud-logo" viewBox="0 0 4092 444"><path fill="currentColor" fill-rule="evenodd" d="M706 443C706 441 700 439 691 438C687 437 681 436 678 434C675 433 672 432 671 432C670 432 667 431 664 429C661 428 657 426 656 426C654 425 651 424 649 423C634 413 626 407 624 405C623 404 618 400 614 397C605 389 593 375 587 364C577 346 572 334 570 324C570 320 568 314 567 311C563 301 563 284 563 146L563 14L565 12L567 10L606 10C638 10 645 10 647 11L648 13L649 147C649 244 650 281 651 283C651 284 653 290 653 296C654 301 656 307 657 309C658 310 659 313 660 316C661 318 662 320 663 321C663 322 665 324 665 326C669 333 680 345 685 348C687 349 690 350 691 352C693 353 695 354 695 354C696 354 699 355 703 357C723 366 766 365 786 355C799 349 802 346 810 338C816 333 827 315 827 311C827 310 828 306 830 301L833 292L834 153L834 14L837 12L839 10L879 10L919 10L921 12L923 14L923 147L922 280L920 294C919 303 917 312 916 315C911 335 910 339 904 350C903 352 902 355 901 358C899 361 896 365 891 373C881 389 857 410 840 420C838 421 835 422 834 423C833 424 831 425 828 426C826 427 823 428 822 429C821 430 818 431 815 432C813 432 809 433 806 435C803 436 797 437 793 438C786 439 780 441 779 443C778 444 706 444 706 443ZM2968 442C2966 440 2963 439 2954 438C2949 438 2943 436 2941 435C2939 434 2935 433 2932 432C2929 431 2925 430 2924 429C2922 428 2919 427 2917 426C2915 425 2911 424 2910 423C2909 422 2906 421 2903 420C2901 419 2899 418 2898 417C2898 416 2889 411 2884 408C2882 408 2881 406 2880 405C2879 404 2878 403 2877 402C2870 400 2840 370 2831 356C2830 355 2827 351 2825 347C2822 343 2820 340 2820 340C2820 339 2819 337 2818 336C2815 332 2808 318 2808 316C2808 315 2807 312 2806 310C2804 308 2803 303 2802 301C2801 299 2800 293 2798 289C2797 285 2795 275 2793 267L2790 252L2791 222L2791 190L2793 177C2795 170 2797 159 2799 154C2801 149 2802 144 2802 143C2802 142 2803 140 2804 138C2806 135 2807 133 2807 132C2807 129 2816 112 2820 105C2822 103 2824 99 2825 97C2826 94 2830 90 2833 86C2836 83 2838 80 2838 79C2838 78 2867 49 2871 47C2872 46 2874 45 2874 44C2875 42 2884 36 2895 30C2904 25 2905 24 2912 21C2925 15 2931 13 2935 12C2937 11 2942 10 2945 9C2948 8 2954 7 2958 6C2970 5 2974 3 2976 2C2977 0 2981 -0 3011 -0L3045 -0L3049 3C3053 4 3056 5 3063 6C3068 7 3075 8 3077 9C3080 10 3085 12 3087 12C3090 13 3094 14 3096 15C3097 16 3100 17 3102 18C3105 19 3109 20 3111 22C3114 23 3117 25 3119 25C3120 26 3126 29 3135 35C3138 37 3142 40 3144 42C3147 45 3151 47 3152 48C3156 51 3182 77 3186 82C3188 85 3190 89 3192 92C3197 98 3203 108 3203 109C3203 109 3204 111 3206 114C3207 116 3209 119 3210 122C3210 124 3212 127 3213 129C3214 130 3215 134 3216 137C3217 140 3219 145 3220 148C3228 167 3233 219 3230 242C3230 247 3229 256 3228 262C3228 269 3226 276 3225 278C3225 280 3223 285 3223 289C3222 292 3220 298 3219 302C3217 305 3216 308 3216 309C3216 311 3203 337 3199 343C3197 346 3194 351 3191 354C3189 357 3187 361 3186 362C3185 363 3177 372 3168 382C3152 397 3145 403 3136 408C3134 409 3132 411 3132 411C3132 411 3129 413 3126 415C3114 421 3113 422 3110 423C3109 424 3106 425 3103 426C3101 427 3098 428 3096 429C3095 430 3091 431 3088 432C3085 432 3082 434 3080 435C3078 435 3073 437 3068 438C3059 439 3052 441 3052 443C3052 444 3034 444 3011 444C2974 444 2969 444 2968 442ZM3468 442C3467 440 3465 439 3451 438C3446 437 3440 436 3436 435C3433 433 3429 432 3427 432C3425 432 3422 431 3421 431C3420 430 3416 428 3414 427C3412 426 3408 424 3406 423C3404 422 3401 421 3398 420C3396 419 3393 418 3392 417C3390 415 3388 414 3386 413C3385 412 3382 410 3379 408C3377 407 3373 404 3371 403C3366 399 3331 365 3331 363C3331 363 3330 360 3328 358C3326 356 3323 352 3322 349C3320 346 3317 342 3315 339C3313 336 3312 333 3312 333C3312 332 3311 330 3310 328C3308 326 3307 322 3306 320C3305 318 3304 314 3302 311C3301 309 3300 306 3300 305C3300 304 3299 299 3297 295C3295 290 3294 284 3294 283C3294 282 3293 277 3292 273C3289 259 3288 245 3288 212C3289 189 3289 180 3290 177C3291 174 3293 168 3293 162C3294 157 3296 151 3297 150C3298 148 3299 144 3300 140C3300 137 3302 133 3303 132C3303 131 3305 128 3305 125C3306 122 3308 119 3309 117C3310 116 3313 110 3315 105C3320 96 3329 83 3334 77C3349 60 3365 45 3370 42C3371 41 3375 38 3378 36C3382 33 3386 30 3388 29C3391 28 3397 25 3402 22C3414 16 3421 13 3423 13C3424 13 3427 12 3430 10C3434 9 3441 7 3446 6C3460 4 3465 3 3466 1C3467 0 3473 0 3502 0L3536 0L3539 2C3541 4 3544 5 3549 5C3553 6 3560 7 3564 9C3568 10 3573 12 3577 12C3583 14 3597 19 3599 21C3600 22 3602 23 3604 24C3606 25 3609 26 3611 28C3613 29 3615 30 3615 30C3617 30 3626 36 3636 44C3651 56 3672 79 3679 91C3680 93 3683 97 3685 100C3686 104 3689 108 3689 109C3696 124 3702 141 3702 145C3702 147 3703 151 3704 154C3707 163 3706 165 3702 167C3698 168 3619 168 3616 167C3614 166 3613 165 3611 160C3610 157 3609 153 3608 151C3607 149 3606 147 3606 146C3606 145 3605 142 3603 140C3601 137 3600 135 3600 135C3600 132 3586 116 3580 111C3571 103 3547 90 3542 90C3541 90 3536 89 3532 87L3524 85L3501 85L3478 85L3470 87C3465 88 3460 90 3457 90C3455 91 3451 92 3449 93C3447 95 3445 96 3444 96C3443 96 3432 102 3427 106C3419 112 3418 114 3412 120C3403 131 3391 152 3389 160C3389 162 3388 165 3387 167C3386 169 3384 175 3384 179C3383 184 3382 190 3381 194C3379 202 3379 241 3381 252C3382 255 3384 262 3384 266C3385 271 3386 276 3388 279C3389 282 3390 285 3390 286C3390 289 3396 302 3402 310C3410 322 3427 338 3435 343C3454 352 3456 353 3469 356C3492 361 3515 361 3533 355C3536 355 3539 354 3540 354C3542 354 3545 353 3548 352C3550 350 3554 349 3556 348C3559 347 3562 345 3572 339C3585 330 3604 308 3607 296C3607 294 3609 289 3610 287C3611 285 3612 282 3612 281C3612 276 3612 276 3659 276C3703 276 3706 276 3706 280C3706 283 3702 298 3698 310C3695 321 3684 344 3680 351C3678 352 3676 356 3675 358C3674 360 3670 365 3667 368C3664 372 3661 375 3661 375C3661 378 3642 395 3630 404C3623 409 3615 414 3614 414C3614 414 3611 415 3609 417C3607 419 3604 420 3603 420C3602 420 3600 421 3597 423C3595 424 3591 426 3589 427C3587 427 3584 428 3581 430C3579 431 3576 432 3575 432C3573 432 3568 433 3563 435C3558 437 3552 438 3550 438C3544 438 3532 441 3530 442C3529 444 3524 444 3499 444L3469 444L3468 442ZM3893 442C3891 441 3886 439 3879 438C3873 438 3866 436 3864 435C3861 434 3857 433 3855 432C3852 432 3837 426 3834 424C3833 423 3830 422 3827 420C3824 419 3822 418 3822 417C3822 416 3820 415 3818 414C3808 409 3784 382 3780 371C3779 370 3778 368 3777 366C3774 362 3770 352 3767 338C3762 322 3762 321 3761 301C3761 284 3761 282 3762 280L3764 277L3804 277L3844 277L3845 279C3845 280 3846 286 3847 293C3848 299 3849 307 3850 311C3851 314 3852 318 3852 319C3852 321 3853 323 3854 324C3855 326 3856 329 3857 332C3862 340 3871 350 3881 354C3883 355 3886 357 3887 357C3891 361 3911 364 3928 365L3944 365L3954 363C3960 361 3966 360 3967 360C3969 360 3981 354 3985 351C3987 349 3989 348 3991 346C3995 343 4001 333 4002 327C4003 321 4003 304 4001 301C3996 291 3987 284 3972 277C3970 276 3966 274 3964 273C3962 272 3957 271 3954 270C3950 269 3945 268 3943 267C3940 266 3934 264 3929 264C3924 263 3917 261 3915 261C3913 260 3907 258 3903 258C3899 257 3894 256 3893 255C3891 255 3886 253 3882 252C3877 251 3872 250 3870 249C3869 248 3865 247 3862 246C3858 245 3845 239 3840 236C3839 236 3836 234 3834 233C3817 225 3799 208 3791 193C3790 191 3789 188 3788 186C3783 178 3781 171 3780 164C3779 160 3779 155 3778 153C3776 144 3776 125 3777 116C3778 112 3779 105 3780 101C3781 94 3785 83 3789 77C3789 76 3791 72 3792 70C3794 67 3797 62 3799 59C3802 55 3804 52 3804 52C3804 50 3834 24 3837 24C3837 24 3839 23 3840 22C3849 15 3868 8 3885 5C3889 4 3892 3 3893 2L3895 -0L3929 -0C3953 -0 3964 0 3965 1C3966 3 3969 4 3980 6C3985 7 3991 9 3993 10C3995 11 3998 12 4000 12C4006 14 4022 23 4031 30C4034 32 4038 34 4040 36C4044 39 4060 55 4062 58C4063 60 4064 62 4065 63C4066 65 4070 72 4073 78C4074 80 4076 84 4077 86C4082 98 4086 118 4089 153L4089 162L4087 164L4084 167L4045 167C4016 167 4006 166 4005 165C4004 164 4003 159 4003 150C4001 128 3998 113 3993 108C3992 106 3991 104 3990 103C3986 98 3970 86 3964 84C3963 84 3959 83 3956 81L3950 79L3930 79L3912 78L3902 81C3890 85 3884 89 3875 98C3865 108 3863 111 3864 126C3864 135 3864 138 3865 142C3868 147 3884 162 3886 162C3887 162 3889 163 3891 164C3893 166 3898 168 3901 168C3904 169 3909 171 3912 172C3915 173 3918 174 3920 174C3921 174 3926 175 3932 177C3937 179 3942 180 3944 180C3945 180 3950 181 3955 182C3959 183 3966 185 3970 186C3973 186 3980 188 3984 190C3988 191 3994 193 3996 193C4005 196 4013 199 4015 201C4017 201 4020 203 4023 204C4025 204 4029 206 4031 207C4033 209 4035 210 4035 210C4037 210 4050 218 4050 219C4050 219 4052 221 4054 222C4059 226 4065 232 4069 237C4070 239 4073 243 4075 247C4078 251 4080 254 4080 255C4080 255 4081 257 4082 259C4083 261 4085 266 4085 270C4087 277 4090 282 4091 282C4092 282 4092 293 4092 311L4092 341L4090 341C4088 342 4088 343 4087 350C4086 352 4085 355 4084 358C4082 360 4081 363 4080 364C4079 368 4071 381 4066 386C4064 389 4062 392 4062 392C4062 394 4028 420 4025 420C4025 420 4023 421 4021 422C4019 424 4015 425 4013 426C4011 427 4006 428 4004 430C4002 431 3999 432 3998 432C3997 432 3993 433 3989 434C3985 436 3978 437 3974 438C3959 440 3955 441 3953 442C3952 444 3947 444 3924 444L3896 444L3893 442ZM0 220L0 6L41 6C75 6 82 6 83 7C84 8 84 52 84 179C84 297 84 351 85 352C86 355 92 355 96 352C98 351 101 350 103 349C110 345 121 336 126 329C130 323 138 308 138 306C138 305 139 301 141 297L143 290L144 148L144 7L147 5L149 2L189 2L229 2L231 5L234 7L234 140C234 269 234 288 231 302C230 304 229 311 229 317C228 322 226 329 225 331C224 333 223 336 223 338C222 341 221 344 220 346C218 350 217 353 219 355C220 356 244 356 323 356L425 356L427 359L429 361L429 396L429 430L427 433L424 435L212 435L0 435L0 220ZM1055 433L1053 430L1053 222L1053 14L1056 12L1058 10L1157 10C1264 10 1282 11 1292 15C1295 16 1300 17 1303 18C1306 19 1313 21 1317 23C1322 26 1327 29 1330 30C1340 36 1362 57 1367 67C1368 68 1369 71 1371 72C1373 75 1377 85 1379 91C1385 108 1385 111 1386 128C1388 150 1386 174 1383 181C1382 183 1381 187 1381 189C1380 194 1366 222 1365 222C1364 222 1363 224 1362 226C1358 234 1337 253 1326 258C1320 260 1315 264 1314 266C1314 267 1315 270 1317 273C1319 276 1320 278 1320 279C1320 280 1321 282 1322 284C1324 286 1326 289 1326 291C1327 293 1330 297 1332 301C1334 305 1336 308 1337 310C1337 311 1338 313 1339 314C1339 315 1342 319 1344 323C1346 327 1349 332 1350 334C1352 336 1353 340 1354 342C1355 343 1356 346 1357 347C1358 348 1360 352 1361 356C1363 359 1366 364 1368 367C1370 370 1371 373 1372 373C1372 374 1373 376 1374 378C1375 380 1376 383 1377 384C1378 385 1379 388 1380 390C1381 392 1382 394 1383 395C1384 396 1385 398 1386 400C1387 403 1390 408 1392 412C1399 425 1402 431 1401 433C1400 434 1394 435 1354 435C1329 435 1307 435 1306 435C1304 434 1296 423 1296 420C1296 419 1295 416 1293 414C1291 412 1290 409 1290 408C1290 407 1289 404 1287 402C1285 400 1284 397 1284 396C1284 395 1283 393 1282 391C1280 389 1279 386 1279 385C1278 384 1272 371 1265 357C1258 343 1252 329 1250 326C1248 321 1247 319 1244 312C1243 310 1241 308 1240 306C1240 304 1238 302 1238 300C1237 298 1235 296 1235 294C1234 293 1233 290 1232 288C1231 287 1229 284 1228 282C1227 279 1225 277 1224 276L1220 274L1183 274L1145 274L1142 276L1140 279L1140 353C1140 393 1140 428 1140 429C1140 435 1141 435 1097 435L1058 435L1055 433ZM1502 433L1500 431L1500 223L1500 15L1502 12L1505 10L1597 10C1701 10 1720 11 1733 15C1737 17 1742 18 1744 19C1753 21 1763 26 1776 34C1783 39 1806 63 1806 67C1806 67 1807 69 1808 71C1811 75 1815 86 1817 92C1820 103 1822 124 1822 130C1820 144 1817 162 1814 167C1813 169 1812 172 1812 173C1812 174 1810 177 1803 187C1797 197 1777 214 1769 216C1768 217 1767 218 1767 218C1766 220 1772 226 1777 228C1791 233 1814 258 1819 273C1820 275 1821 279 1822 280C1824 284 1827 304 1827 315C1827 328 1824 352 1821 358C1820 360 1819 364 1818 367C1815 375 1798 398 1793 401C1792 402 1791 403 1789 404C1786 408 1780 413 1776 414C1774 415 1772 417 1771 418C1769 419 1758 424 1752 425C1750 426 1745 428 1741 429C1738 430 1728 432 1717 433L1700 435L1602 435L1504 435L1502 433ZM1887 433C1885 431 1885 432 1896 403C1898 399 1900 391 1902 387C1904 383 1906 375 1908 371C1910 367 1912 359 1914 355C1916 351 1918 343 1920 339C1922 335 1924 327 1926 323C1928 319 1930 311 1932 307C1934 303 1936 295 1938 291C1940 287 1942 279 1944 275C1946 271 1948 263 1950 259C1958 238 1959 234 1961 229C1962 226 1964 222 1965 220C1966 218 1967 215 1967 213C1968 211 1969 207 1971 203C1973 199 1975 194 1975 192C1979 181 1981 175 1983 172C1984 170 1985 167 1985 165C1986 163 1987 159 1989 155C1991 151 1993 146 1993 144C1997 133 1999 127 2001 124C2002 122 2003 119 2003 117C2004 115 2005 111 2007 107C2009 103 2011 98 2011 96C2015 85 2017 79 2019 76C2020 74 2021 71 2021 69C2022 67 2023 63 2025 59C2027 55 2029 50 2029 48C2033 36 2035 31 2037 29C2037 27 2039 23 2040 20C2041 14 2042 13 2045 12L2048 10L2091 10C2123 10 2133 10 2134 11C2136 13 2142 24 2142 26C2142 27 2143 30 2144 32C2145 34 2147 38 2148 42C2149 46 2151 50 2152 53C2153 55 2154 57 2154 58C2154 60 2155 63 2157 66C2159 70 2160 73 2160 74C2160 75 2161 78 2162 80C2163 82 2165 87 2166 91C2168 96 2169 100 2170 100C2170 101 2171 104 2172 106C2173 109 2174 112 2175 114C2176 115 2177 118 2178 121C2178 123 2179 126 2180 128C2181 130 2183 135 2184 139C2186 144 2187 148 2188 148C2188 149 2189 152 2190 154C2191 157 2192 160 2193 162C2194 163 2195 166 2196 169C2196 171 2197 174 2198 176C2199 178 2201 183 2202 187C2204 192 2205 196 2206 196C2206 197 2207 200 2208 202C2209 205 2210 208 2211 210C2212 211 2213 214 2214 217C2214 219 2215 222 2216 224C2217 226 2219 231 2220 235C2222 240 2223 244 2224 244C2224 245 2225 248 2226 250C2227 253 2228 256 2229 258C2230 259 2231 262 2232 265C2232 267 2233 270 2234 272C2235 274 2237 279 2238 283C2240 288 2241 292 2242 292C2242 293 2243 296 2244 298C2245 301 2246 304 2247 306C2248 307 2249 310 2250 313C2250 315 2251 318 2252 320C2253 322 2255 327 2256 331C2258 336 2259 340 2260 340C2260 341 2261 344 2262 346C2263 349 2264 352 2265 354C2266 355 2267 358 2268 361C2268 363 2269 366 2270 368C2271 370 2273 375 2274 379C2276 384 2277 388 2278 388C2278 389 2279 392 2280 394C2281 397 2282 401 2283 402C2284 404 2285 406 2286 408C2286 410 2288 415 2290 420C2296 436 2299 435 2247 435L2205 435L2202 432C2200 430 2198 425 2196 420C2195 415 2192 407 2190 402C2188 396 2185 388 2184 385C2183 381 2181 376 2180 374C2179 372 2178 369 2178 368C2178 368 2177 366 2176 364L2173 362L2089 362L2006 362L2003 364C2000 365 1999 367 1998 372C1996 376 1995 380 1994 382C1994 383 1992 387 1991 390C1987 402 1986 407 1983 412C1982 415 1980 420 1980 424C1978 428 1977 430 1975 432L1972 435L1930 435C1893 435 1889 435 1887 433ZM2366 433C2365 433 2364 431 2364 430C2364 429 2364 335 2364 222C2364 109 2364 15 2364 15C2364 10 2362 10 2448 10C2539 10 2562 11 2578 16C2582 17 2588 18 2589 18C2591 18 2595 19 2598 20C2601 22 2605 23 2607 24C2610 24 2625 30 2628 32C2629 33 2632 34 2634 35C2636 36 2639 38 2640 38C2641 39 2644 40 2647 42C2650 43 2652 44 2652 45C2652 46 2653 47 2655 48C2667 54 2688 75 2702 95C2705 99 2718 120 2718 121C2718 121 2719 125 2721 128C2723 132 2725 138 2727 141C2728 144 2729 149 2730 153C2731 157 2732 161 2732 163C2736 171 2739 206 2739 228C2738 260 2736 275 2734 282C2732 286 2731 292 2730 296C2729 299 2728 304 2726 307C2725 309 2724 312 2724 313C2724 313 2723 315 2721 318C2719 320 2718 322 2718 324C2718 326 2716 330 2712 336C2709 340 2706 345 2706 345C2706 346 2695 360 2690 366C2681 376 2670 387 2664 391C2662 392 2659 395 2656 396C2648 402 2638 408 2637 408C2636 408 2633 409 2631 411C2629 413 2626 414 2626 414C2625 414 2622 415 2620 416C2614 419 2601 424 2594 425C2592 426 2587 427 2583 428C2579 429 2572 430 2568 431C2563 432 2554 433 2550 433C2543 434 2514 435 2454 435L2367 435L2366 433ZM3039 358C3043 357 3049 355 3053 354C3056 354 3061 352 3064 350C3066 349 3069 348 3069 348C3071 348 3082 341 3086 338C3088 336 3089 335 3090 335C3091 335 3110 316 3113 312C3114 309 3116 307 3117 306C3121 300 3131 278 3132 271C3133 269 3134 265 3135 262L3137 258L3138 227L3138 196L3134 182C3130 165 3126 154 3123 150C3122 148 3121 146 3120 145C3117 138 3098 115 3089 109C3086 107 3084 105 3084 105C3084 104 3082 103 3079 102C3076 100 3073 99 3072 98C3069 96 3054 90 3050 90C3048 89 3044 88 3040 87L3034 84L3012 85L2990 85L2976 88C2964 91 2952 96 2948 98C2928 111 2916 121 2907 135C2905 138 2902 143 2901 144C2898 148 2893 159 2892 164C2891 167 2889 172 2888 175C2887 178 2886 183 2885 187C2885 191 2884 196 2883 199C2881 208 2881 236 2884 249C2885 254 2886 260 2886 261C2886 265 2893 285 2895 289C2897 291 2898 293 2898 294C2898 295 2904 305 2909 313C2915 321 2927 333 2936 338C2940 341 2945 344 2946 345C2948 346 2951 348 2953 348C2955 349 2958 351 2960 351C2963 353 2968 354 2984 359C2992 361 3030 360 3039 358ZM1706 354C1719 352 1730 344 1736 331L1739 324L1739 309L1739 294L1736 287C1730 275 1722 268 1708 263L1700 260L1645 259L1591 259L1588 261L1586 264L1586 308C1586 332 1586 352 1587 353C1589 356 1592 356 1644 356C1687 356 1699 356 1706 354ZM2552 352C2555 351 2561 349 2565 348C2569 347 2575 346 2577 344C2580 343 2582 342 2583 342C2585 342 2596 335 2599 332C2600 331 2602 330 2603 329C2607 328 2619 315 2622 310C2623 308 2625 306 2625 306C2627 306 2639 279 2640 274C2641 271 2642 266 2643 262C2648 248 2648 195 2643 182C2642 179 2641 173 2640 170C2640 167 2638 164 2637 162C2636 161 2635 158 2634 156C2633 151 2624 135 2619 132C2619 131 2616 128 2614 125C2607 118 2597 109 2591 107C2589 107 2587 105 2586 105C2583 102 2569 97 2556 94C2543 91 2534 90 2492 90C2460 90 2454 90 2452 92L2450 93L2450 223L2450 352L2452 353C2453 354 2469 354 2500 354C2540 353 2547 353 2552 352ZM2145 281L2148 279L2145 276C2144 275 2143 272 2142 269C2142 267 2141 264 2140 262C2139 260 2137 255 2136 251C2135 248 2133 240 2131 235C2129 229 2125 221 2123 215C2121 210 2119 202 2118 199C2117 195 2115 190 2114 188C2113 186 2112 183 2112 181C2111 178 2110 175 2109 174C2108 173 2107 170 2106 167C2106 165 2105 162 2104 160C2103 158 2101 153 2100 150C2099 146 2098 142 2097 141C2097 139 2095 135 2094 131C2092 124 2090 122 2087 124C2085 125 2084 128 2083 132C2082 136 2080 141 2078 144C2077 147 2076 151 2075 153C2075 156 2074 159 2072 162C2071 164 2070 167 2070 168C2070 170 2069 173 2068 175C2066 177 2065 182 2064 184C2063 187 2062 191 2061 193C2060 195 2059 198 2059 200C2058 203 2057 207 2056 210C2054 213 2053 218 2052 220C2047 235 2044 241 2042 246C2041 249 2040 253 2039 256C2039 258 2038 261 2037 263C2036 264 2035 267 2034 270C2034 272 2033 275 2032 277L2031 280L2032 282C2034 283 2043 283 2089 283L2143 283L2145 281ZM1261 192C1266 191 1270 190 1272 189C1273 188 1276 187 1278 186C1290 182 1300 163 1300 142C1300 116 1285 96 1260 91C1258 90 1231 90 1200 90L1143 90L1142 92C1140 94 1140 101 1140 142C1140 182 1140 189 1142 191L1143 193L1198 193C1228 193 1256 193 1261 192ZM1703 177C1705 176 1708 175 1711 174C1716 173 1726 162 1730 154C1738 135 1734 115 1720 102C1717 99 1714 96 1714 96C1713 96 1711 95 1709 94C1707 92 1703 91 1698 90C1690 89 1596 87 1592 88C1586 90 1586 88 1586 135L1586 177L1588 178C1590 180 1596 180 1644 180L1698 180L1703 177Z"/></symbol>
+  </defs>
+</svg>
+
+<main class="wrap">
+  <button type="button" class="flip" id="flip" aria-label="Retourner la carte">
+    <div class="flip-inner">
+      <div class="face back" id="backFace" aria-hidden="false">
+        <div class="cell-row top">
+          <div class="logo-cell"><svg viewBox="0 0 4092 444" role="img" aria-label="Urbadocs"><use href="#ud-logo"/></svg></div>
+          <div class="tag">Urbanisme</div>
+        </div>
+        <div class="who">
+          <p class="name" id="cName"></p>
+          <p class="role" id="cTitle"></p>
+        </div>
+        <div class="cell-row bottom">
+          <div class="lines" id="cLines"></div>
+          <div class="mini-qr" id="miniQr"></div>
+        </div>
+      </div>
+      <div class="face front" id="frontFace" aria-hidden="true">
+        <div class="mid"><svg viewBox="0 0 4092 444" role="img" aria-label="Urbadocs"><use href="#ud-logo"/></svg></div>
+        <div class="foot"><span>Vos documents d'urbanisme en quelques clics</span><span>urbadocs.com</span></div>
+      </div>
+    </div>
+  </button>
+  <p class="hint">Touchez la carte pour la retourner</p>
+
+  <section class="scan" aria-labelledby="scanTitle">
+    <h2 id="scanTitle">Scannez pour m'ajouter</h2>
+    <div class="qr-tile"><div id="qr" role="img" aria-label="QR code contenant mes coordonnées"></div></div>
+    <p>Visez le code avec l'appareil photo de votre téléphone, puis touchez « Ajouter aux contacts ».</p>
+  </section>
+
+  <div class="actions">
+    <button type="button" class="btn primary" id="wakeBtn" aria-pressed="false">Garder l'écran allumé</button>
+    <button type="button" class="btn" id="copyBtn">Copier mes coordonnées</button>
+    <button type="button" class="btn" id="editBtn">Modifier</button>
+    <button type="button" class="btn" id="vcfBtn" hidden>Télécharger la fiche contact (.vcf)</button>
+  </div>
+  <p class="status" id="status" role="status" aria-live="polite"></p>
+
+  <form id="form" hidden>
+    <h2>Mes coordonnées</h2>
+    <div class="row">
+      <label for="f-first">Prénom<input id="f-first" name="first" autocomplete="given-name"></label>
+      <label for="f-last">Nom<input id="f-last" name="last" autocomplete="family-name"></label>
+    </div>
+    <label for="f-title">Fonction<input id="f-title" name="title" autocomplete="organization-title"></label>
+    <label for="f-org">Entreprise<input id="f-org" name="org" autocomplete="organization"></label>
+    <label for="f-tel">Mobile<input id="f-tel" name="tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="+33 6 12 34 56 78"></label>
+    <label for="f-email">E-mail<input id="f-email" name="email" type="email" inputmode="email" autocomplete="email"></label>
+    <label for="f-url">Site<input id="f-url" name="url" inputmode="url" autocomplete="url"></label>
+    <div class="actions">
+      <button type="submit" class="btn primary">Enregistrer</button>
+      <button type="button" class="btn" id="cancelBtn">Annuler</button>
+    </div>
+  </form>
+
+  <details class="help">
+    <summary>Sur iPhone</summary>
+    <ol>
+      <li><b>Écran d'accueil</b> : dans Safari, bouton Partager, puis « Sur l'écran d'accueil ». La carte s'ouvre comme une app.</li>
+      <li><b>Sans réseau</b> : faites une capture d'écran du QR code et mettez-la en Favori dans Photos.</li>
+      <li><b>Entre deux iPhone</b> : NameDrop (iOS 17+) envoie votre fiche Contacts en approchant les téléphones.</li>
+    </ol>
+  </details>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>
+(function () {
+  var KEY = "urbadocs-card-alexandra-v1";
+  var DEFAULTS = {
+    first: "Alexandra", last: "Costantini", title: "Associée", org: "Urbadocs",
+    tel: "", email: "alexandra@urbadocs.com", url: "www.urbadocs.com"
+  };
+  var FIELDS = ["first", "last", "title", "org", "tel", "email", "url"];
+
+  var data = Object.assign({}, DEFAULTS);
+  try {
+    var raw = localStorage.getItem(KEY);
+    if (raw) data = Object.assign(data, JSON.parse(raw));
+  } catch (e) {}
+
+  var $ = function (id) { return document.getElementById(id); };
+  var statusTimer;
+  function say(msg) {
+    $("status").textContent = msg;
+    clearTimeout(statusTimer);
+    statusTimer = setTimeout(function () { $("status").textContent = ""; }, 3000);
+  }
+
+  function esc(v) {
+    return String(v || "").replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/,/g, "\\,").replace(/;/g, "\\;");
+  }
+  function fullName(d) { return [d.first, d.last].filter(Boolean).join(" "); }
+  function fullUrl(u) { return !u ? "" : /^https?:\/\//i.test(u) ? u : "https://" + u; }
+  function shortUrl(u) { return (u || "").replace(/^https?:\/\//i, "").replace(/\/$/, ""); }
+
+  function vcard(d) {
+    var l = ["BEGIN:VCARD", "VERSION:3.0",
+      "N:" + esc(d.last) + ";" + esc(d.first) + ";;;",
+      "FN:" + esc(fullName(d) || d.org)];
+    if (d.org) l.push("ORG:" + esc(d.org));
+    if (d.title) l.push("TITLE:" + esc(d.title));
+    if (d.tel) l.push("TEL;TYPE=CELL:" + d.tel.replace(/[^\d+]/g, ""));
+    if (d.email) l.push("EMAIL;TYPE=INTERNET:" + esc(d.email));
+    if (d.url) l.push("URL:" + esc(fullUrl(d.url)));
+    l.push("END:VCARD");
+    return l.join("\r\n");
+  }
+  function plainText(d) {
+    return [fullName(d), [d.title, d.org].filter(Boolean).join(" · "), d.tel, d.email, fullUrl(d.url)]
+      .filter(Boolean).join("\n");
+  }
+
+  function qrSvg(text) {
+    if (typeof qrcode !== "function") return null;
+    qrcode.stringToBytes = qrcode.stringToBytesFuncs["UTF-8"];
+    var q = qrcode(0, "M");
+    q.addData(text, "Byte");
+    q.make();
+    // Dark modules on the mint tile, like the printed card
+    return q.createSvgTag({ cellSize: 4, margin: 0, scalable: true })
+      .replace(/fill="black"/g, 'fill="#230635"').replace(/fill="white"/g, 'fill="transparent"');
+  }
+
+  function render() {
+    var name = $("cName");
+    name.textContent = "";
+    if (data.first) name.appendChild(document.createTextNode(data.first + " "));
+    if (data.last) { var b = document.createElement("b"); b.textContent = data.last; name.appendChild(b); }
+    $("cTitle").textContent = data.title || "";
+    var lines = $("cLines");
+    lines.textContent = "";
+    [data.tel, data.email, shortUrl(data.url)].filter(Boolean).forEach(function (t) {
+      var s = document.createElement("span"); s.textContent = t; lines.appendChild(s);
+    });
+
+    var svg = qrSvg(vcard(data));
+    if (svg) {
+      $("qr").innerHTML = svg;
+      $("miniQr").innerHTML = svg;
+    } else {
+      $("qr").innerHTML = '<p class="qr-error">Le QR code n\'a pas pu se charger. Vérifiez la connexion puis rechargez la page.</p>';
+    }
+  }
+
+  // Flip
+  var flip = $("flip");
+  flip.addEventListener("click", function () {
+    var front = flip.classList.toggle("is-front");
+    $("frontFace").setAttribute("aria-hidden", String(!front));
+    $("backFace").setAttribute("aria-hidden", String(front));
+  });
+
+  // Edit
+  var form = $("form");
+  $("editBtn").addEventListener("click", function () {
+    FIELDS.forEach(function (k) { form.elements[k].value = data[k] || ""; });
+    form.hidden = false;
+    form.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  $("cancelBtn").addEventListener("click", function () { form.hidden = true; });
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var next = {};
+    FIELDS.forEach(function (k) { next[k] = form.elements[k].value.trim(); });
+    if (!next.first && !next.last && !next.org) { say("Indiquez au moins un nom ou une entreprise."); return; }
+    data = next;
+    var ok = true;
+    try { localStorage.setItem(KEY, JSON.stringify(data)); } catch (err) { ok = false; }
+    form.hidden = true;
+    render();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    say(ok ? "Carte enregistrée sur ce téléphone." : "Carte mise à jour, mais elle ne sera pas conservée (navigation privée ?).");
+  });
+
+  // Copy
+  $("copyBtn").addEventListener("click", function () {
+    var text = plainText(data);
+    function fallback() {
+      var ta = document.createElement("textarea");
+      ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand("copy"); } catch (e) {}
+      document.body.removeChild(ta);
+      say(ok ? "Coordonnées copiées." : "Copie impossible ici. Utilisez le QR code.");
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say("Coordonnées copiées."); }, fallback);
+    } else { fallback(); }
+  });
+
+  // Keep the screen on while someone scans
+  var lock = null, wakeBtn = $("wakeBtn");
+  if (!("wakeLock" in navigator)) wakeBtn.hidden = true;
+  wakeBtn.addEventListener("click", function () {
+    if (lock) { lock.release(); return; }
+    navigator.wakeLock.request("screen").then(function (l) {
+      lock = l;
+      wakeBtn.setAttribute("aria-pressed", "true");
+      wakeBtn.textContent = "Écran maintenu allumé";
+      l.addEventListener("release", function () {
+        lock = null;
+        wakeBtn.setAttribute("aria-pressed", "false");
+        wakeBtn.textContent = "Garder l'écran allumé";
+      });
+    }, function () { say("Le navigateur refuse de garder l'écran allumé."); });
+  });
+
+  // .vcf download works only when the page is opened directly, not inside an embedded viewer
+  var standalone = false;
+  try { standalone = window.self === window.top; } catch (e) {}
+  if (standalone) {
+    var vcfBtn = $("vcfBtn");
+    vcfBtn.hidden = false;
+    vcfBtn.addEventListener("click", function () {
+      var blob = new Blob([vcard(data)], { type: "text/vcard;charset=utf-8" });
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = (fullName(data) || "contact").replace(/[^\w\- ]+/g, "") + ".vcf";
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+    });
+  }
+
+  render();
+})();
+</script>
