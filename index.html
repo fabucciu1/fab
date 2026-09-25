@@ -1,0 +1,439 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Ma carte">
+<title>Carte de visite de poche</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --ground: #EEF0F3;
+    --surface: #FFFFFF;
+    --ink: #17202B;
+    --muted: #5B6675;
+    --line: #D6DBE2;
+    --accent: #1F4FD1;
+    --accent-ink: #FFFFFF;
+    --card-bg: #10233F;
+    --card-ink: #F4F6FA;
+    --card-muted: #A9B6C9;
+    --card-rule: #C8A96A;
+    --focus: #1F4FD1;
+    --ok: #1E7A4C;
+    --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+    --body: "IBM Plex Sans", -apple-system, "Helvetica Neue", Arial, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --ground: #0E131A;
+      --surface: #171E28;
+      --ink: #E8ECF2;
+      --muted: #97A3B4;
+      --line: #2A3442;
+      --accent: #7EA2FF;
+      --accent-ink: #0B1220;
+      --card-bg: #1A3257;
+      --card-ink: #F4F6FA;
+      --card-muted: #AEBBD0;
+      --focus: #7EA2FF;
+      --ok: #5CC592;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --ground: #0E131A;
+    --surface: #171E28;
+    --ink: #E8ECF2;
+    --muted: #97A3B4;
+    --line: #2A3442;
+    --accent: #7EA2FF;
+    --accent-ink: #0B1220;
+    --card-bg: #1A3257;
+    --card-ink: #F4F6FA;
+    --card-muted: #AEBBD0;
+    --focus: #7EA2FF;
+    --ok: #5CC592;
+  }
+
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font: 15px/1.5 var(--body);
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 440px;
+    margin: 0 auto;
+    padding-inline: 16px;
+    padding-block: 20px 40px;
+    display: grid;
+    gap: 20px;
+  }
+
+  .note {
+    font-size: 13px;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px dashed var(--line);
+    border-radius: 10px;
+    padding: 10px 12px;
+  }
+
+  /* The card itself: 85 × 55 mm proportions */
+  .card {
+    aspect-ratio: 85 / 55;
+    max-width: 100%;
+    background: var(--card-bg);
+    color: var(--card-ink);
+    border-radius: 14px;
+    padding: 20px 22px;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    box-shadow: 0 1px 2px rgba(0,0,0,.12), 0 12px 32px -12px rgba(16,35,63,.45);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::after {
+    content: "";
+    position: absolute;
+    inset: auto 22px 0 22px;
+    height: 3px;
+    background: var(--card-rule);
+  }
+  .card .org {
+    font: 500 11px/1.2 var(--mono);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--card-rule);
+    overflow-wrap: anywhere;
+  }
+  .card .who { align-self: center; }
+  .card .name {
+    font: 700 clamp(22px, 7vw, 28px)/1.1 var(--display);
+    letter-spacing: -.01em;
+    margin: 0;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+  .card .role {
+    margin: 4px 0 0;
+    color: var(--card-muted);
+    font-size: 14px;
+  }
+  .card .lines {
+    font: 400 12px/1.55 var(--mono);
+    color: var(--card-ink);
+    display: grid;
+    min-width: 0;
+  }
+  .card .lines span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* QR panel: always light so any phone camera reads it */
+  .qr-panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px;
+    display: grid;
+    gap: 12px;
+    justify-items: center;
+    text-align: center;
+  }
+  .qr-panel h2 {
+    margin: 0;
+    font: 600 16px/1.3 var(--display);
+  }
+  .qr-panel p { margin: 0; color: var(--muted); font-size: 13px; max-width: 34ch; }
+  .qr-box {
+    background: #FFFFFF;
+    padding: 12px;
+    border-radius: 10px;
+    width: min(100%, 300px);
+    aspect-ratio: 1;
+    max-width: 100%;
+    display: grid;
+    place-items: center;
+  }
+  .qr-box svg { width: 100%; height: 100%; display: block; }
+  .qr-box .qr-error { color: #5B6675; font-size: 13px; padding: 12px; }
+
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  button, .btn {
+    font: 500 14px/1 var(--body);
+    border-radius: 999px;
+    padding: 12px 16px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink);
+    cursor: pointer;
+    flex: 1 1 auto;
+    min-height: 44px;
+  }
+  button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  button:focus-visible, input:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  button[aria-pressed="true"] { border-color: var(--ok); color: var(--ok); }
+
+  .status { min-height: 1.2em; font-size: 13px; color: var(--ok); text-align: center; margin: 0; }
+
+  form {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px;
+    display: grid;
+    gap: 14px;
+  }
+  form h2 { margin: 0; font: 600 16px/1.3 var(--display); }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  label { display: grid; gap: 4px; font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+  input {
+    font: 400 16px/1.3 var(--body); /* 16px avoids iOS zoom on focus */
+    color: var(--ink);
+    background: var(--ground);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px 12px;
+    width: 100%;
+    min-width: 0;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  details.help {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 14px 18px;
+  }
+  details.help summary { cursor: pointer; font-weight: 600; }
+  details.help ol { margin: 10px 0 0; padding-left: 20px; display: grid; gap: 8px; color: var(--muted); font-size: 14px; }
+  details.help b { color: var(--ink); font-weight: 600; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .card { transition: transform .2s ease; }
+    .card:active { transform: scale(.99); }
+  }
+</style>
+
+<main class="wrap">
+  <p class="note" id="exampleNote">Exemple : touchez <b>Modifier</b> pour mettre vos coordonnées. Elles restent enregistrées sur ce téléphone.</p>
+
+  <article class="card" aria-label="Carte de visite">
+    <div class="org" id="cOrg"></div>
+    <div class="who">
+      <h1 class="name" id="cName"></h1>
+      <p class="role" id="cTitle"></p>
+    </div>
+    <div class="lines" id="cLines"></div>
+  </article>
+
+  <section class="qr-panel" aria-labelledby="qrTitle">
+    <h2 id="qrTitle">Faites scanner ce code</h2>
+    <div class="qr-box" id="qr" role="img" aria-label="QR code contenant vos coordonnées"></div>
+    <p>Votre interlocuteur ouvre l'appareil photo de son téléphone et vise le code. Il peut ensuite ajouter le contact en un geste. Pas d'application, pas de connexion.</p>
+  </section>
+
+  <div class="actions">
+    <button type="button" class="primary" id="editBtn">Modifier</button>
+    <button type="button" id="copyBtn">Copier mes coordonnées</button>
+    <button type="button" id="wakeBtn" aria-pressed="false">Garder l'écran allumé</button>
+    <button type="button" id="vcfBtn" hidden>Télécharger la fiche contact (.vcf)</button>
+  </div>
+  <p class="status" id="status" role="status" aria-live="polite"></p>
+
+  <form id="form" hidden>
+    <h2>Vos coordonnées</h2>
+    <div class="row">
+      <label for="f-first">Prénom<input id="f-first" name="first" autocomplete="given-name"></label>
+      <label for="f-last">Nom<input id="f-last" name="last" autocomplete="family-name"></label>
+    </div>
+    <label for="f-title">Fonction<input id="f-title" name="title" autocomplete="organization-title"></label>
+    <label for="f-org">Entreprise<input id="f-org" name="org" autocomplete="organization"></label>
+    <label for="f-tel">Mobile<input id="f-tel" name="tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="+33 6 12 34 56 78"></label>
+    <label for="f-email">E-mail<input id="f-email" name="email" type="email" inputmode="email" autocomplete="email"></label>
+    <label for="f-url">Site ou LinkedIn<input id="f-url" name="url" type="url" inputmode="url" autocomplete="url" placeholder="https://"></label>
+    <label for="f-adr">Ville<input id="f-adr" name="adr" autocomplete="address-level2"></label>
+    <div class="actions">
+      <button type="submit" class="primary" id="saveBtn">Enregistrer</button>
+      <button type="button" id="cancelBtn">Annuler</button>
+    </div>
+  </form>
+
+  <details class="help">
+    <summary>L'utiliser au mieux sur iPhone</summary>
+    <ol>
+      <li><b>Ajoutez-la à l'écran d'accueil</b> : dans Safari, bouton Partager, puis « Sur l'écran d'accueil ». Elle s'ouvre alors comme une app.</li>
+      <li><b>Sans réseau</b> : faites une capture d'écran du QR code et ajoutez-la aux Favoris de Photos. Le code fonctionne hors ligne.</li>
+      <li><b>Entre deux iPhone</b> : NameDrop (iOS 17+) envoie votre fiche Contacts en approchant les deux téléphones. Remplissez d'abord « Ma fiche » dans Contacts.</li>
+    </ol>
+  </details>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>
+(function () {
+  var KEY = "pocket-card-v1";
+  var EXAMPLE = {
+    first: "Camille", last: "Martin", title: "Directrice commerciale",
+    org: "Atelier Nord", tel: "+33 6 12 34 56 78", email: "camille.martin@ateliernord.fr",
+    url: "https://ateliernord.fr", adr: "Lyon"
+  };
+  var FIELDS = ["first", "last", "title", "org", "tel", "email", "url", "adr"];
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (e) {}
+    return null;
+  }
+  function save(d) {
+    try { localStorage.setItem(KEY, JSON.stringify(d)); return true; } catch (e) { return false; }
+  }
+
+  var data = load();
+  var isExample = !data;
+  if (!data) data = Object.assign({}, EXAMPLE);
+
+  var $ = function (id) { return document.getElementById(id); };
+  var statusEl = $("status");
+  var statusTimer;
+  function say(msg) {
+    statusEl.textContent = msg;
+    clearTimeout(statusTimer);
+    statusTimer = setTimeout(function () { statusEl.textContent = ""; }, 3000);
+  }
+
+  function esc(v) {
+    return String(v || "").replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/,/g, "\\,").replace(/;/g, "\\;");
+  }
+  function fullName(d) { return [d.first, d.last].filter(Boolean).join(" "); }
+
+  function vcard(d) {
+    var l = ["BEGIN:VCARD", "VERSION:3.0",
+      "N:" + esc(d.last) + ";" + esc(d.first) + ";;;",
+      "FN:" + esc(fullName(d) || d.org)];
+    if (d.org) l.push("ORG:" + esc(d.org));
+    if (d.title) l.push("TITLE:" + esc(d.title));
+    if (d.tel) l.push("TEL;TYPE=CELL:" + d.tel.replace(/[^\d+]/g, ""));
+    if (d.email) l.push("EMAIL;TYPE=INTERNET:" + esc(d.email));
+    if (d.url) l.push("URL:" + esc(d.url));
+    if (d.adr) l.push("ADR;TYPE=WORK:;;;" + esc(d.adr) + ";;;");
+    l.push("END:VCARD");
+    return l.join("\r\n");
+  }
+
+  function plainText(d) {
+    return [fullName(d), [d.title, d.org].filter(Boolean).join(" · "), d.tel, d.email, d.url, d.adr]
+      .filter(Boolean).join("\n");
+  }
+
+  function render() {
+    $("exampleNote").hidden = !isExample;
+    $("cOrg").textContent = data.org || "";
+    $("cName").textContent = fullName(data) || "Votre nom";
+    $("cTitle").textContent = data.title || "";
+    var lines = $("cLines");
+    lines.textContent = "";
+    [data.tel, data.email, data.url && data.url.replace(/^https?:\/\//, "").replace(/\/$/, "")]
+      .filter(Boolean).forEach(function (t) {
+        var s = document.createElement("span");
+        s.textContent = t;
+        lines.appendChild(s);
+      });
+
+    var box = $("qr");
+    if (typeof qrcode !== "function") {
+      box.innerHTML = '<p class="qr-error">Le QR code n\'a pas pu se charger. Vérifiez la connexion puis rechargez la page.</p>';
+      return;
+    }
+    qrcode.stringToBytes = qrcode.stringToBytesFuncs["UTF-8"];
+    var qr = qrcode(0, "M");
+    qr.addData(vcard(data), "Byte");
+    qr.make();
+    box.innerHTML = qr.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
+  }
+
+  // Edit form
+  var form = $("form");
+  function openForm() {
+    FIELDS.forEach(function (k) { form.elements[k].value = isExample ? "" : (data[k] || ""); });
+    form.hidden = false;
+    form.elements.first.focus();
+    form.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  $("editBtn").addEventListener("click", openForm);
+  $("cancelBtn").addEventListener("click", function () { form.hidden = true; });
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var next = {};
+    FIELDS.forEach(function (k) { next[k] = form.elements[k].value.trim(); });
+    if (!next.first && !next.last && !next.org) { say("Indiquez au moins un nom ou une entreprise."); return; }
+    data = next;
+    isExample = false;
+    var ok = save(data);
+    form.hidden = true;
+    render();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    say(ok ? "Carte enregistrée sur ce téléphone." : "Carte mise à jour. Elle ne sera pas conservée : le stockage est bloqué (navigation privée ?).");
+  });
+
+  // Copy
+  $("copyBtn").addEventListener("click", function () {
+    var text = plainText(data);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say("Coordonnées copiées."); }, fallback);
+    } else { fallback(); }
+    function fallback() {
+      var ta = document.createElement("textarea");
+      ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand("copy"); } catch (e) {}
+      document.body.removeChild(ta);
+      say(ok ? "Coordonnées copiées." : "Copie impossible ici. Utilisez le QR code.");
+    }
+  });
+
+  // Keep screen awake while showing the QR code
+  var lock = null;
+  var wakeBtn = $("wakeBtn");
+  if (!("wakeLock" in navigator)) wakeBtn.hidden = true;
+  wakeBtn.addEventListener("click", function () {
+    if (lock) { lock.release(); return; }
+    navigator.wakeLock.request("screen").then(function (l) {
+      lock = l;
+      wakeBtn.setAttribute("aria-pressed", "true");
+      wakeBtn.textContent = "Écran maintenu allumé";
+      l.addEventListener("release", function () {
+        lock = null;
+        wakeBtn.setAttribute("aria-pressed", "false");
+        wakeBtn.textContent = "Garder l'écran allumé";
+      });
+    }, function () { say("Votre navigateur refuse de garder l'écran allumé."); });
+  });
+
+  // .vcf download only works when the page is opened directly, not inside an embedded viewer
+  var standalone = false;
+  try { standalone = window.self === window.top; } catch (e) {}
+  if (standalone) {
+    var vcfBtn = $("vcfBtn");
+    vcfBtn.hidden = false;
+    vcfBtn.addEventListener("click", function () {
+      var blob = new Blob([vcard(data)], { type: "text/vcard;charset=utf-8" });
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = (fullName(data) || "contact").replace(/[^\w\- ]+/g, "") + ".vcf";
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+    });
+  }
+
+  render();
+})();
+</script>
